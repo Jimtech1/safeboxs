@@ -15,6 +15,11 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AgentIndexRouteImport } from './routes/agent.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AgentWithdrawRouteImport } from './routes/agent.withdraw'
+import { Route as AgentTransactionsRouteImport } from './routes/agent.transactions'
+import { Route as AgentTradersRouteImport } from './routes/agent.traders'
+import { Route as AgentSettingsRouteImport } from './routes/agent.settings'
+import { Route as AgentPerformanceRouteImport } from './routes/agent.performance'
+import { Route as AgentEodRouteImport } from './routes/agent.eod'
 import { Route as AgentDepositRouteImport } from './routes/agent.deposit'
 import { Route as AgentBalanceRouteImport } from './routes/agent.balance'
 import { Route as AdminTransactionsRouteImport } from './routes/admin.transactions'
@@ -51,6 +56,31 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
 const AgentWithdrawRoute = AgentWithdrawRouteImport.update({
   id: '/withdraw',
   path: '/withdraw',
+  getParentRoute: () => AgentRoute,
+} as any)
+const AgentTransactionsRoute = AgentTransactionsRouteImport.update({
+  id: '/transactions',
+  path: '/transactions',
+  getParentRoute: () => AgentRoute,
+} as any)
+const AgentTradersRoute = AgentTradersRouteImport.update({
+  id: '/traders',
+  path: '/traders',
+  getParentRoute: () => AgentRoute,
+} as any)
+const AgentSettingsRoute = AgentSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AgentRoute,
+} as any)
+const AgentPerformanceRoute = AgentPerformanceRouteImport.update({
+  id: '/performance',
+  path: '/performance',
+  getParentRoute: () => AgentRoute,
+} as any)
+const AgentEodRoute = AgentEodRouteImport.update({
+  id: '/eod',
+  path: '/eod',
   getParentRoute: () => AgentRoute,
 } as any)
 const AgentDepositRoute = AgentDepositRouteImport.update({
@@ -100,6 +130,11 @@ export interface FileRoutesByFullPath {
   '/admin/transactions': typeof AdminTransactionsRoute
   '/agent/balance': typeof AgentBalanceRoute
   '/agent/deposit': typeof AgentDepositRoute
+  '/agent/eod': typeof AgentEodRoute
+  '/agent/performance': typeof AgentPerformanceRoute
+  '/agent/settings': typeof AgentSettingsRoute
+  '/agent/traders': typeof AgentTradersRoute
+  '/agent/transactions': typeof AgentTransactionsRoute
   '/agent/withdraw': typeof AgentWithdrawRoute
   '/admin/': typeof AdminIndexRoute
   '/agent/': typeof AgentIndexRoute
@@ -113,6 +148,11 @@ export interface FileRoutesByTo {
   '/admin/transactions': typeof AdminTransactionsRoute
   '/agent/balance': typeof AgentBalanceRoute
   '/agent/deposit': typeof AgentDepositRoute
+  '/agent/eod': typeof AgentEodRoute
+  '/agent/performance': typeof AgentPerformanceRoute
+  '/agent/settings': typeof AgentSettingsRoute
+  '/agent/traders': typeof AgentTradersRoute
+  '/agent/transactions': typeof AgentTransactionsRoute
   '/agent/withdraw': typeof AgentWithdrawRoute
   '/admin': typeof AdminIndexRoute
   '/agent': typeof AgentIndexRoute
@@ -129,6 +169,11 @@ export interface FileRoutesById {
   '/admin/transactions': typeof AdminTransactionsRoute
   '/agent/balance': typeof AgentBalanceRoute
   '/agent/deposit': typeof AgentDepositRoute
+  '/agent/eod': typeof AgentEodRoute
+  '/agent/performance': typeof AgentPerformanceRoute
+  '/agent/settings': typeof AgentSettingsRoute
+  '/agent/traders': typeof AgentTradersRoute
+  '/agent/transactions': typeof AgentTransactionsRoute
   '/agent/withdraw': typeof AgentWithdrawRoute
   '/admin/': typeof AdminIndexRoute
   '/agent/': typeof AgentIndexRoute
@@ -146,6 +191,11 @@ export interface FileRouteTypes {
     | '/admin/transactions'
     | '/agent/balance'
     | '/agent/deposit'
+    | '/agent/eod'
+    | '/agent/performance'
+    | '/agent/settings'
+    | '/agent/traders'
+    | '/agent/transactions'
     | '/agent/withdraw'
     | '/admin/'
     | '/agent/'
@@ -159,6 +209,11 @@ export interface FileRouteTypes {
     | '/admin/transactions'
     | '/agent/balance'
     | '/agent/deposit'
+    | '/agent/eod'
+    | '/agent/performance'
+    | '/agent/settings'
+    | '/agent/traders'
+    | '/agent/transactions'
     | '/agent/withdraw'
     | '/admin'
     | '/agent'
@@ -174,6 +229,11 @@ export interface FileRouteTypes {
     | '/admin/transactions'
     | '/agent/balance'
     | '/agent/deposit'
+    | '/agent/eod'
+    | '/agent/performance'
+    | '/agent/settings'
+    | '/agent/traders'
+    | '/agent/transactions'
     | '/agent/withdraw'
     | '/admin/'
     | '/agent/'
@@ -227,6 +287,41 @@ declare module '@tanstack/react-router' {
       path: '/withdraw'
       fullPath: '/agent/withdraw'
       preLoaderRoute: typeof AgentWithdrawRouteImport
+      parentRoute: typeof AgentRoute
+    }
+    '/agent/transactions': {
+      id: '/agent/transactions'
+      path: '/transactions'
+      fullPath: '/agent/transactions'
+      preLoaderRoute: typeof AgentTransactionsRouteImport
+      parentRoute: typeof AgentRoute
+    }
+    '/agent/traders': {
+      id: '/agent/traders'
+      path: '/traders'
+      fullPath: '/agent/traders'
+      preLoaderRoute: typeof AgentTradersRouteImport
+      parentRoute: typeof AgentRoute
+    }
+    '/agent/settings': {
+      id: '/agent/settings'
+      path: '/settings'
+      fullPath: '/agent/settings'
+      preLoaderRoute: typeof AgentSettingsRouteImport
+      parentRoute: typeof AgentRoute
+    }
+    '/agent/performance': {
+      id: '/agent/performance'
+      path: '/performance'
+      fullPath: '/agent/performance'
+      preLoaderRoute: typeof AgentPerformanceRouteImport
+      parentRoute: typeof AgentRoute
+    }
+    '/agent/eod': {
+      id: '/agent/eod'
+      path: '/eod'
+      fullPath: '/agent/eod'
+      preLoaderRoute: typeof AgentEodRouteImport
       parentRoute: typeof AgentRoute
     }
     '/agent/deposit': {
@@ -304,6 +399,11 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 interface AgentRouteChildren {
   AgentBalanceRoute: typeof AgentBalanceRoute
   AgentDepositRoute: typeof AgentDepositRoute
+  AgentEodRoute: typeof AgentEodRoute
+  AgentPerformanceRoute: typeof AgentPerformanceRoute
+  AgentSettingsRoute: typeof AgentSettingsRoute
+  AgentTradersRoute: typeof AgentTradersRoute
+  AgentTransactionsRoute: typeof AgentTransactionsRoute
   AgentWithdrawRoute: typeof AgentWithdrawRoute
   AgentIndexRoute: typeof AgentIndexRoute
 }
@@ -311,6 +411,11 @@ interface AgentRouteChildren {
 const AgentRouteChildren: AgentRouteChildren = {
   AgentBalanceRoute: AgentBalanceRoute,
   AgentDepositRoute: AgentDepositRoute,
+  AgentEodRoute: AgentEodRoute,
+  AgentPerformanceRoute: AgentPerformanceRoute,
+  AgentSettingsRoute: AgentSettingsRoute,
+  AgentTradersRoute: AgentTradersRoute,
+  AgentTransactionsRoute: AgentTransactionsRoute,
   AgentWithdrawRoute: AgentWithdrawRoute,
   AgentIndexRoute: AgentIndexRoute,
 }
