@@ -14,6 +14,9 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AgentIndexRouteImport } from './routes/agent.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AgentWithdrawRouteImport } from './routes/agent.withdraw'
+import { Route as AgentDepositRouteImport } from './routes/agent.deposit'
+import { Route as AgentBalanceRouteImport } from './routes/agent.balance'
 import { Route as AdminTransactionsRouteImport } from './routes/admin.transactions'
 import { Route as AdminTradersRouteImport } from './routes/admin.traders'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
@@ -44,6 +47,21 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AdminRoute,
+} as any)
+const AgentWithdrawRoute = AgentWithdrawRouteImport.update({
+  id: '/withdraw',
+  path: '/withdraw',
+  getParentRoute: () => AgentRoute,
+} as any)
+const AgentDepositRoute = AgentDepositRouteImport.update({
+  id: '/deposit',
+  path: '/deposit',
+  getParentRoute: () => AgentRoute,
+} as any)
+const AgentBalanceRoute = AgentBalanceRouteImport.update({
+  id: '/balance',
+  path: '/balance',
+  getParentRoute: () => AgentRoute,
 } as any)
 const AdminTransactionsRoute = AdminTransactionsRouteImport.update({
   id: '/transactions',
@@ -80,6 +98,9 @@ export interface FileRoutesByFullPath {
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/traders': typeof AdminTradersRoute
   '/admin/transactions': typeof AdminTransactionsRoute
+  '/agent/balance': typeof AgentBalanceRoute
+  '/agent/deposit': typeof AgentDepositRoute
+  '/agent/withdraw': typeof AgentWithdrawRoute
   '/admin/': typeof AdminIndexRoute
   '/agent/': typeof AgentIndexRoute
 }
@@ -90,6 +111,9 @@ export interface FileRoutesByTo {
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/traders': typeof AdminTradersRoute
   '/admin/transactions': typeof AdminTransactionsRoute
+  '/agent/balance': typeof AgentBalanceRoute
+  '/agent/deposit': typeof AgentDepositRoute
+  '/agent/withdraw': typeof AgentWithdrawRoute
   '/admin': typeof AdminIndexRoute
   '/agent': typeof AgentIndexRoute
 }
@@ -103,6 +127,9 @@ export interface FileRoutesById {
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/traders': typeof AdminTradersRoute
   '/admin/transactions': typeof AdminTransactionsRoute
+  '/agent/balance': typeof AgentBalanceRoute
+  '/agent/deposit': typeof AgentDepositRoute
+  '/agent/withdraw': typeof AgentWithdrawRoute
   '/admin/': typeof AdminIndexRoute
   '/agent/': typeof AgentIndexRoute
 }
@@ -117,6 +144,9 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/traders'
     | '/admin/transactions'
+    | '/agent/balance'
+    | '/agent/deposit'
+    | '/agent/withdraw'
     | '/admin/'
     | '/agent/'
   fileRoutesByTo: FileRoutesByTo
@@ -127,6 +157,9 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/traders'
     | '/admin/transactions'
+    | '/agent/balance'
+    | '/agent/deposit'
+    | '/agent/withdraw'
     | '/admin'
     | '/agent'
   id:
@@ -139,6 +172,9 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/traders'
     | '/admin/transactions'
+    | '/agent/balance'
+    | '/agent/deposit'
+    | '/agent/withdraw'
     | '/admin/'
     | '/agent/'
   fileRoutesById: FileRoutesById
@@ -185,6 +221,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
+    }
+    '/agent/withdraw': {
+      id: '/agent/withdraw'
+      path: '/withdraw'
+      fullPath: '/agent/withdraw'
+      preLoaderRoute: typeof AgentWithdrawRouteImport
+      parentRoute: typeof AgentRoute
+    }
+    '/agent/deposit': {
+      id: '/agent/deposit'
+      path: '/deposit'
+      fullPath: '/agent/deposit'
+      preLoaderRoute: typeof AgentDepositRouteImport
+      parentRoute: typeof AgentRoute
+    }
+    '/agent/balance': {
+      id: '/agent/balance'
+      path: '/balance'
+      fullPath: '/agent/balance'
+      preLoaderRoute: typeof AgentBalanceRouteImport
+      parentRoute: typeof AgentRoute
     }
     '/admin/transactions': {
       id: '/admin/transactions'
@@ -245,10 +302,16 @@ const AdminRouteChildren: AdminRouteChildren = {
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface AgentRouteChildren {
+  AgentBalanceRoute: typeof AgentBalanceRoute
+  AgentDepositRoute: typeof AgentDepositRoute
+  AgentWithdrawRoute: typeof AgentWithdrawRoute
   AgentIndexRoute: typeof AgentIndexRoute
 }
 
 const AgentRouteChildren: AgentRouteChildren = {
+  AgentBalanceRoute: AgentBalanceRoute,
+  AgentDepositRoute: AgentDepositRoute,
+  AgentWithdrawRoute: AgentWithdrawRoute,
   AgentIndexRoute: AgentIndexRoute,
 }
 
