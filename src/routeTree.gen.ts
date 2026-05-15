@@ -9,38 +9,258 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AgentRouteImport } from './routes/agent'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AgentIndexRouteImport } from './routes/agent.index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AgentWithdrawRouteImport } from './routes/agent.withdraw'
+import { Route as AgentTransactionsRouteImport } from './routes/agent.transactions'
+import { Route as AgentTradersRouteImport } from './routes/agent.traders'
+import { Route as AgentSettingsRouteImport } from './routes/agent.settings'
+import { Route as AgentPerformanceRouteImport } from './routes/agent.performance'
+import { Route as AgentEodRouteImport } from './routes/agent.eod'
+import { Route as AgentDepositRouteImport } from './routes/agent.deposit'
+import { Route as AgentBalanceRouteImport } from './routes/agent.balance'
+import { Route as AdminTransactionsRouteImport } from './routes/admin.transactions'
+import { Route as AdminTradersRouteImport } from './routes/admin.traders'
+import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
+import { Route as AdminComplianceRouteImport } from './routes/admin.compliance'
+import { Route as AdminAgentsRouteImport } from './routes/admin.agents'
 
+const AgentRoute = AgentRouteImport.update({
+  id: '/agent',
+  path: '/agent',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AgentIndexRoute = AgentIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AgentRoute,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AgentWithdrawRoute = AgentWithdrawRouteImport.update({
+  id: '/withdraw',
+  path: '/withdraw',
+  getParentRoute: () => AgentRoute,
+} as any)
+const AgentTransactionsRoute = AgentTransactionsRouteImport.update({
+  id: '/transactions',
+  path: '/transactions',
+  getParentRoute: () => AgentRoute,
+} as any)
+const AgentTradersRoute = AgentTradersRouteImport.update({
+  id: '/traders',
+  path: '/traders',
+  getParentRoute: () => AgentRoute,
+} as any)
+const AgentSettingsRoute = AgentSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AgentRoute,
+} as any)
+const AgentPerformanceRoute = AgentPerformanceRouteImport.update({
+  id: '/performance',
+  path: '/performance',
+  getParentRoute: () => AgentRoute,
+} as any)
+const AgentEodRoute = AgentEodRouteImport.update({
+  id: '/eod',
+  path: '/eod',
+  getParentRoute: () => AgentRoute,
+} as any)
+const AgentDepositRoute = AgentDepositRouteImport.update({
+  id: '/deposit',
+  path: '/deposit',
+  getParentRoute: () => AgentRoute,
+} as any)
+const AgentBalanceRoute = AgentBalanceRouteImport.update({
+  id: '/balance',
+  path: '/balance',
+  getParentRoute: () => AgentRoute,
+} as any)
+const AdminTransactionsRoute = AdminTransactionsRouteImport.update({
+  id: '/transactions',
+  path: '/transactions',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminTradersRoute = AdminTradersRouteImport.update({
+  id: '/traders',
+  path: '/traders',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSettingsRoute = AdminSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminComplianceRoute = AdminComplianceRouteImport.update({
+  id: '/compliance',
+  path: '/compliance',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAgentsRoute = AdminAgentsRouteImport.update({
+  id: '/agents',
+  path: '/agents',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/agent': typeof AgentRouteWithChildren
+  '/admin/agents': typeof AdminAgentsRoute
+  '/admin/compliance': typeof AdminComplianceRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/traders': typeof AdminTradersRoute
+  '/admin/transactions': typeof AdminTransactionsRoute
+  '/agent/balance': typeof AgentBalanceRoute
+  '/agent/deposit': typeof AgentDepositRoute
+  '/agent/eod': typeof AgentEodRoute
+  '/agent/performance': typeof AgentPerformanceRoute
+  '/agent/settings': typeof AgentSettingsRoute
+  '/agent/traders': typeof AgentTradersRoute
+  '/agent/transactions': typeof AgentTransactionsRoute
+  '/agent/withdraw': typeof AgentWithdrawRoute
+  '/admin/': typeof AdminIndexRoute
+  '/agent/': typeof AgentIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin/agents': typeof AdminAgentsRoute
+  '/admin/compliance': typeof AdminComplianceRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/traders': typeof AdminTradersRoute
+  '/admin/transactions': typeof AdminTransactionsRoute
+  '/agent/balance': typeof AgentBalanceRoute
+  '/agent/deposit': typeof AgentDepositRoute
+  '/agent/eod': typeof AgentEodRoute
+  '/agent/performance': typeof AgentPerformanceRoute
+  '/agent/settings': typeof AgentSettingsRoute
+  '/agent/traders': typeof AgentTradersRoute
+  '/agent/transactions': typeof AgentTransactionsRoute
+  '/agent/withdraw': typeof AgentWithdrawRoute
+  '/admin': typeof AdminIndexRoute
+  '/agent': typeof AgentIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/agent': typeof AgentRouteWithChildren
+  '/admin/agents': typeof AdminAgentsRoute
+  '/admin/compliance': typeof AdminComplianceRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/traders': typeof AdminTradersRoute
+  '/admin/transactions': typeof AdminTransactionsRoute
+  '/agent/balance': typeof AgentBalanceRoute
+  '/agent/deposit': typeof AgentDepositRoute
+  '/agent/eod': typeof AgentEodRoute
+  '/agent/performance': typeof AgentPerformanceRoute
+  '/agent/settings': typeof AgentSettingsRoute
+  '/agent/traders': typeof AgentTradersRoute
+  '/agent/transactions': typeof AgentTransactionsRoute
+  '/agent/withdraw': typeof AgentWithdrawRoute
+  '/admin/': typeof AdminIndexRoute
+  '/agent/': typeof AgentIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/agent'
+    | '/admin/agents'
+    | '/admin/compliance'
+    | '/admin/settings'
+    | '/admin/traders'
+    | '/admin/transactions'
+    | '/agent/balance'
+    | '/agent/deposit'
+    | '/agent/eod'
+    | '/agent/performance'
+    | '/agent/settings'
+    | '/agent/traders'
+    | '/agent/transactions'
+    | '/agent/withdraw'
+    | '/admin/'
+    | '/agent/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/admin/agents'
+    | '/admin/compliance'
+    | '/admin/settings'
+    | '/admin/traders'
+    | '/admin/transactions'
+    | '/agent/balance'
+    | '/agent/deposit'
+    | '/agent/eod'
+    | '/agent/performance'
+    | '/agent/settings'
+    | '/agent/traders'
+    | '/agent/transactions'
+    | '/agent/withdraw'
+    | '/admin'
+    | '/agent'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/agent'
+    | '/admin/agents'
+    | '/admin/compliance'
+    | '/admin/settings'
+    | '/admin/traders'
+    | '/admin/transactions'
+    | '/agent/balance'
+    | '/agent/deposit'
+    | '/agent/eod'
+    | '/agent/performance'
+    | '/agent/settings'
+    | '/agent/traders'
+    | '/agent/transactions'
+    | '/agent/withdraw'
+    | '/admin/'
+    | '/agent/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  AgentRoute: typeof AgentRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/agent': {
+      id: '/agent'
+      path: '/agent'
+      fullPath: '/agent'
+      preLoaderRoute: typeof AgentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +268,165 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/agent/': {
+      id: '/agent/'
+      path: '/'
+      fullPath: '/agent/'
+      preLoaderRoute: typeof AgentIndexRouteImport
+      parentRoute: typeof AgentRoute
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/agent/withdraw': {
+      id: '/agent/withdraw'
+      path: '/withdraw'
+      fullPath: '/agent/withdraw'
+      preLoaderRoute: typeof AgentWithdrawRouteImport
+      parentRoute: typeof AgentRoute
+    }
+    '/agent/transactions': {
+      id: '/agent/transactions'
+      path: '/transactions'
+      fullPath: '/agent/transactions'
+      preLoaderRoute: typeof AgentTransactionsRouteImport
+      parentRoute: typeof AgentRoute
+    }
+    '/agent/traders': {
+      id: '/agent/traders'
+      path: '/traders'
+      fullPath: '/agent/traders'
+      preLoaderRoute: typeof AgentTradersRouteImport
+      parentRoute: typeof AgentRoute
+    }
+    '/agent/settings': {
+      id: '/agent/settings'
+      path: '/settings'
+      fullPath: '/agent/settings'
+      preLoaderRoute: typeof AgentSettingsRouteImport
+      parentRoute: typeof AgentRoute
+    }
+    '/agent/performance': {
+      id: '/agent/performance'
+      path: '/performance'
+      fullPath: '/agent/performance'
+      preLoaderRoute: typeof AgentPerformanceRouteImport
+      parentRoute: typeof AgentRoute
+    }
+    '/agent/eod': {
+      id: '/agent/eod'
+      path: '/eod'
+      fullPath: '/agent/eod'
+      preLoaderRoute: typeof AgentEodRouteImport
+      parentRoute: typeof AgentRoute
+    }
+    '/agent/deposit': {
+      id: '/agent/deposit'
+      path: '/deposit'
+      fullPath: '/agent/deposit'
+      preLoaderRoute: typeof AgentDepositRouteImport
+      parentRoute: typeof AgentRoute
+    }
+    '/agent/balance': {
+      id: '/agent/balance'
+      path: '/balance'
+      fullPath: '/agent/balance'
+      preLoaderRoute: typeof AgentBalanceRouteImport
+      parentRoute: typeof AgentRoute
+    }
+    '/admin/transactions': {
+      id: '/admin/transactions'
+      path: '/transactions'
+      fullPath: '/admin/transactions'
+      preLoaderRoute: typeof AdminTransactionsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/traders': {
+      id: '/admin/traders'
+      path: '/traders'
+      fullPath: '/admin/traders'
+      preLoaderRoute: typeof AdminTradersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/settings': {
+      id: '/admin/settings'
+      path: '/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminSettingsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/compliance': {
+      id: '/admin/compliance'
+      path: '/compliance'
+      fullPath: '/admin/compliance'
+      preLoaderRoute: typeof AdminComplianceRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/agents': {
+      id: '/admin/agents'
+      path: '/agents'
+      fullPath: '/admin/agents'
+      preLoaderRoute: typeof AdminAgentsRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
+interface AdminRouteChildren {
+  AdminAgentsRoute: typeof AdminAgentsRoute
+  AdminComplianceRoute: typeof AdminComplianceRoute
+  AdminSettingsRoute: typeof AdminSettingsRoute
+  AdminTradersRoute: typeof AdminTradersRoute
+  AdminTransactionsRoute: typeof AdminTransactionsRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminAgentsRoute: AdminAgentsRoute,
+  AdminComplianceRoute: AdminComplianceRoute,
+  AdminSettingsRoute: AdminSettingsRoute,
+  AdminTradersRoute: AdminTradersRoute,
+  AdminTransactionsRoute: AdminTransactionsRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface AgentRouteChildren {
+  AgentBalanceRoute: typeof AgentBalanceRoute
+  AgentDepositRoute: typeof AgentDepositRoute
+  AgentEodRoute: typeof AgentEodRoute
+  AgentPerformanceRoute: typeof AgentPerformanceRoute
+  AgentSettingsRoute: typeof AgentSettingsRoute
+  AgentTradersRoute: typeof AgentTradersRoute
+  AgentTransactionsRoute: typeof AgentTransactionsRoute
+  AgentWithdrawRoute: typeof AgentWithdrawRoute
+  AgentIndexRoute: typeof AgentIndexRoute
+}
+
+const AgentRouteChildren: AgentRouteChildren = {
+  AgentBalanceRoute: AgentBalanceRoute,
+  AgentDepositRoute: AgentDepositRoute,
+  AgentEodRoute: AgentEodRoute,
+  AgentPerformanceRoute: AgentPerformanceRoute,
+  AgentSettingsRoute: AgentSettingsRoute,
+  AgentTradersRoute: AgentTradersRoute,
+  AgentTransactionsRoute: AgentTransactionsRoute,
+  AgentWithdrawRoute: AgentWithdrawRoute,
+  AgentIndexRoute: AgentIndexRoute,
+}
+
+const AgentRouteWithChildren = AgentRoute._addFileChildren(AgentRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
+  AgentRoute: AgentRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

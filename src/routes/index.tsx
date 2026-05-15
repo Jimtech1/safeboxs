@@ -1,26 +1,312 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { motion } from "framer-motion";
+import {
+  MapPin, Banknote, Wallet, MessageSquare, TrendingUp, Clock,
+  ShieldCheck, Phone, Users, Star, FileCheck, Lock, Building2,
+  ArrowRight, CheckCircle2, Smartphone,
+} from "lucide-react";
+import { Navbar } from "@/components/landing/Navbar";
+import { Footer } from "@/components/landing/Footer";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card } from "@/components/ui/card";
 
 export const Route = createFileRoute("/")({
-  component: Index,
+  component: Landing,
 });
 
-// IMPORTANT: Replace this placeholder. For sites with multiple pages (About, Services, Contact, etc.),
-// create separate route files (about.tsx, services.tsx, contact.tsx) — don't put all pages in this file.
-function PlaceholderIndex() {
+const features = [
+  { icon: MessageSquare, title: "Instant SMS Receipts", desc: "Every deposit and withdrawal sends an instant SMS to your phone. You always have proof." },
+  { icon: TrendingUp, title: "Earn Yield on Savings", desc: "Your savings don't just sit. They grow. Earn up to 10% annually on your balance." },
+  { icon: Clock, title: "Withdraw Anytime", desc: "No fixed terms. No penalties. Get your money when you need it." },
+  { icon: ShieldCheck, title: "CBN Compliant", desc: "SafeBox operates under CBN Agent Banking Guidelines. Your savings are protected." },
+  { icon: Phone, title: "No Smartphone Required", desc: "Any phone works. Agents handle the technology. You just save." },
+  { icon: Users, title: "5,000+ Agents Nationwide", desc: "Find a SafeBox agent in every major market. We're growing daily." },
+];
+
+const partners = ["Moniepoint", "Alaba International", "Mile 12 Market", "Ariaria Market", "Wuse Market", "Oil Mill Market", "Bodija Market", "Oshodi Market"];
+
+const testimonials = [
+  { name: "Mama Ngozi", role: "Trader", location: "Mile 12 Market, Lagos", quote: "I used to hide my savings under my mattress. Now I save with SafeBox. I can see my balance grow every day.", rating: 5 },
+  { name: "Adebayo O.", role: "SafeBox Agent", location: "Bodija Market, Ibadan", quote: "Being a SafeBox agent gives me steady income. My community trusts me.", rating: 5 },
+  { name: "Director, Partner MFB", role: "Principal", location: "Lagos", quote: "SafeBox helped us reach thousands of unbanked traders. Their technology is solid.", rating: 5 },
+];
+
+function Landing() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="min-h-screen bg-background">
+      <Navbar />
+
+      {/* HERO */}
+      <section className="bg-hero-gradient">
+        <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 py-16 md:grid-cols-2 md:px-8 md:py-24">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+            <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-white/70 px-3 py-1 text-xs font-medium text-primary">
+              <ShieldCheck className="h-3.5 w-3.5" /> CBN Agent Banking Compliant
+            </div>
+            <h1 className="mt-5 text-4xl font-bold leading-[1.05] md:text-6xl">
+              Your Daily Savings.{" "}
+              <span className="text-primary">Safe.</span>{" "}
+              <span className="text-gradient-gold">Simple.</span>{" "}
+              <span className="text-accent">Rewarding.</span>
+            </h1>
+            <p className="mt-5 max-w-lg text-lg text-muted-foreground">
+              SafeBox helps market traders save daily without fear. No more disappearing collectors. Instant SMS receipts. Withdraw anytime. Earn yield on your savings.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-2">
+              {["CBN Compliant", "Instant SMS", "Earn Up to 10% Annually"].map((p) => (
+                <span key={p} className="rounded-full bg-white px-3 py-1 text-xs font-medium text-foreground/80 shadow-sm border">
+                  {p}
+                </span>
+              ))}
+            </div>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Button size="lg" className="bg-primary hover:bg-primary/90">
+                Start Saving Today <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+              <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+                Become an Agent
+              </Button>
+            </div>
+          </motion.div>
+
+          {/* Right illustration */}
+          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.7, delay: 0.1 }} className="relative">
+            <div className="relative mx-auto aspect-square max-w-md">
+              {/* Agent + trader card */}
+              <div className="absolute left-0 top-6 w-[78%] rounded-2xl bg-white p-5 shadow-xl border">
+                <div className="flex items-center gap-3">
+                  <div className="grid h-12 w-12 place-items-center rounded-full bg-primary/10 text-primary"><Users /></div>
+                  <div>
+                    <p className="font-semibold">Trader → Agent</p>
+                    <p className="text-xs text-muted-foreground">Cash handed safely</p>
+                  </div>
+                </div>
+                <div className="mt-4 rounded-lg bg-cream p-3">
+                  <p className="text-xs text-muted-foreground">Today's deposit</p>
+                  <p className="font-display text-2xl font-bold text-primary">₦1,000</p>
+                </div>
+              </div>
+
+              {/* Phone SMS card */}
+              <motion.div
+                animate={{ y: [0, -8, 0] }}
+                transition={{ repeat: Infinity, duration: 3 }}
+                className="absolute right-0 top-32 w-[60%] rounded-2xl bg-sidebar text-sidebar-foreground p-4 shadow-2xl"
+              >
+                <div className="flex items-center gap-2 text-xs text-sidebar-foreground/70">
+                  <MessageSquare className="h-3.5 w-3.5" /> SafeBox SMS
+                </div>
+                <p className="mt-2 text-sm">You saved <span className="font-bold text-gold">₦1,000</span>. New balance: ₦24,500. Thank you!</p>
+              </motion.div>
+
+              {/* Growth bar */}
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+                className="absolute bottom-0 left-6 w-[88%] rounded-2xl bg-white p-5 shadow-xl border"
+              >
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-semibold">Savings growing</p>
+                  <span className="text-xs font-semibold text-success">+8.4% YTD</span>
+                </div>
+                <div className="mt-3 flex items-end gap-1 h-16">
+                  {[30, 45, 38, 60, 72, 80, 95].map((h, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ height: 0 }}
+                      animate={{ height: `${h}%` }}
+                      transition={{ delay: 0.5 + i * 0.08, duration: 0.6 }}
+                      className="flex-1 rounded-t bg-gradient-to-t from-primary to-accent"
+                    />
+                  ))}
+                </div>
+              </motion.div>
+
+              {/* Floating badges */}
+              <div className="absolute -top-2 right-2 rounded-full bg-gold px-3 py-1 text-xs font-bold text-gold-foreground shadow-lg">₦50B+ Saved</div>
+              <div className="absolute -bottom-2 right-10 rounded-full bg-primary px-3 py-1 text-xs font-bold text-primary-foreground shadow-lg">100k+ Traders</div>
+              <div className="absolute top-1/2 -left-3 rounded-full bg-accent px-3 py-1 text-xs font-bold text-accent-foreground shadow-lg">5k+ Agents</div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* PARTNER MARQUEE */}
+      <section className="border-y bg-cream py-8">
+        <p className="text-center text-xs uppercase tracking-widest text-muted-foreground">SafeBox is powered by Licensed MFBs and trusted across major markets</p>
+        <div className="mt-5 overflow-hidden">
+          <div className="marquee flex gap-12 whitespace-nowrap">
+            {[...partners, ...partners].map((p, i) => (
+              <span key={i} className="font-display text-lg font-semibold text-foreground/40">{p}</span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* HOW IT WORKS */}
+      <section id="traders" className="mx-auto max-w-7xl px-4 py-20 md:px-8">
+        <div className="text-center">
+          <p className="text-xs font-semibold uppercase tracking-widest text-accent">How It Works</p>
+          <h2 className="mt-2 text-3xl font-bold md:text-4xl">Three simple steps to save daily</h2>
+        </div>
+        <div className="mt-12 grid gap-6 md:grid-cols-3">
+          {[
+            { n: "01", icon: MapPin, title: "Find a SafeBox Agent", desc: "Visit any SafeBox agent in your market. They are trained, verified, and ready to help." },
+            { n: "02", icon: Banknote, title: "Save Daily", desc: "Give your daily savings to the agent. Receive an instant SMS receipt. Watch your balance grow." },
+            { n: "03", icon: Wallet, title: "Withdraw Anytime", desc: "Need cash? Visit any SafeBox agent. Withdraw instantly. No paperwork. No delays." },
+          ].map((s, i) => (
+            <motion.div key={s.n} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}>
+              <Card className="relative h-full p-6 border-2 hover:border-primary/40 transition-colors">
+                <span className="absolute right-5 top-5 font-display text-4xl font-bold text-cream">{s.n}</span>
+                <div className="grid h-12 w-12 place-items-center rounded-xl bg-primary/10 text-primary"><s.icon /></div>
+                <h3 className="mt-4 text-xl font-semibold">{s.title}</h3>
+                <p className="mt-2 text-sm text-muted-foreground">{s.desc}</p>
+              </Card>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* FEATURES GRID */}
+      <section className="bg-cream py-20">
+        <div className="mx-auto max-w-7xl px-4 md:px-8">
+          <div className="text-center">
+            <p className="text-xs font-semibold uppercase tracking-widest text-accent">Why SafeBox</p>
+            <h2 className="mt-2 text-3xl font-bold md:text-4xl">Built for traders. Trusted by communities.</h2>
+          </div>
+          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {features.map((f, i) => (
+              <motion.div key={f.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }}>
+                <Card className="h-full p-6 hover:shadow-lg transition-shadow">
+                  <div className="grid h-11 w-11 place-items-center rounded-lg bg-gold/15 text-gold-foreground">
+                    <f.icon className="h-5 w-5" />
+                  </div>
+                  <h3 className="mt-4 font-semibold text-lg">{f.title}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground">{f.desc}</p>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FOR AGENTS */}
+      <section id="agents" className="mx-auto max-w-7xl px-4 py-20 md:px-8">
+        <div className="grid items-center gap-12 md:grid-cols-2">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-widest text-accent">For Agents</p>
+            <h2 className="mt-2 text-3xl font-bold md:text-4xl">Become a SafeBox Agent. <span className="text-gradient-gold">Earn Daily.</span></h2>
+            <p className="mt-4 text-muted-foreground">
+              Join our network of trusted agents. Earn commissions on every transaction. Be the financial hero in your community.
+            </p>
+            <ul className="mt-6 space-y-3">
+              {[
+                "Earn ₦10 per deposit and withdrawal",
+                "Daily commission settlement",
+                "Free training and support",
+                "Work in your own market",
+              ].map((b) => (
+                <li key={b} className="flex items-start gap-3">
+                  <CheckCircle2 className="mt-0.5 h-5 w-5 text-success shrink-0" />
+                  <span>{b}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <Card className="p-6 border-2 border-primary/10 bg-gradient-to-br from-white to-cream">
+            <h3 className="font-display text-xl font-semibold">Apply Now</h3>
+            <p className="mt-1 text-sm text-muted-foreground">Get a callback within 24 hours.</p>
+            <form className="mt-5 space-y-4" onSubmit={(e) => e.preventDefault()}>
+              <Input placeholder="Full name" />
+              <Input placeholder="Phone number" type="tel" />
+              <Input placeholder="Market location (e.g. Bodija Market, Ibadan)" />
+              <Button className="w-full bg-primary hover:bg-primary/90">Submit Application</Button>
+            </form>
+          </Card>
+        </div>
+      </section>
+
+      {/* FOR PARTNERS */}
+      <section id="about" className="bg-sidebar text-sidebar-foreground py-20">
+        <div className="mx-auto max-w-7xl px-4 md:px-8">
+          <div className="grid gap-12 md:grid-cols-2 items-center">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-widest text-gold">For Partners</p>
+              <h2 className="mt-2 text-3xl font-bold md:text-4xl">Partner with SafeBox. Reach the Unbanked.</h2>
+              <p className="mt-4 text-sidebar-foreground/80">
+                SafeBox provides the technology, agent network, and reconciliation engine. You provide the regulatory license and fund custody. Together, we bring financial inclusion to millions.
+              </p>
+              <Button className="mt-6 bg-gold text-gold-foreground hover:bg-gold/90">Become a Partner</Button>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {[
+                "CBN Agent Banking compliant",
+                "Real-time reconciliation",
+                "Daily NIBSS reporting",
+                "Agent KYC and training",
+                "White-label options",
+                "Dedicated success team",
+              ].map((f) => (
+                <div key={f} className="flex items-start gap-2 rounded-lg bg-white/5 p-3 border border-white/10">
+                  <Smartphone className="mt-0.5 h-4 w-4 text-gold shrink-0" />
+                  <span className="text-sm">{f}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* TESTIMONIALS */}
+      <section className="mx-auto max-w-7xl px-4 py-20 md:px-8">
+        <div className="text-center">
+          <p className="text-xs font-semibold uppercase tracking-widest text-accent">Voices from the market</p>
+          <h2 className="mt-2 text-3xl font-bold md:text-4xl">Trusted by traders, agents, and partners</h2>
+        </div>
+        <div className="mt-12 grid gap-6 md:grid-cols-3">
+          {testimonials.map((t, i) => (
+            <motion.div key={t.name} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}>
+              <Card className="h-full p-6">
+                <div className="flex gap-0.5">
+                  {Array.from({ length: t.rating }).map((_, j) => (
+                    <Star key={j} className="h-4 w-4 fill-gold text-gold" />
+                  ))}
+                </div>
+                <p className="mt-4 text-foreground/90">"{t.quote}"</p>
+                <div className="mt-6 flex items-center gap-3 border-t pt-4">
+                  <div className="grid h-10 w-10 place-items-center rounded-full bg-primary/10 font-semibold text-primary">
+                    {t.name.charAt(0)}
+                  </div>
+                  <div>
+                    <p className="font-semibold text-sm">{t.name}</p>
+                    <p className="text-xs text-muted-foreground">{t.role} • {t.location}</p>
+                  </div>
+                </div>
+              </Card>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* CBN COMPLIANCE BANNER */}
+      <section className="bg-primary text-primary-foreground">
+        <div className="mx-auto max-w-7xl px-4 py-10 md:px-8">
+          <div className="flex flex-col items-center gap-6 text-center md:flex-row md:text-left">
+            <div className="flex gap-3">
+              <div className="grid h-12 w-12 place-items-center rounded-full bg-white/10"><FileCheck className="h-5 w-5" /></div>
+              <div className="grid h-12 w-12 place-items-center rounded-full bg-white/10"><Lock className="h-5 w-5" /></div>
+              <div className="grid h-12 w-12 place-items-center rounded-full bg-white/10"><Building2 className="h-5 w-5" /></div>
+            </div>
+            <p className="text-sm md:text-base">
+              <span className="font-semibold">SafeBox operates in full compliance</span> with the Central Bank of Nigeria Guidelines for the Operations of Agent Banking (October 2025).
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <Footer />
     </div>
   );
-}
-
-function Index() {
-  return <PlaceholderIndex />;
 }
