@@ -17,6 +17,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AgentWithdrawRouteImport } from './routes/agent.withdraw'
 import { Route as AgentTransactionsRouteImport } from './routes/agent.transactions'
 import { Route as AgentTradersRouteImport } from './routes/agent.traders'
+import { Route as AgentTopupRouteImport } from './routes/agent.topup'
 import { Route as AgentSettingsRouteImport } from './routes/agent.settings'
 import { Route as AgentPerformanceRouteImport } from './routes/agent.performance'
 import { Route as AgentEodRouteImport } from './routes/agent.eod'
@@ -66,6 +67,11 @@ const AgentTransactionsRoute = AgentTransactionsRouteImport.update({
 const AgentTradersRoute = AgentTradersRouteImport.update({
   id: '/traders',
   path: '/traders',
+  getParentRoute: () => AgentRoute,
+} as any)
+const AgentTopupRoute = AgentTopupRouteImport.update({
+  id: '/topup',
+  path: '/topup',
   getParentRoute: () => AgentRoute,
 } as any)
 const AgentSettingsRoute = AgentSettingsRouteImport.update({
@@ -133,6 +139,7 @@ export interface FileRoutesByFullPath {
   '/agent/eod': typeof AgentEodRoute
   '/agent/performance': typeof AgentPerformanceRoute
   '/agent/settings': typeof AgentSettingsRoute
+  '/agent/topup': typeof AgentTopupRoute
   '/agent/traders': typeof AgentTradersRoute
   '/agent/transactions': typeof AgentTransactionsRoute
   '/agent/withdraw': typeof AgentWithdrawRoute
@@ -151,6 +158,7 @@ export interface FileRoutesByTo {
   '/agent/eod': typeof AgentEodRoute
   '/agent/performance': typeof AgentPerformanceRoute
   '/agent/settings': typeof AgentSettingsRoute
+  '/agent/topup': typeof AgentTopupRoute
   '/agent/traders': typeof AgentTradersRoute
   '/agent/transactions': typeof AgentTransactionsRoute
   '/agent/withdraw': typeof AgentWithdrawRoute
@@ -172,6 +180,7 @@ export interface FileRoutesById {
   '/agent/eod': typeof AgentEodRoute
   '/agent/performance': typeof AgentPerformanceRoute
   '/agent/settings': typeof AgentSettingsRoute
+  '/agent/topup': typeof AgentTopupRoute
   '/agent/traders': typeof AgentTradersRoute
   '/agent/transactions': typeof AgentTransactionsRoute
   '/agent/withdraw': typeof AgentWithdrawRoute
@@ -194,6 +203,7 @@ export interface FileRouteTypes {
     | '/agent/eod'
     | '/agent/performance'
     | '/agent/settings'
+    | '/agent/topup'
     | '/agent/traders'
     | '/agent/transactions'
     | '/agent/withdraw'
@@ -212,6 +222,7 @@ export interface FileRouteTypes {
     | '/agent/eod'
     | '/agent/performance'
     | '/agent/settings'
+    | '/agent/topup'
     | '/agent/traders'
     | '/agent/transactions'
     | '/agent/withdraw'
@@ -232,6 +243,7 @@ export interface FileRouteTypes {
     | '/agent/eod'
     | '/agent/performance'
     | '/agent/settings'
+    | '/agent/topup'
     | '/agent/traders'
     | '/agent/transactions'
     | '/agent/withdraw'
@@ -301,6 +313,13 @@ declare module '@tanstack/react-router' {
       path: '/traders'
       fullPath: '/agent/traders'
       preLoaderRoute: typeof AgentTradersRouteImport
+      parentRoute: typeof AgentRoute
+    }
+    '/agent/topup': {
+      id: '/agent/topup'
+      path: '/topup'
+      fullPath: '/agent/topup'
+      preLoaderRoute: typeof AgentTopupRouteImport
       parentRoute: typeof AgentRoute
     }
     '/agent/settings': {
@@ -402,6 +421,7 @@ interface AgentRouteChildren {
   AgentEodRoute: typeof AgentEodRoute
   AgentPerformanceRoute: typeof AgentPerformanceRoute
   AgentSettingsRoute: typeof AgentSettingsRoute
+  AgentTopupRoute: typeof AgentTopupRoute
   AgentTradersRoute: typeof AgentTradersRoute
   AgentTransactionsRoute: typeof AgentTransactionsRoute
   AgentWithdrawRoute: typeof AgentWithdrawRoute
@@ -414,6 +434,7 @@ const AgentRouteChildren: AgentRouteChildren = {
   AgentEodRoute: AgentEodRoute,
   AgentPerformanceRoute: AgentPerformanceRoute,
   AgentSettingsRoute: AgentSettingsRoute,
+  AgentTopupRoute: AgentTopupRoute,
   AgentTradersRoute: AgentTradersRoute,
   AgentTransactionsRoute: AgentTransactionsRoute,
   AgentWithdrawRoute: AgentWithdrawRoute,
