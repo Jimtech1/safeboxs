@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import {
   MapPin, Banknote, Wallet, MessageSquare, TrendingUp, Clock,
@@ -10,6 +10,9 @@ import { Footer } from "@/components/landing/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
+import traderImg from "@/assets/trader-woman.jpg";
+import agentImg from "@/assets/agent-man.jpg";
+import communityImg from "@/assets/community.jpg";
 
 export const Route = createFileRoute("/")({
   component: Landing,
@@ -23,8 +26,6 @@ const features = [
   { icon: Phone, title: "No Smartphone Required", desc: "Any phone works. Agents handle the technology. You just save." },
   { icon: Users, title: "5,000+ Agents Nationwide", desc: "Find a SafeBox agent in every major market. We're growing daily." },
 ];
-
-const partners = ["Moniepoint", "Alaba International", "Mile 12 Market", "Ariaria Market", "Wuse Market", "Oil Mill Market", "Bodija Market", "Oshodi Market"];
 
 const testimonials = [
   { name: "Mama Ngozi", role: "Trader", location: "Mile 12 Market, Lagos", quote: "I used to hide my savings under my mattress. Now I save with SafeBox. I can see my balance grow every day.", rating: 5 },
