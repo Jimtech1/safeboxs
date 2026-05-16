@@ -8,7 +8,7 @@ import {
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+
 import { Card } from "@/components/ui/card";
 import traderImg from "@/assets/trader-woman.jpg";
 import agentImg from "@/assets/agent-man.jpg";
