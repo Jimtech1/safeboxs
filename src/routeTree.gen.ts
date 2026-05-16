@@ -25,6 +25,7 @@ import { Route as AgentBalanceRouteImport } from './routes/agent.balance'
 import { Route as AdminTransactionsRouteImport } from './routes/admin.transactions'
 import { Route as AdminTradersRouteImport } from './routes/admin.traders'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
+import { Route as AdminFloatRouteImport } from './routes/admin.float'
 import { Route as AdminComplianceRouteImport } from './routes/admin.compliance'
 import { Route as AdminAgentsRouteImport } from './routes/admin.agents'
 
@@ -108,6 +109,11 @@ const AdminSettingsRoute = AdminSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminFloatRoute = AdminFloatRouteImport.update({
+  id: '/float',
+  path: '/float',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminComplianceRoute = AdminComplianceRouteImport.update({
   id: '/compliance',
   path: '/compliance',
@@ -125,6 +131,7 @@ export interface FileRoutesByFullPath {
   '/agent': typeof AgentRouteWithChildren
   '/admin/agents': typeof AdminAgentsRoute
   '/admin/compliance': typeof AdminComplianceRoute
+  '/admin/float': typeof AdminFloatRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/traders': typeof AdminTradersRoute
   '/admin/transactions': typeof AdminTransactionsRoute
@@ -143,6 +150,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin/agents': typeof AdminAgentsRoute
   '/admin/compliance': typeof AdminComplianceRoute
+  '/admin/float': typeof AdminFloatRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/traders': typeof AdminTradersRoute
   '/admin/transactions': typeof AdminTransactionsRoute
@@ -164,6 +172,7 @@ export interface FileRoutesById {
   '/agent': typeof AgentRouteWithChildren
   '/admin/agents': typeof AdminAgentsRoute
   '/admin/compliance': typeof AdminComplianceRoute
+  '/admin/float': typeof AdminFloatRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/traders': typeof AdminTradersRoute
   '/admin/transactions': typeof AdminTransactionsRoute
@@ -186,6 +195,7 @@ export interface FileRouteTypes {
     | '/agent'
     | '/admin/agents'
     | '/admin/compliance'
+    | '/admin/float'
     | '/admin/settings'
     | '/admin/traders'
     | '/admin/transactions'
@@ -204,6 +214,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin/agents'
     | '/admin/compliance'
+    | '/admin/float'
     | '/admin/settings'
     | '/admin/traders'
     | '/admin/transactions'
@@ -224,6 +235,7 @@ export interface FileRouteTypes {
     | '/agent'
     | '/admin/agents'
     | '/admin/compliance'
+    | '/admin/float'
     | '/admin/settings'
     | '/admin/traders'
     | '/admin/transactions'
@@ -359,6 +371,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSettingsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/float': {
+      id: '/admin/float'
+      path: '/float'
+      fullPath: '/admin/float'
+      preLoaderRoute: typeof AdminFloatRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/compliance': {
       id: '/admin/compliance'
       path: '/compliance'
@@ -379,6 +398,7 @@ declare module '@tanstack/react-router' {
 interface AdminRouteChildren {
   AdminAgentsRoute: typeof AdminAgentsRoute
   AdminComplianceRoute: typeof AdminComplianceRoute
+  AdminFloatRoute: typeof AdminFloatRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminTradersRoute: typeof AdminTradersRoute
   AdminTransactionsRoute: typeof AdminTransactionsRoute
@@ -388,6 +408,7 @@ interface AdminRouteChildren {
 const AdminRouteChildren: AdminRouteChildren = {
   AdminAgentsRoute: AdminAgentsRoute,
   AdminComplianceRoute: AdminComplianceRoute,
+  AdminFloatRoute: AdminFloatRoute,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminTradersRoute: AdminTradersRoute,
   AdminTransactionsRoute: AdminTransactionsRoute,
@@ -430,3 +451,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
