@@ -14,7 +14,7 @@ const metrics = [
   { label: "Total Active Traders", value: overviewMetrics.activeTraders.toLocaleString(), icon: Users, change: "+4.2%", tone: "primary" },
   { label: "Total Active Agents", value: overviewMetrics.activeAgents.toLocaleString(), icon: UserCog, change: "+2.1%", tone: "accent" },
   { label: "Total Savings Volume", value: "₦12.4B", icon: Banknote, change: "+11.8%", tone: "gold" },
-  { label: "Daily Transaction Volume", value: "₦84.2M", icon: TrendingUp, change: "+6.4%", tone: "success" },
+  { label: "Total Float Deployed", value: "₦412.5M", icon: TrendingUp, change: "+6.4%", tone: "success" },
   { label: "Active Principals (MFBs)", value: overviewMetrics.activePrincipals.toString(), icon: Building2, change: "stable", tone: "primary" },
   { label: "Avg Yield Earned (YTD)", value: overviewMetrics.avgYield + "%", icon: Percent, change: "+0.3%", tone: "gold" },
 ];
@@ -166,7 +166,7 @@ function Overview() {
           <div className="flex flex-wrap gap-2">
             <Button className="bg-gold text-gold-foreground hover:bg-gold/90">Approve New Agent</Button>
             <Button variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white/20">Generate Compliance Report</Button>
-            <Button variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white/20">Reconcile Settlement</Button>
+            <Link to="/admin/float"><Button variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white/20">Float Management</Button></Link>
           </div>
         </div>
       </Card>
