@@ -194,39 +194,49 @@ function Landing() {
         </div>
       </section>
 
-      {/* FOR AGENTS */}
-      <section id="agents" className="mx-auto max-w-7xl px-4 py-20 md:px-8">
+      {/* FOR TRADERS */}
+      <section id="traders-portrait" className="mx-auto max-w-7xl px-4 py-20 md:px-8">
         <div className="grid items-center gap-12 md:grid-cols-2">
+          <img src={traderImg} alt="Black African market trader smiling at her stall" width={1024} height={1024} className="rounded-2xl shadow-xl object-cover aspect-square w-full" loading="lazy" />
           <div>
-            <p className="text-xs font-semibold uppercase tracking-widest text-accent">For Agents</p>
-            <h2 className="mt-2 text-3xl font-bold md:text-4xl">Become a SafeBox Agent. <span className="text-gradient-gold">Earn Daily.</span></h2>
-            <p className="mt-4 text-muted-foreground">
-              Join our network of trusted agents. Earn commissions on every transaction. Be the financial hero in your community.
-            </p>
-            <ul className="mt-6 space-y-3">
-              {[
-                "Earn ₦10 per deposit and withdrawal",
-                "Daily commission settlement",
-                "Free training and support",
-                "Work in your own market",
-              ].map((b) => (
-                <li key={b} className="flex items-start gap-3">
-                  <CheckCircle2 className="mt-0.5 h-5 w-5 text-success shrink-0" />
-                  <span>{b}</span>
-                </li>
-              ))}
-            </ul>
+            <p className="text-xs font-semibold uppercase tracking-widest text-accent">For Traders</p>
+            <h2 className="mt-2 text-3xl font-bold md:text-4xl">"My savings are <span className="text-primary">finally safe.</span>"</h2>
+            <p className="mt-4 text-muted-foreground">Mama Ngozi sells fabric at Mile 12. She used to fear her daily collector. Today, SafeBox sends her an SMS every time she saves — and her balance earns yield every month.</p>
+            <Link to="/for-traders"><Button size="lg" className="mt-6 bg-primary hover:bg-primary/90">See trader benefits <ArrowRight className="ml-2 h-4 w-4" /></Button></Link>
           </div>
-          <Card className="p-6 border-2 border-primary/10 bg-gradient-to-br from-white to-cream">
-            <h3 className="font-display text-xl font-semibold">Apply Now</h3>
-            <p className="mt-1 text-sm text-muted-foreground">Get a callback within 24 hours.</p>
-            <form className="mt-5 space-y-4" onSubmit={(e) => e.preventDefault()}>
-              <Input placeholder="Full name" />
-              <Input placeholder="Phone number" type="tel" />
-              <Input placeholder="Market location (e.g. Bodija Market, Ibadan)" />
-              <Button className="w-full bg-primary hover:bg-primary/90">Submit Application</Button>
-            </form>
-          </Card>
+        </div>
+      </section>
+
+      {/* FOR AGENTS */}
+      <section id="agents" className="bg-cream py-20">
+        <div className="mx-auto max-w-7xl px-4 md:px-8">
+          <div className="grid items-center gap-12 md:grid-cols-2">
+            <div className="order-2 md:order-1">
+              <p className="text-xs font-semibold uppercase tracking-widest text-accent">For Agents</p>
+              <h2 className="mt-2 text-3xl font-bold md:text-4xl">Become a SafeBox Agent. <span className="text-gradient-gold">Earn Daily.</span></h2>
+              <p className="mt-4 text-muted-foreground">
+                Top up your float, credit traders from your capital, keep the cash they pay you. Earn commissions on every transaction — no end-of-day cash deposit.
+              </p>
+              <ul className="mt-6 space-y-3">
+                {[
+                  "Earn ₦10 per deposit and ₦15 per withdrawal",
+                  "Daily commission settlement",
+                  "Dedicated float account, USSD / bank top-up",
+                  "Free training and ongoing support",
+                ].map((b) => (
+                  <li key={b} className="flex items-start gap-3">
+                    <CheckCircle2 className="mt-0.5 h-5 w-5 text-success shrink-0" />
+                    <span>{b}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-6 flex gap-3 flex-wrap">
+                <Link to="/register"><Button size="lg" className="bg-primary hover:bg-primary/90">Become an Agent</Button></Link>
+                <Link to="/for-agents"><Button size="lg" variant="outline">How it works</Button></Link>
+              </div>
+            </div>
+            <img src={agentImg} alt="Black African SafeBox agent in green polo holding a smartphone" width={1024} height={1024} className="rounded-2xl shadow-xl object-cover aspect-square w-full order-1 md:order-2" loading="lazy" />
+          </div>
         </div>
       </section>
 
