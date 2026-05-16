@@ -62,12 +62,12 @@ function Landing() {
               ))}
             </div>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Button size="lg" className="bg-primary hover:bg-primary/90">
+              <Link to="/register"><Button size="lg" className="bg-primary hover:bg-primary/90">
                 Start Saving Today <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-              <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+              </Button></Link>
+              <Link to="/register"><Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
                 Become an Agent
-              </Button>
+              </Button></Link>
             </div>
           </motion.div>
 
@@ -134,14 +134,15 @@ function Landing() {
         </div>
       </section>
 
-      {/* PARTNER MARQUEE */}
-      <section className="border-y bg-cream py-8">
-        <p className="text-center text-xs uppercase tracking-widest text-muted-foreground">SafeBox is powered by Licensed MFBs and trusted across major markets</p>
-        <div className="mt-5 overflow-hidden">
-          <div className="marquee flex gap-12 whitespace-nowrap">
-            {[...partners, ...partners].map((p, i) => (
-              <span key={i} className="font-display text-lg font-semibold text-foreground/40">{p}</span>
-            ))}
+      {/* COMMUNITY STRIP */}
+      <section className="bg-cream py-16">
+        <div className="mx-auto max-w-7xl px-4 md:px-8 grid gap-10 md:grid-cols-2 items-center">
+          <img src={communityImg} alt="Diverse Black African market community members smiling together" width={1280} height={768} className="rounded-2xl shadow-xl object-cover w-full" loading="lazy" />
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-widest text-accent">Our Community</p>
+            <h2 className="mt-2 text-3xl md:text-4xl font-bold">A network built by — and for — the markets we serve.</h2>
+            <p className="mt-4 text-muted-foreground">From the vendors of Mile 12 to the tailors of Aba, SafeBox is owned by the trust of the people who use it every day.</p>
+            <Link to="/about"><Button className="mt-6 bg-primary hover:bg-primary/90">Read our story</Button></Link>
           </div>
         </div>
       </section>
