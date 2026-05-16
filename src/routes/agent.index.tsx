@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowDownToLine, ArrowUpFromLine, Search, MapPin, Calendar, ArrowRight } from "lucide-react";
+import { ArrowDownToLine, ArrowUpFromLine, Search, MapPin, Calendar, Plus, Wallet, TrendingUp, AlertTriangle } from "lucide-react";
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { currentAgent, transactions, formatNaira } from "@/lib/mockData";
 
 export const Route = createFileRoute("/agent/")({
@@ -11,7 +11,8 @@ export const Route = createFileRoute("/agent/")({
 
 function AgentHome() {
   const recent = transactions.slice(0, 5);
-  const net = currentAgent.todayDeposits - currentAgent.todayWithdrawals;
+  const lowFloat = currentAgent.floatBalance < currentAgent.lowFloatThreshold;
+  const utilization = Math.min(100, Math.round((currentAgent.floatUsedToday / currentAgent.floatCapacity) * 100));
 
   return (
     <div className="space-y-5">
@@ -22,32 +23,70 @@ function AgentHome() {
         </p>
       </div>
 
-      {/* Float / balance card */}
+      {/* Float capital card */}
       <Card className="overflow-hidden border-0 bg-gradient-to-br from-primary to-primary/80 text-primary-foreground">
         <div className="p-5">
-          <p className="text-xs uppercase tracking-wide text-primary-foreground/70">Available Float</p>
-          <p className="font-display text-4xl font-bold mt-1">{formatNaira(currentAgent.float)}</p>
-          <div className="mt-5 grid grid-cols-3 gap-3 text-xs">
-            <div>
-              <p className="text-primary-foreground/70">Deposits</p>
-              <p className="font-semibold text-base text-success-foreground/90">{formatNaira(currentAgent.todayDeposits)}</p>
-            </div>
-            <div>
-              <p className="text-primary-foreground/70">Withdrawals</p>
-              <p className="font-semibold text-base">{formatNaira(currentAgent.todayWithdrawals)}</p>
-            </div>
-            <div>
-              <p className="text-primary-foreground/70">Net</p>
-              <p className="font-semibold text-base text-gold">+{formatNaira(net)}</p>
-            </div>
+          <div className="flex items-center justify-between">
+            <p className="text-xs uppercase tracking-wide text-primary-foreground/70">Your Float Balance</p>
+            <Wallet className="h-4 w-4 text-gold" />
           </div>
+          <p className="font-display text-4xl font-bold mt-1">{formatNaira(currentAgent.floatBalance)}</p>
+          <p className="text-xs text-primary-foreground/70 mt-1">Capital you've loaded to credit traders</p>
+
+          <Link to="/agent/topup" className="mt-4 flex items-center justify-center gap-2 w-full rounded-xl bg-gold text-gold-foreground py-3 font-semibold hover:bg-gold/90 transition">
+            <Plus className="h-5 w-5" /> Add Money to Float
+          </Link>
         </div>
-        <Link to="/agent/eod" className="block bg-black/15 px-5 py-3 text-sm font-medium flex items-center justify-between hover:bg-black/20 transition">
-          End Day Settlement <ArrowRight className="h-4 w-4" />
-        </Link>
       </Card>
 
-      {/* Quick actions - large mobile-friendly */}
+      {lowFloat && (
+        <Card className="p-4 border-2 border-warning bg-warning/10">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="h-5 w-5 text-warning shrink-0 mt-0.5" />
+            <div className="flex-1">
+              <p className="font-semibold text-sm">Low float warning</p>
+              <p className="text-xs text-muted-foreground mt-0.5">Top up to keep serving traders without interruption.</p>
+            </div>
+          </div>
+        </Card>
+      )}
+
+      {/* Daily collection summary */}
+      <Card className="p-5">
+        <div className="flex items-center justify-between">
+          <h3 className="font-semibold flex items-center gap-2"><TrendingUp className="h-4 w-4 text-primary" /> Today's Collection</h3>
+          <span className="text-[10px] uppercase tracking-wide text-muted-foreground">Live</span>
+        </div>
+        <div className="mt-4 grid grid-cols-3 gap-3 text-center">
+          <div className="rounded-xl bg-success/10 p-3">
+            <p className="text-[10px] uppercase text-muted-foreground">Deposits Collected</p>
+            <p className="font-display text-lg font-bold text-success mt-1">{formatNaira(currentAgent.depositsCollectedToday)}</p>
+            <p className="text-[10px] text-muted-foreground mt-0.5">{currentAgent.tradersServedToday} traders</p>
+          </div>
+          <div className="rounded-xl bg-primary/10 p-3">
+            <p className="text-[10px] uppercase text-muted-foreground">Float Used</p>
+            <p className="font-display text-lg font-bold text-primary mt-1">{formatNaira(currentAgent.floatUsedToday)}</p>
+            <p className="text-[10px] text-muted-foreground mt-0.5">{utilization}% of cap</p>
+          </div>
+          <div className="rounded-xl bg-gold/15 p-3">
+            <p className="text-[10px] uppercase text-muted-foreground">Commission</p>
+            <p className="font-display text-lg font-bold text-gold-foreground mt-1">{formatNaira(currentAgent.commissionToday)}</p>
+            <p className="text-[10px] text-muted-foreground mt-0.5">Earned today</p>
+          </div>
+        </div>
+        <div className="mt-4">
+          <div className="flex justify-between text-xs text-muted-foreground mb-1.5">
+            <span>Float utilization</span>
+            <span>{utilization}%</span>
+          </div>
+          <Progress value={utilization} />
+        </div>
+        <p className="mt-3 text-xs text-muted-foreground leading-relaxed">
+          Cash you collected from traders is yours — it reimburses the float you spent crediting their accounts. No end-of-day deposit required.
+        </p>
+      </Card>
+
+      {/* Quick actions */}
       <div className="grid grid-cols-3 gap-3">
         <Link to="/agent/deposit">
           <Card className="p-4 hover:shadow-md transition cursor-pointer border-2 hover:border-success">

@@ -43,7 +43,9 @@ export interface Agent {
   phone: string;
   market: string;
   principal: string;
-  dailyVolume: number;
+  floatBalance: number;
+  floatCapacity: number;
+  floatUsedToday: number;
   commissionMTD: number;
   status: "Active" | "Suspended" | "Pending";
 }
@@ -58,6 +60,17 @@ export interface Transaction {
   amount: number;
   status: "Successful" | "Pending" | "Failed";
   smsSent: boolean;
+}
+
+export interface FloatTransaction {
+  id: string;
+  agentId: string;
+  agentName: string;
+  timestamp: string;
+  amount: number;
+  channel: "Bank Transfer" | "Card" | "USSD";
+  reference: string;
+  status: "Successful" | "Pending";
 }
 
 const phone = (i: number) => `0${800 + (i % 100)}${(1000000 + i * 137).toString().slice(0, 7)}`;
@@ -75,16 +88,22 @@ export const traders: Trader[] = Array.from({ length: 60 }, (_, i) => ({
 
 export const principals = ["Licensed MFB Alpha", "Partner Bank Beta", "Principal Gamma MFB"];
 
-export const agents: Agent[] = Array.from({ length: 14 }, (_, i) => ({
-  id: `AG-${2000 + i}`,
-  name: `${pick(firstNames)} ${pick(lastNames)}`,
-  phone: phone(i + 200),
-  market: pick(markets),
-  principal: pick(principals),
-  dailyVolume: Math.floor(rnd() * 200000) + 20000,
-  commissionMTD: Math.floor(rnd() * 80000) + 5000,
-  status: i < 11 ? "Active" : i < 13 ? "Pending" : "Suspended",
-}));
+export const agents: Agent[] = Array.from({ length: 14 }, (_, i) => {
+  const capacity = (Math.floor(rnd() * 8) + 3) * 50000;
+  const balance = Math.floor(rnd() * capacity);
+  return {
+    id: `AG-${2000 + i}`,
+    name: `${pick(firstNames)} ${pick(lastNames)}`,
+    phone: phone(i + 200),
+    market: pick(markets),
+    principal: pick(principals),
+    floatBalance: balance,
+    floatCapacity: capacity,
+    floatUsedToday: Math.floor(rnd() * 80000),
+    commissionMTD: Math.floor(rnd() * 80000) + 5000,
+    status: i < 11 ? "Active" : i < 13 ? "Pending" : "Suspended",
+  };
+});
 
 export const transactions: Transaction[] = Array.from({ length: 220 }, (_, i) => {
   const t = traders[i % traders.length];
@@ -102,6 +121,20 @@ export const transactions: Transaction[] = Array.from({ length: 220 }, (_, i) =>
     amount: Math.floor(rnd() * 80000) + 500,
     status: rnd() > 0.05 ? "Successful" : rnd() > 0.5 ? "Pending" : "Failed",
     smsSent: rnd() > 0.03,
+  };
+});
+
+export const floatTransactions: FloatTransaction[] = Array.from({ length: 80 }, (_, i) => {
+  const a = agents[i % agents.length];
+  return {
+    id: `FL-${700000 + i}`,
+    agentId: a.id,
+    agentName: a.name,
+    timestamp: `${Math.floor(rnd() * 20)}d ${Math.floor(rnd() * 24)}h ago`,
+    amount: (Math.floor(rnd() * 9) + 1) * 25000,
+    channel: rnd() > 0.6 ? "Bank Transfer" : rnd() > 0.4 ? "USSD" : "Card",
+    reference: `NIBSS-${Math.floor(rnd() * 9000000) + 1000000}`,
+    status: rnd() > 0.08 ? "Successful" : "Pending",
   };
 });
 
@@ -128,19 +161,30 @@ export const dailyCommission = [
   { day: "Sun", value: 1240 },
 ];
 
-// Current logged-in agent
+// Current logged-in agent (float-funded model)
 export const currentAgent = {
   name: "Adebayo Ogunlesi",
   market: "Bodija Market, Ibadan",
-  float: 45000,
-  todayDeposits: 32000,
-  todayWithdrawals: 12000,
+  floatBalance: 145000,
+  floatCapacity: 250000,
+  floatUsedToday: 78500,
+  depositsCollectedToday: 78500,
+  withdrawalsToday: 12000,
   commissionToday: 1240,
   commissionWeek: 6800,
   commissionMonth: 24500,
+  tradersServedToday: 23,
   tradersServed: 147,
   avgDailyDeposits: 42000,
+  lowFloatThreshold: 50000,
 };
+
+export const myFloatTopUps: FloatTransaction[] = [
+  { id: "FL-900001", agentId: "AG-2000", agentName: "Adebayo Ogunlesi", timestamp: "Today 8:14 AM", amount: 100000, channel: "Bank Transfer", reference: "NIBSS-8273644", status: "Successful" },
+  { id: "FL-900002", agentId: "AG-2000", agentName: "Adebayo Ogunlesi", timestamp: "Yesterday 7:02 AM", amount: 75000, channel: "USSD", reference: "NIBSS-8264411", status: "Successful" },
+  { id: "FL-900003", agentId: "AG-2000", agentName: "Adebayo Ogunlesi", timestamp: "2d ago 9:30 AM", amount: 50000, channel: "Bank Transfer", reference: "NIBSS-8251008", status: "Successful" },
+  { id: "FL-900004", agentId: "AG-2000", agentName: "Adebayo Ogunlesi", timestamp: "4d ago 8:45 AM", amount: 120000, channel: "Card", reference: "NIBSS-8230229", status: "Successful" },
+];
 
 export const overviewMetrics = {
   activeTraders: 24847,
@@ -149,4 +193,6 @@ export const overviewMetrics = {
   dailyVolume: 84_200_000,
   activePrincipals: 3,
   avgYield: 8.4,
+  totalFloatDeployed: 412_500_000,
+  lowFloatAgents: 38,
 };

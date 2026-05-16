@@ -62,7 +62,8 @@ function AgentsPage() {
                 <th className="py-3 pr-4">Phone</th>
                 <th className="py-3 pr-4">Market</th>
                 <th className="py-3 pr-4">Principal</th>
-                <th className="py-3 pr-4 text-right">Daily Vol</th>
+                <th className="py-3 pr-4 text-right">Float Balance</th>
+                <th className="py-3 pr-4 text-right">Used Today</th>
                 <th className="py-3 pr-4 text-right">Comm. (MTD)</th>
                 <th className="py-3 pr-4">Status</th>
                 <th className="py-3"></th>
@@ -76,7 +77,10 @@ function AgentsPage() {
                   <td className="py-3 pr-4">{a.phone}</td>
                   <td className="py-3 pr-4 text-muted-foreground">{a.market}</td>
                   <td className="py-3 pr-4 text-muted-foreground">{a.principal}</td>
-                  <td className="py-3 pr-4 text-right">{formatNaira(a.dailyVolume)}</td>
+                  <td className="py-3 pr-4 text-right">
+                    <span className={a.floatBalance < 50000 ? "text-destructive font-semibold" : "font-medium"}>{formatNaira(a.floatBalance)}</span>
+                  </td>
+                  <td className="py-3 pr-4 text-right text-muted-foreground">{formatNaira(a.floatUsedToday)}</td>
                   <td className="py-3 pr-4 text-right font-semibold text-success">{formatNaira(a.commissionMTD)}</td>
                   <td className="py-3 pr-4"><Badge className={statusColor(a.status)}>{a.status}</Badge></td>
                   <td className="py-3"><Button size="sm" variant="ghost">View</Button></td>

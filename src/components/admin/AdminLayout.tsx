@@ -1,5 +1,5 @@
 import { Link, Outlet, useRouterState } from "@tanstack/react-router";
-import { LayoutDashboard, Users, UserCog, ArrowLeftRight, ShieldCheck, Settings, Bell, Search } from "lucide-react";
+import { LayoutDashboard, Users, UserCog, ArrowLeftRight, Wallet, ShieldCheck, Settings, Bell, Search } from "lucide-react";
 import { SafeBoxLogo } from "@/components/SafeBoxLogo";
 import { Input } from "@/components/ui/input";
 
@@ -7,7 +7,8 @@ const nav = [
   { to: "/admin", label: "Overview", icon: LayoutDashboard, exact: true },
   { to: "/admin/traders", label: "Traders", icon: Users },
   { to: "/admin/agents", label: "Agents", icon: UserCog },
-  { to: "/admin/transactions", label: "Transactions", icon: ArrowLeftRight },
+  { to: "/admin/float", label: "Float", icon: Wallet },
+  { to: "/admin/transactions", label: "Txns", icon: ArrowLeftRight },
   { to: "/admin/compliance", label: "Compliance", icon: ShieldCheck },
   { to: "/admin/settings", label: "Settings", icon: Settings },
 ];
@@ -77,7 +78,7 @@ export function AdminLayout() {
 
       {/* Mobile bottom nav */}
       <nav className="md:hidden fixed bottom-0 inset-x-0 bg-sidebar border-t border-white/10 z-40">
-        <div className="grid grid-cols-6">
+        <div className="grid grid-cols-7">
           {nav.map((n) => {
             const active = isActive(n.to, n.exact);
             return (

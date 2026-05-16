@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import {
   MapPin, Banknote, Wallet, MessageSquare, TrendingUp, Clock,
@@ -8,8 +8,11 @@ import {
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+
 import { Card } from "@/components/ui/card";
+import traderImg from "@/assets/trader-woman.jpg";
+import agentImg from "@/assets/agent-man.jpg";
+import communityImg from "@/assets/community.jpg";
 
 export const Route = createFileRoute("/")({
   component: Landing,
@@ -23,8 +26,6 @@ const features = [
   { icon: Phone, title: "No Smartphone Required", desc: "Any phone works. Agents handle the technology. You just save." },
   { icon: Users, title: "5,000+ Agents Nationwide", desc: "Find a SafeBox agent in every major market. We're growing daily." },
 ];
-
-const partners = ["Moniepoint", "Alaba International", "Mile 12 Market", "Ariaria Market", "Wuse Market", "Oil Mill Market", "Bodija Market", "Oshodi Market"];
 
 const testimonials = [
   { name: "Mama Ngozi", role: "Trader", location: "Mile 12 Market, Lagos", quote: "I used to hide my savings under my mattress. Now I save with SafeBox. I can see my balance grow every day.", rating: 5 },
@@ -61,12 +62,12 @@ function Landing() {
               ))}
             </div>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Button size="lg" className="bg-primary hover:bg-primary/90">
+              <Link to="/register"><Button size="lg" className="bg-primary hover:bg-primary/90">
                 Start Saving Today <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-              <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+              </Button></Link>
+              <Link to="/register"><Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
                 Become an Agent
-              </Button>
+              </Button></Link>
             </div>
           </motion.div>
 
@@ -133,14 +134,15 @@ function Landing() {
         </div>
       </section>
 
-      {/* PARTNER MARQUEE */}
-      <section className="border-y bg-cream py-8">
-        <p className="text-center text-xs uppercase tracking-widest text-muted-foreground">SafeBox is powered by Licensed MFBs and trusted across major markets</p>
-        <div className="mt-5 overflow-hidden">
-          <div className="marquee flex gap-12 whitespace-nowrap">
-            {[...partners, ...partners].map((p, i) => (
-              <span key={i} className="font-display text-lg font-semibold text-foreground/40">{p}</span>
-            ))}
+      {/* COMMUNITY STRIP */}
+      <section className="bg-cream py-16">
+        <div className="mx-auto max-w-7xl px-4 md:px-8 grid gap-10 md:grid-cols-2 items-center">
+          <img src={communityImg} alt="Diverse Black African market community members smiling together" width={1280} height={768} className="rounded-2xl shadow-xl object-cover w-full" loading="lazy" />
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-widest text-accent">Our Community</p>
+            <h2 className="mt-2 text-3xl md:text-4xl font-bold">A network built by — and for — the markets we serve.</h2>
+            <p className="mt-4 text-muted-foreground">From the vendors of Mile 12 to the tailors of Aba, SafeBox is owned by the trust of the people who use it every day.</p>
+            <Link to="/about"><Button className="mt-6 bg-primary hover:bg-primary/90">Read our story</Button></Link>
           </div>
         </div>
       </section>
@@ -192,39 +194,49 @@ function Landing() {
         </div>
       </section>
 
-      {/* FOR AGENTS */}
-      <section id="agents" className="mx-auto max-w-7xl px-4 py-20 md:px-8">
+      {/* FOR TRADERS */}
+      <section id="traders-portrait" className="mx-auto max-w-7xl px-4 py-20 md:px-8">
         <div className="grid items-center gap-12 md:grid-cols-2">
+          <img src={traderImg} alt="Black African market trader smiling at her stall" width={1024} height={1024} className="rounded-2xl shadow-xl object-cover aspect-square w-full" loading="lazy" />
           <div>
-            <p className="text-xs font-semibold uppercase tracking-widest text-accent">For Agents</p>
-            <h2 className="mt-2 text-3xl font-bold md:text-4xl">Become a SafeBox Agent. <span className="text-gradient-gold">Earn Daily.</span></h2>
-            <p className="mt-4 text-muted-foreground">
-              Join our network of trusted agents. Earn commissions on every transaction. Be the financial hero in your community.
-            </p>
-            <ul className="mt-6 space-y-3">
-              {[
-                "Earn ₦10 per deposit and withdrawal",
-                "Daily commission settlement",
-                "Free training and support",
-                "Work in your own market",
-              ].map((b) => (
-                <li key={b} className="flex items-start gap-3">
-                  <CheckCircle2 className="mt-0.5 h-5 w-5 text-success shrink-0" />
-                  <span>{b}</span>
-                </li>
-              ))}
-            </ul>
+            <p className="text-xs font-semibold uppercase tracking-widest text-accent">For Traders</p>
+            <h2 className="mt-2 text-3xl font-bold md:text-4xl">"My savings are <span className="text-primary">finally safe.</span>"</h2>
+            <p className="mt-4 text-muted-foreground">Mama Ngozi sells fabric at Mile 12. She used to fear her daily collector. Today, SafeBox sends her an SMS every time she saves — and her balance earns yield every month.</p>
+            <Link to="/for-traders"><Button size="lg" className="mt-6 bg-primary hover:bg-primary/90">See trader benefits <ArrowRight className="ml-2 h-4 w-4" /></Button></Link>
           </div>
-          <Card className="p-6 border-2 border-primary/10 bg-gradient-to-br from-white to-cream">
-            <h3 className="font-display text-xl font-semibold">Apply Now</h3>
-            <p className="mt-1 text-sm text-muted-foreground">Get a callback within 24 hours.</p>
-            <form className="mt-5 space-y-4" onSubmit={(e) => e.preventDefault()}>
-              <Input placeholder="Full name" />
-              <Input placeholder="Phone number" type="tel" />
-              <Input placeholder="Market location (e.g. Bodija Market, Ibadan)" />
-              <Button className="w-full bg-primary hover:bg-primary/90">Submit Application</Button>
-            </form>
-          </Card>
+        </div>
+      </section>
+
+      {/* FOR AGENTS */}
+      <section id="agents" className="bg-cream py-20">
+        <div className="mx-auto max-w-7xl px-4 md:px-8">
+          <div className="grid items-center gap-12 md:grid-cols-2">
+            <div className="order-2 md:order-1">
+              <p className="text-xs font-semibold uppercase tracking-widest text-accent">For Agents</p>
+              <h2 className="mt-2 text-3xl font-bold md:text-4xl">Become a SafeBox Agent. <span className="text-gradient-gold">Earn Daily.</span></h2>
+              <p className="mt-4 text-muted-foreground">
+                Top up your float, credit traders from your capital, keep the cash they pay you. Earn commissions on every transaction — no end-of-day cash deposit.
+              </p>
+              <ul className="mt-6 space-y-3">
+                {[
+                  "Earn ₦10 per deposit and ₦15 per withdrawal",
+                  "Daily commission settlement",
+                  "Dedicated float account, USSD / bank top-up",
+                  "Free training and ongoing support",
+                ].map((b) => (
+                  <li key={b} className="flex items-start gap-3">
+                    <CheckCircle2 className="mt-0.5 h-5 w-5 text-success shrink-0" />
+                    <span>{b}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-6 flex gap-3 flex-wrap">
+                <Link to="/register"><Button size="lg" className="bg-primary hover:bg-primary/90">Become an Agent</Button></Link>
+                <Link to="/for-agents"><Button size="lg" variant="outline">How it works</Button></Link>
+              </div>
+            </div>
+            <img src={agentImg} alt="Black African SafeBox agent in green polo holding a smartphone" width={1024} height={1024} className="rounded-2xl shadow-xl object-cover aspect-square w-full order-1 md:order-2" loading="lazy" />
+          </div>
         </div>
       </section>
 
