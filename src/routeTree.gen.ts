@@ -9,8 +9,14 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as RegisterRouteImport } from './routes/register'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as ForTradersRouteImport } from './routes/for-traders'
+import { Route as ForAgentsRouteImport } from './routes/for-agents'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AgentRouteImport } from './routes/agent'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AgentIndexRouteImport } from './routes/agent.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
@@ -29,6 +35,31 @@ import { Route as AdminFloatRouteImport } from './routes/admin.float'
 import { Route as AdminComplianceRouteImport } from './routes/admin.compliance'
 import { Route as AdminAgentsRouteImport } from './routes/admin.agents'
 
+const RegisterRoute = RegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForTradersRoute = ForTradersRouteImport.update({
+  id: '/for-traders',
+  path: '/for-traders',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForAgentsRoute = ForAgentsRouteImport.update({
+  id: '/for-agents',
+  path: '/for-agents',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AgentRoute = AgentRouteImport.update({
   id: '/agent',
   path: '/agent',
@@ -37,6 +68,11 @@ const AgentRoute = AgentRouteImport.update({
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -127,8 +163,14 @@ const AdminAgentsRoute = AdminAgentsRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/admin': typeof AdminRouteWithChildren
   '/agent': typeof AgentRouteWithChildren
+  '/contact': typeof ContactRoute
+  '/for-agents': typeof ForAgentsRoute
+  '/for-traders': typeof ForTradersRoute
+  '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
   '/admin/agents': typeof AdminAgentsRoute
   '/admin/compliance': typeof AdminComplianceRoute
   '/admin/float': typeof AdminFloatRoute
@@ -148,6 +190,12 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
+  '/for-agents': typeof ForAgentsRoute
+  '/for-traders': typeof ForTradersRoute
+  '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
   '/admin/agents': typeof AdminAgentsRoute
   '/admin/compliance': typeof AdminComplianceRoute
   '/admin/float': typeof AdminFloatRoute
@@ -168,8 +216,14 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/admin': typeof AdminRouteWithChildren
   '/agent': typeof AgentRouteWithChildren
+  '/contact': typeof ContactRoute
+  '/for-agents': typeof ForAgentsRoute
+  '/for-traders': typeof ForTradersRoute
+  '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
   '/admin/agents': typeof AdminAgentsRoute
   '/admin/compliance': typeof AdminComplianceRoute
   '/admin/float': typeof AdminFloatRoute
@@ -191,8 +245,14 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about'
     | '/admin'
     | '/agent'
+    | '/contact'
+    | '/for-agents'
+    | '/for-traders'
+    | '/login'
+    | '/register'
     | '/admin/agents'
     | '/admin/compliance'
     | '/admin/float'
@@ -212,6 +272,12 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about'
+    | '/contact'
+    | '/for-agents'
+    | '/for-traders'
+    | '/login'
+    | '/register'
     | '/admin/agents'
     | '/admin/compliance'
     | '/admin/float'
@@ -231,8 +297,14 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/about'
     | '/admin'
     | '/agent'
+    | '/contact'
+    | '/for-agents'
+    | '/for-traders'
+    | '/login'
+    | '/register'
     | '/admin/agents'
     | '/admin/compliance'
     | '/admin/float'
@@ -253,12 +325,53 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
   AdminRoute: typeof AdminRouteWithChildren
   AgentRoute: typeof AgentRouteWithChildren
+  ContactRoute: typeof ContactRoute
+  ForAgentsRoute: typeof ForAgentsRoute
+  ForTradersRoute: typeof ForTradersRoute
+  LoginRoute: typeof LoginRoute
+  RegisterRoute: typeof RegisterRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/for-traders': {
+      id: '/for-traders'
+      path: '/for-traders'
+      fullPath: '/for-traders'
+      preLoaderRoute: typeof ForTradersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/for-agents': {
+      id: '/for-agents'
+      path: '/for-agents'
+      fullPath: '/for-agents'
+      preLoaderRoute: typeof ForAgentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/agent': {
       id: '/agent'
       path: '/agent'
@@ -271,6 +384,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -445,8 +565,14 @@ const AgentRouteWithChildren = AgentRoute._addFileChildren(AgentRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
   AdminRoute: AdminRouteWithChildren,
   AgentRoute: AgentRouteWithChildren,
+  ContactRoute: ContactRoute,
+  ForAgentsRoute: ForAgentsRoute,
+  ForTradersRoute: ForTradersRoute,
+  LoginRoute: LoginRoute,
+  RegisterRoute: RegisterRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
