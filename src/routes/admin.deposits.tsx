@@ -111,7 +111,7 @@ function DepositsAnalytics() {
                 <XAxis dataKey="name" />
                 <YAxis />
                 <Tooltip formatter={(v: number) => formatNaira(v)} />
-                <Bar dataKey="amount" fill="hsl(var(--primary))" radius={[6, 6, 0, 0]} />
+                <Bar dataKey="amount" fill="#0B4F2E" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>

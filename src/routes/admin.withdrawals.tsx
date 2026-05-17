@@ -110,7 +110,7 @@ function WithdrawalsAnalytics() {
                 <XAxis dataKey="name" />
                 <YAxis />
                 <Tooltip formatter={(v: number) => formatNaira(v)} />
-                <Bar dataKey="amount" fill="hsl(var(--destructive))" radius={[6, 6, 0, 0]} />
+                <Bar dataKey="amount" fill="#b91c1c" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
