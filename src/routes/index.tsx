@@ -241,32 +241,33 @@ function Landing() {
         </div>
       </section>
 
-      {/* FOR PARTNERS */}
-      <section id="about" className="bg-sidebar text-sidebar-foreground py-20">
+      {/* WITHDRAWAL AUTHENTICATION */}
+      <section id="security" className="bg-sidebar text-sidebar-foreground py-20">
         <div className="mx-auto max-w-7xl px-4 md:px-8">
           <div className="grid gap-12 md:grid-cols-2 items-center">
+            <img src={authImg} alt="SafeBox agent verifying a trader withdrawal using SMS OTP, paper savings card and a biometric fingerprint scanner in a Nigerian market" width={1024} height={1024} className="rounded-2xl shadow-2xl object-cover aspect-square w-full" loading="lazy" />
             <div>
-              <p className="text-xs font-semibold uppercase tracking-widest text-gold">For Partners</p>
-              <h2 className="mt-2 text-3xl font-bold md:text-4xl">Partner with SafeBox. Reach the Unbanked.</h2>
-              <p className="mt-4 text-sidebar-foreground/80">
-                SafeBox provides the technology, agent network, and reconciliation engine. You provide the regulatory license and fund custody. Together, we bring financial inclusion to millions.
+              <p className="text-xs font-semibold uppercase tracking-widest text-gold">Withdrawal Security</p>
+              <h2 className="mt-2 text-3xl font-bold md:text-4xl">Layered authentication. <span className="text-gold">Nobody is excluded.</span></h2>
+              <p className="mt-4 text-sidebar-foreground/80 leading-relaxed">
+                SafeBox will supports multiple withdrawal authentication methods to serve traders across all literacy and technology levels. For phone users, we use SMS OTP. For non-phone users, agents verify identity through in-person recognition. Traders also receive a paper savings card that serves as a physical record and can be used for verification. In high-volume markets, we deploy biometric fingerprint scanners as the most secure option. This layered approach ensures no trader is excluded.
               </p>
-              <Button className="mt-6 bg-gold text-gold-foreground hover:bg-gold/90">Become a Partner</Button>
-            </div>
-            <div className="grid gap-3 sm:grid-cols-2">
-              {[
-                "CBN Agent Banking compliant",
-                "Real-time reconciliation",
-                "Daily NIBSS reporting",
-                "Agent KYC and training",
-                "White-label options",
-                "Dedicated success team",
-              ].map((f) => (
-                <div key={f} className="flex items-start gap-2 rounded-lg bg-white/5 p-3 border border-white/10">
-                  <Smartphone className="mt-0.5 h-4 w-4 text-gold shrink-0" />
-                  <span className="text-sm">{f}</span>
-                </div>
-              ))}
+              <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                {[
+                  { icon: MessageSquare, label: "SMS OTP", desc: "Phone users" },
+                  { icon: Users, label: "Agent recognition", desc: "Non-phone users" },
+                  { icon: FileCheck, label: "Paper savings card", desc: "Physical record" },
+                  { icon: ShieldCheck, label: "Biometric fingerprint", desc: "High-volume markets" },
+                ].map((f) => (
+                  <div key={f.label} className="flex items-start gap-3 rounded-lg bg-white/5 p-3 border border-white/10">
+                    <f.icon className="mt-0.5 h-4 w-4 text-gold shrink-0" />
+                    <div>
+                      <p className="text-sm font-semibold">{f.label}</p>
+                      <p className="text-[11px] text-sidebar-foreground/70">{f.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
