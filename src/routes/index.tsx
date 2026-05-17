@@ -13,6 +13,7 @@ import { Card } from "@/components/ui/card";
 import traderImg from "@/assets/trader-woman.jpg";
 import agentImg from "@/assets/agent-man.jpg";
 import communityImg from "@/assets/community.jpg";
+import authImg from "@/assets/withdrawal-auth.jpg";
 
 export const Route = createFileRoute("/")({
   component: Landing,
