@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { currentAgent, myFloatTopUps, formatNaira } from "@/lib/mockData";
+import { agentStore, useAgentState } from "@/lib/agentStore";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/agent/topup")({
@@ -24,7 +25,8 @@ function TopUp() {
   const [amount, setAmount] = useState("50000");
   const [channel, setChannel] = useState<typeof channels[number]["id"]>("bank");
   const navigate = useNavigate();
-  const newBalance = currentAgent.floatBalance + Number(amount || 0);
+  const s = useAgentState();
+  const newBalance = s.floatBalance + Number(amount || 0);
   const ref = "NIBSS-" + Math.floor(Math.random() * 9000000 + 1000000);
 
   return (
