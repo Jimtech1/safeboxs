@@ -28,10 +28,12 @@ import { Route as AgentSettingsRouteImport } from './routes/agent.settings'
 import { Route as AgentPerformanceRouteImport } from './routes/agent.performance'
 import { Route as AgentDepositRouteImport } from './routes/agent.deposit'
 import { Route as AgentBalanceRouteImport } from './routes/agent.balance'
+import { Route as AdminWithdrawalsRouteImport } from './routes/admin.withdrawals'
 import { Route as AdminTransactionsRouteImport } from './routes/admin.transactions'
 import { Route as AdminTradersRouteImport } from './routes/admin.traders'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminFloatRouteImport } from './routes/admin.float'
+import { Route as AdminDepositsRouteImport } from './routes/admin.deposits'
 import { Route as AdminComplianceRouteImport } from './routes/admin.compliance'
 import { Route as AdminAgentsRouteImport } from './routes/admin.agents'
 
@@ -130,6 +132,11 @@ const AgentBalanceRoute = AgentBalanceRouteImport.update({
   path: '/balance',
   getParentRoute: () => AgentRoute,
 } as any)
+const AdminWithdrawalsRoute = AdminWithdrawalsRouteImport.update({
+  id: '/withdrawals',
+  path: '/withdrawals',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminTransactionsRoute = AdminTransactionsRouteImport.update({
   id: '/transactions',
   path: '/transactions',
@@ -148,6 +155,11 @@ const AdminSettingsRoute = AdminSettingsRouteImport.update({
 const AdminFloatRoute = AdminFloatRouteImport.update({
   id: '/float',
   path: '/float',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminDepositsRoute = AdminDepositsRouteImport.update({
+  id: '/deposits',
+  path: '/deposits',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminComplianceRoute = AdminComplianceRouteImport.update({
@@ -173,10 +185,12 @@ export interface FileRoutesByFullPath {
   '/register': typeof RegisterRoute
   '/admin/agents': typeof AdminAgentsRoute
   '/admin/compliance': typeof AdminComplianceRoute
+  '/admin/deposits': typeof AdminDepositsRoute
   '/admin/float': typeof AdminFloatRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/traders': typeof AdminTradersRoute
   '/admin/transactions': typeof AdminTransactionsRoute
+  '/admin/withdrawals': typeof AdminWithdrawalsRoute
   '/agent/balance': typeof AgentBalanceRoute
   '/agent/deposit': typeof AgentDepositRoute
   '/agent/performance': typeof AgentPerformanceRoute
@@ -198,10 +212,12 @@ export interface FileRoutesByTo {
   '/register': typeof RegisterRoute
   '/admin/agents': typeof AdminAgentsRoute
   '/admin/compliance': typeof AdminComplianceRoute
+  '/admin/deposits': typeof AdminDepositsRoute
   '/admin/float': typeof AdminFloatRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/traders': typeof AdminTradersRoute
   '/admin/transactions': typeof AdminTransactionsRoute
+  '/admin/withdrawals': typeof AdminWithdrawalsRoute
   '/agent/balance': typeof AgentBalanceRoute
   '/agent/deposit': typeof AgentDepositRoute
   '/agent/performance': typeof AgentPerformanceRoute
@@ -226,10 +242,12 @@ export interface FileRoutesById {
   '/register': typeof RegisterRoute
   '/admin/agents': typeof AdminAgentsRoute
   '/admin/compliance': typeof AdminComplianceRoute
+  '/admin/deposits': typeof AdminDepositsRoute
   '/admin/float': typeof AdminFloatRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/traders': typeof AdminTradersRoute
   '/admin/transactions': typeof AdminTransactionsRoute
+  '/admin/withdrawals': typeof AdminWithdrawalsRoute
   '/agent/balance': typeof AgentBalanceRoute
   '/agent/deposit': typeof AgentDepositRoute
   '/agent/performance': typeof AgentPerformanceRoute
@@ -255,10 +273,12 @@ export interface FileRouteTypes {
     | '/register'
     | '/admin/agents'
     | '/admin/compliance'
+    | '/admin/deposits'
     | '/admin/float'
     | '/admin/settings'
     | '/admin/traders'
     | '/admin/transactions'
+    | '/admin/withdrawals'
     | '/agent/balance'
     | '/agent/deposit'
     | '/agent/performance'
@@ -280,10 +300,12 @@ export interface FileRouteTypes {
     | '/register'
     | '/admin/agents'
     | '/admin/compliance'
+    | '/admin/deposits'
     | '/admin/float'
     | '/admin/settings'
     | '/admin/traders'
     | '/admin/transactions'
+    | '/admin/withdrawals'
     | '/agent/balance'
     | '/agent/deposit'
     | '/agent/performance'
@@ -307,10 +329,12 @@ export interface FileRouteTypes {
     | '/register'
     | '/admin/agents'
     | '/admin/compliance'
+    | '/admin/deposits'
     | '/admin/float'
     | '/admin/settings'
     | '/admin/traders'
     | '/admin/transactions'
+    | '/admin/withdrawals'
     | '/agent/balance'
     | '/agent/deposit'
     | '/agent/performance'
@@ -470,6 +494,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AgentBalanceRouteImport
       parentRoute: typeof AgentRoute
     }
+    '/admin/withdrawals': {
+      id: '/admin/withdrawals'
+      path: '/withdrawals'
+      fullPath: '/admin/withdrawals'
+      preLoaderRoute: typeof AdminWithdrawalsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/transactions': {
       id: '/admin/transactions'
       path: '/transactions'
@@ -498,6 +529,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminFloatRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/deposits': {
+      id: '/admin/deposits'
+      path: '/deposits'
+      fullPath: '/admin/deposits'
+      preLoaderRoute: typeof AdminDepositsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/compliance': {
       id: '/admin/compliance'
       path: '/compliance'
@@ -518,20 +556,24 @@ declare module '@tanstack/react-router' {
 interface AdminRouteChildren {
   AdminAgentsRoute: typeof AdminAgentsRoute
   AdminComplianceRoute: typeof AdminComplianceRoute
+  AdminDepositsRoute: typeof AdminDepositsRoute
   AdminFloatRoute: typeof AdminFloatRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminTradersRoute: typeof AdminTradersRoute
   AdminTransactionsRoute: typeof AdminTransactionsRoute
+  AdminWithdrawalsRoute: typeof AdminWithdrawalsRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminAgentsRoute: AdminAgentsRoute,
   AdminComplianceRoute: AdminComplianceRoute,
+  AdminDepositsRoute: AdminDepositsRoute,
   AdminFloatRoute: AdminFloatRoute,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminTradersRoute: AdminTradersRoute,
   AdminTransactionsRoute: AdminTransactionsRoute,
+  AdminWithdrawalsRoute: AdminWithdrawalsRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 

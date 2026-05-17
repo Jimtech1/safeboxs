@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { currentAgent, myFloatTopUps, formatNaira } from "@/lib/mockData";
+import { agentStore, useAgentState } from "@/lib/agentStore";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/agent/topup")({
@@ -24,7 +25,8 @@ function TopUp() {
   const [amount, setAmount] = useState("50000");
   const [channel, setChannel] = useState<typeof channels[number]["id"]>("bank");
   const navigate = useNavigate();
-  const newBalance = currentAgent.floatBalance + Number(amount || 0);
+  const s = useAgentState();
+  const newBalance = s.floatBalance + Number(amount || 0);
   const ref = "NIBSS-" + Math.floor(Math.random() * 9000000 + 1000000);
 
   return (
@@ -45,7 +47,7 @@ function TopUp() {
             <Card className="p-5 space-y-4">
               <div className="rounded-xl bg-primary/5 p-4">
                 <p className="text-xs text-muted-foreground">Current float balance</p>
-                <p className="font-display text-2xl font-bold text-primary">{formatNaira(currentAgent.floatBalance)}</p>
+                <p className="font-display text-2xl font-bold text-primary">{formatNaira(s.floatBalance)}</p>
                 <p className="text-[11px] text-muted-foreground mt-1">Capacity: {formatNaira(currentAgent.floatCapacity)}</p>
               </div>
               <div>
@@ -88,7 +90,7 @@ function TopUp() {
                 <hr />
                 <div className="flex justify-between"><span className="text-muted-foreground">New float balance</span><span className="font-display text-lg font-bold text-primary">{formatNaira(newBalance)}</span></div>
               </div>
-              <Button className="w-full h-12 bg-success hover:bg-success/90" onClick={() => { setStep(4); toast.success(`Float topped up by ${formatNaira(Number(amount))}.`); }}>Pay Now</Button>
+              <Button className="w-full h-12 bg-success hover:bg-success/90" onClick={() => { agentStore.topupFloat(Number(amount)); setStep(4); toast.success(`Float topped up by ${formatNaira(Number(amount))}.`); }}>Pay Now</Button>
             </Card>
           )}
 

@@ -1,5 +1,5 @@
 import { Link, Outlet, useRouterState } from "@tanstack/react-router";
-import { LayoutDashboard, Users, UserCog, ArrowLeftRight, Wallet, ShieldCheck, Settings, Bell, Search } from "lucide-react";
+import { LayoutDashboard, Users, UserCog, ArrowLeftRight, Wallet, ShieldCheck, Settings, Bell, Search, ArrowDownToLine, ArrowUpFromLine } from "lucide-react";
 import { SafeBoxLogo } from "@/components/SafeBoxLogo";
 import { Input } from "@/components/ui/input";
 
@@ -7,6 +7,8 @@ const nav = [
   { to: "/admin", label: "Overview", icon: LayoutDashboard, exact: true },
   { to: "/admin/traders", label: "Traders", icon: Users },
   { to: "/admin/agents", label: "Agents", icon: UserCog },
+  { to: "/admin/deposits", label: "Deposits", icon: ArrowDownToLine },
+  { to: "/admin/withdrawals", label: "Withdrawals", icon: ArrowUpFromLine },
   { to: "/admin/float", label: "Float", icon: Wallet },
   { to: "/admin/transactions", label: "Txns", icon: ArrowLeftRight },
   { to: "/admin/compliance", label: "Compliance", icon: ShieldCheck },
@@ -77,12 +79,12 @@ export function AdminLayout() {
       </div>
 
       {/* Mobile bottom nav */}
-      <nav className="md:hidden fixed bottom-0 inset-x-0 bg-sidebar border-t border-white/10 z-40">
-        <div className="grid grid-cols-7">
+      <nav className="md:hidden fixed bottom-0 inset-x-0 bg-sidebar border-t border-white/10 z-40 overflow-x-auto">
+        <div className="flex min-w-max">
           {nav.map((n) => {
             const active = isActive(n.to, n.exact);
             return (
-              <Link key={n.to} to={n.to} className={`flex flex-col items-center gap-1 py-2 text-[10px] ${active ? "text-gold" : "text-sidebar-foreground/70"}`}>
+              <Link key={n.to} to={n.to} className={`flex flex-col items-center gap-1 py-2 px-4 text-[10px] shrink-0 ${active ? "text-gold" : "text-sidebar-foreground/70"}`}>
                 <n.icon className="h-5 w-5" />
                 {n.label}
               </Link>

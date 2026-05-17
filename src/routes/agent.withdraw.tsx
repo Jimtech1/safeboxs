@@ -1,11 +1,12 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ArrowUpFromLine, CheckCircle2, MessageSquare, Delete, AlertTriangle } from "lucide-react";
+import { ArrowLeft, ArrowUpFromLine, CheckCircle2, MessageSquare, Delete, AlertTriangle, ShieldCheck, RefreshCw } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { traders, formatNaira } from "@/lib/mockData";
+import { agentStore } from "@/lib/agentStore";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/agent/withdraw")({
@@ -27,17 +28,52 @@ function NumPad({ onPress, onBack }: { onPress: (s: string) => void; onBack: () 
   );
 }
 
+function genOTP() {
+  return String(Math.floor(100000 + Math.random() * 900000));
+}
+
 function WithdrawFlow() {
-  const [step, setStep] = useState<1|2|3|4>(1);
+  const [step, setStep] = useState<1|2|3|4|5>(1);
   const [phone, setPhone] = useState("");
   const [amount, setAmount] = useState("");
+  const [otp, setOtp] = useState("");
+  const [generatedOtp, setGeneratedOtp] = useState("");
+  const [otpInput, setOtpInput] = useState("");
+  const [otpError, setOtpError] = useState("");
   const navigate = useNavigate();
   const trader = traders.find((t) => t.phone === phone) ?? traders[0];
   const amt = Number(amount || 0);
   const exceedsBalance = amt > trader.balance;
   const exceedsLimit = amt > DAILY_LIMIT;
   const newBalance = trader.balance - amt;
-  const reset = () => { setStep(1); setPhone(""); setAmount(""); };
+  const reset = () => { setStep(1); setPhone(""); setAmount(""); setOtp(""); setGeneratedOtp(""); setOtpInput(""); setOtpError(""); };
+
+  // Generate OTP when entering step 3
+  useEffect(() => {
+    if (step === 3 && !generatedOtp) {
+      const code = genOTP();
+      setGeneratedOtp(code);
+      toast.success(`SafeBox: OTP ${code} sent to ${trader.phone}. Expires in 5 min.`, { duration: 8000 });
+    }
+  }, [step, generatedOtp, trader.phone]);
+
+  const verifyOtp = () => {
+    if (otpInput === generatedOtp) {
+      setOtp(otpInput);
+      setOtpError("");
+      setStep(4);
+    } else {
+      setOtpError("Invalid OTP. Please try again.");
+    }
+  };
+
+  const resendOtp = () => {
+    const code = genOTP();
+    setGeneratedOtp(code);
+    setOtpInput("");
+    setOtpError("");
+    toast.success(`New OTP ${code} sent to ${trader.phone}.`, { duration: 8000 });
+  };
 
   return (
     <div className="space-y-4">
@@ -46,11 +82,11 @@ function WithdrawFlow() {
         <div className="grid h-10 w-10 place-items-center rounded-xl bg-destructive/15 text-destructive"><ArrowUpFromLine /></div>
         <div>
           <h1 className="text-xl font-bold">Withdrawal</h1>
-          <p className="text-xs text-muted-foreground">Step {step} of 4</p>
+          <p className="text-xs text-muted-foreground">Step {step} of 5</p>
         </div>
       </div>
       <div className="h-1.5 rounded-full bg-secondary overflow-hidden">
-        <motion.div className="h-full bg-destructive" animate={{ width: `${step*25}%` }} />
+        <motion.div className="h-full bg-destructive" animate={{ width: `${step*20}%` }} />
       </div>
 
       <AnimatePresence mode="wait">
@@ -97,26 +133,64 @@ function WithdrawFlow() {
                 </div>
               )}
               <NumPad onPress={(k) => setAmount(amount + k)} onBack={() => setAmount(amount.slice(0, -1))} />
-              <Button disabled={!amt || exceedsBalance || exceedsLimit} className="w-full h-12 bg-destructive hover:bg-destructive/90" onClick={() => setStep(3)}>Confirm Withdrawal</Button>
+              <Button disabled={!amt || exceedsBalance || exceedsLimit} className="w-full h-12 bg-destructive hover:bg-destructive/90" onClick={() => setStep(3)}>Send OTP to Trader</Button>
             </Card>
           )}
 
           {step === 3 && (
             <Card className="p-5 space-y-4">
+              <div className="grid h-12 w-12 mx-auto place-items-center rounded-xl bg-primary/10 text-primary"><ShieldCheck className="h-6 w-6" /></div>
+              <div className="text-center">
+                <h3 className="font-semibold">Verify trader OTP</h3>
+                <p className="text-xs text-muted-foreground mt-1">A 6-digit code was sent via SMS to {trader.phone}.</p>
+              </div>
+
+              <div className="rounded-lg bg-cream p-3 text-center">
+                <p className="text-[10px] uppercase text-muted-foreground tracking-wide">Demo OTP (shown for testing)</p>
+                <p className="font-mono text-lg font-bold tracking-widest text-primary">{generatedOtp}</p>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium">Enter the 6-digit OTP from trader</label>
+                <Input
+                  inputMode="numeric"
+                  maxLength={6}
+                  className="mt-1.5 h-14 text-center text-2xl font-mono tracking-[0.6em]"
+                  placeholder="------"
+                  value={otpInput}
+                  onChange={(e) => { setOtpInput(e.target.value.replace(/\D/g, "")); setOtpError(""); }}
+                />
+                {otpError && <p className="mt-2 text-xs text-destructive">{otpError}</p>}
+              </div>
+
+              <div className="flex items-center justify-between">
+                <button onClick={resendOtp} className="flex items-center gap-1.5 text-xs text-primary font-medium">
+                  <RefreshCw className="h-3 w-3" /> Resend OTP
+                </button>
+                <p className="text-[11px] text-muted-foreground">Expires in 5 min</p>
+              </div>
+
+              <Button disabled={otpInput.length !== 6} className="w-full h-12 bg-primary hover:bg-primary/90" onClick={verifyOtp}>Verify OTP</Button>
+            </Card>
+          )}
+
+          {step === 4 && (
+            <Card className="p-5 space-y-4">
               <h3 className="font-semibold">Confirm & disburse cash</h3>
               <div className="rounded-xl border bg-cream/50 p-4 space-y-3 text-sm">
                 <div className="flex justify-between"><span className="text-muted-foreground">Trader</span><span className="font-medium">{trader.name}</span></div>
                 <div className="flex justify-between"><span className="text-muted-foreground">Amount</span><span className="font-bold">{formatNaira(amt)}</span></div>
+                <div className="flex justify-between"><span className="text-muted-foreground">OTP verified</span><span className="font-mono text-success">✓ {otp}</span></div>
                 <div className="flex justify-between"><span className="text-muted-foreground">New balance</span><span className="font-bold">{formatNaira(newBalance)}</span></div>
               </div>
-              <p className="text-xs text-muted-foreground text-center">Disburse cash to trader before confirming.</p>
-              <Button className="w-full h-12 bg-destructive hover:bg-destructive/90" onClick={() => { setStep(4); toast.success(`Withdrawal of ${formatNaira(amt)} processed. Cash disbursed.`); }}>
+              <p className="text-xs text-muted-foreground text-center">Disburse cash to trader before confirming. Your float will be refunded by the same amount.</p>
+              <Button className="w-full h-12 bg-destructive hover:bg-destructive/90" onClick={() => { agentStore.recordWithdrawal(amt); setStep(5); toast.success(`Withdrawal of ${formatNaira(amt)} processed. Float refunded.`); }}>
                 Process Withdrawal
               </Button>
             </Card>
           )}
 
-          {step === 4 && (
+          {step === 5 && (
             <Card className="p-6 text-center space-y-4">
               <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="mx-auto grid h-20 w-20 place-items-center rounded-full bg-success/15 text-success">
                 <CheckCircle2 className="h-10 w-10" />
@@ -127,7 +201,7 @@ function WithdrawFlow() {
               </div>
               <div className="flex items-center justify-center gap-2 text-xs text-success"><MessageSquare className="h-4 w-4" /> SMS receipt sent</div>
               <div className="rounded-lg bg-cream p-3">
-                <p className="text-xs text-muted-foreground">New balance</p>
+                <p className="text-xs text-muted-foreground">Trader's new balance</p>
                 <p className="font-display text-xl font-bold text-primary">{formatNaira(newBalance)}</p>
               </div>
               <div className="grid grid-cols-2 gap-2">

@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { traders, formatNaira } from "@/lib/mockData";
+import { agentStore } from "@/lib/agentStore";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/agent/deposit")({
@@ -106,7 +107,7 @@ function DepositFlow() {
                 <Row label="Amount" value={formatNaira(Number(amount))} bold />
                 <Row label="New balance" value={formatNaira(newBalance)} bold />
               </div>
-              <Button className="w-full h-12 bg-success hover:bg-success/90" onClick={() => { setStep(4); toast.success(`Deposit of ${formatNaira(Number(amount))} processed. SMS sent to trader.`); }}>
+              <Button className="w-full h-12 bg-success hover:bg-success/90" onClick={() => { agentStore.recordDeposit(Number(amount)); setStep(4); toast.success(`Deposit of ${formatNaira(Number(amount))} processed. SMS sent to trader.`); }}>
                 Process Deposit
               </Button>
             </Card>

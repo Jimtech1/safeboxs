@@ -13,6 +13,7 @@ import { Card } from "@/components/ui/card";
 import traderImg from "@/assets/trader-woman.jpg";
 import agentImg from "@/assets/agent-man.jpg";
 import communityImg from "@/assets/community.jpg";
+import authImg from "@/assets/withdrawal-auth.jpg";
 
 export const Route = createFileRoute("/")({
   component: Landing,
@@ -73,19 +74,19 @@ function Landing() {
 
           {/* Right illustration */}
           <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.7, delay: 0.1 }} className="relative">
-            <div className="relative mx-auto aspect-square max-w-md">
+            <div className="relative mx-auto h-[460px] sm:h-[500px] md:aspect-square md:h-auto max-w-md">
               {/* Agent + trader card */}
-              <div className="absolute left-0 top-6 w-[78%] rounded-2xl bg-white p-5 shadow-xl border">
+              <div className="absolute left-0 top-0 md:top-6 w-[72%] rounded-2xl bg-white p-4 md:p-5 shadow-xl border">
                 <div className="flex items-center gap-3">
-                  <div className="grid h-12 w-12 place-items-center rounded-full bg-primary/10 text-primary"><Users /></div>
+                  <div className="grid h-10 w-10 md:h-12 md:w-12 place-items-center rounded-full bg-primary/10 text-primary"><Users /></div>
                   <div>
-                    <p className="font-semibold">Trader → Agent</p>
-                    <p className="text-xs text-muted-foreground">Cash handed safely</p>
+                    <p className="font-semibold text-sm md:text-base">Trader → Agent</p>
+                    <p className="text-[11px] md:text-xs text-muted-foreground">Cash handed safely</p>
                   </div>
                 </div>
-                <div className="mt-4 rounded-lg bg-cream p-3">
-                  <p className="text-xs text-muted-foreground">Today's deposit</p>
-                  <p className="font-display text-2xl font-bold text-primary">₦1,000</p>
+                <div className="mt-3 md:mt-4 rounded-lg bg-cream p-3">
+                  <p className="text-[11px] md:text-xs text-muted-foreground">Today's deposit</p>
+                  <p className="font-display text-xl md:text-2xl font-bold text-primary">₦1,000</p>
                 </div>
               </div>
 
@@ -93,12 +94,12 @@ function Landing() {
               <motion.div
                 animate={{ y: [0, -8, 0] }}
                 transition={{ repeat: Infinity, duration: 3 }}
-                className="absolute right-0 top-32 w-[60%] rounded-2xl bg-sidebar text-sidebar-foreground p-4 shadow-2xl"
+                className="absolute right-0 top-[170px] md:top-32 w-[64%] md:w-[60%] rounded-2xl bg-sidebar text-sidebar-foreground p-3 md:p-4 shadow-2xl"
               >
-                <div className="flex items-center gap-2 text-xs text-sidebar-foreground/70">
+                <div className="flex items-center gap-2 text-[11px] md:text-xs text-sidebar-foreground/70">
                   <MessageSquare className="h-3.5 w-3.5" /> SafeBox SMS
                 </div>
-                <p className="mt-2 text-sm">You saved <span className="font-bold text-gold">₦1,000</span>. New balance: ₦24,500. Thank you!</p>
+                <p className="mt-2 text-xs md:text-sm leading-snug">You saved <span className="font-bold text-gold">₦1,000</span>. New balance: ₦24,500. Thank you!</p>
               </motion.div>
 
               {/* Growth bar */}
@@ -106,13 +107,13 @@ function Landing() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="absolute bottom-0 left-6 w-[88%] rounded-2xl bg-white p-5 shadow-xl border"
+                className="absolute bottom-0 left-0 md:left-6 w-[92%] md:w-[88%] rounded-2xl bg-white p-4 md:p-5 shadow-xl border"
               >
                 <div className="flex items-center justify-between">
                   <p className="text-sm font-semibold">Savings growing</p>
                   <span className="text-xs font-semibold text-success">+8.4% YTD</span>
                 </div>
-                <div className="mt-3 flex items-end gap-1 h-16">
+                <div className="mt-3 flex items-end gap-1 h-14 md:h-16">
                   {[30, 45, 38, 60, 72, 80, 95].map((h, i) => (
                     <motion.div
                       key={i}
@@ -126,9 +127,9 @@ function Landing() {
               </motion.div>
 
               {/* Floating badges */}
-              <div className="absolute -top-2 right-2 rounded-full bg-gold px-3 py-1 text-xs font-bold text-gold-foreground shadow-lg">₦50B+ Saved</div>
-              <div className="absolute -bottom-2 right-10 rounded-full bg-primary px-3 py-1 text-xs font-bold text-primary-foreground shadow-lg">100k+ Traders</div>
-              <div className="absolute top-1/2 -left-3 rounded-full bg-accent px-3 py-1 text-xs font-bold text-accent-foreground shadow-lg">5k+ Agents</div>
+              <div className="absolute -top-2 right-2 rounded-full bg-gold px-3 py-1 text-[11px] md:text-xs font-bold text-gold-foreground shadow-lg">₦50B+ Saved</div>
+              <div className="absolute bottom-[88px] md:-bottom-2 right-2 md:right-10 rounded-full bg-primary px-3 py-1 text-[11px] md:text-xs font-bold text-primary-foreground shadow-lg">100k+ Traders</div>
+              <div className="absolute top-[130px] md:top-1/2 -left-1 md:-left-3 rounded-full bg-accent px-3 py-1 text-[11px] md:text-xs font-bold text-accent-foreground shadow-lg">5k+ Agents</div>
             </div>
           </motion.div>
         </div>
@@ -240,32 +241,33 @@ function Landing() {
         </div>
       </section>
 
-      {/* FOR PARTNERS */}
-      <section id="about" className="bg-sidebar text-sidebar-foreground py-20">
+      {/* WITHDRAWAL AUTHENTICATION */}
+      <section id="security" className="bg-sidebar text-sidebar-foreground py-20">
         <div className="mx-auto max-w-7xl px-4 md:px-8">
           <div className="grid gap-12 md:grid-cols-2 items-center">
+            <img src={authImg} alt="SafeBox agent verifying a trader withdrawal using SMS OTP, paper savings card and a biometric fingerprint scanner in a Nigerian market" width={1024} height={1024} className="rounded-2xl shadow-2xl object-cover aspect-square w-full" loading="lazy" />
             <div>
-              <p className="text-xs font-semibold uppercase tracking-widest text-gold">For Partners</p>
-              <h2 className="mt-2 text-3xl font-bold md:text-4xl">Partner with SafeBox. Reach the Unbanked.</h2>
-              <p className="mt-4 text-sidebar-foreground/80">
-                SafeBox provides the technology, agent network, and reconciliation engine. You provide the regulatory license and fund custody. Together, we bring financial inclusion to millions.
+              <p className="text-xs font-semibold uppercase tracking-widest text-gold">Withdrawal Security</p>
+              <h2 className="mt-2 text-3xl font-bold md:text-4xl">Layered authentication. <span className="text-gold">Nobody is excluded.</span></h2>
+              <p className="mt-4 text-sidebar-foreground/80 leading-relaxed">
+                SafeBox will supports multiple withdrawal authentication methods to serve traders across all literacy and technology levels. For phone users, we use SMS OTP. For non-phone users, agents verify identity through in-person recognition. Traders also receive a paper savings card that serves as a physical record and can be used for verification. In high-volume markets, we deploy biometric fingerprint scanners as the most secure option. This layered approach ensures no trader is excluded.
               </p>
-              <Button className="mt-6 bg-gold text-gold-foreground hover:bg-gold/90">Become a Partner</Button>
-            </div>
-            <div className="grid gap-3 sm:grid-cols-2">
-              {[
-                "CBN Agent Banking compliant",
-                "Real-time reconciliation",
-                "Daily NIBSS reporting",
-                "Agent KYC and training",
-                "White-label options",
-                "Dedicated success team",
-              ].map((f) => (
-                <div key={f} className="flex items-start gap-2 rounded-lg bg-white/5 p-3 border border-white/10">
-                  <Smartphone className="mt-0.5 h-4 w-4 text-gold shrink-0" />
-                  <span className="text-sm">{f}</span>
-                </div>
-              ))}
+              <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                {[
+                  { icon: MessageSquare, label: "SMS OTP", desc: "Phone users" },
+                  { icon: Users, label: "Agent recognition", desc: "Non-phone users" },
+                  { icon: FileCheck, label: "Paper savings card", desc: "Physical record" },
+                  { icon: ShieldCheck, label: "Biometric fingerprint", desc: "High-volume markets" },
+                ].map((f) => (
+                  <div key={f.label} className="flex items-start gap-3 rounded-lg bg-white/5 p-3 border border-white/10">
+                    <f.icon className="mt-0.5 h-4 w-4 text-gold shrink-0" />
+                    <div>
+                      <p className="text-sm font-semibold">{f.label}</p>
+                      <p className="text-[11px] text-sidebar-foreground/70">{f.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
