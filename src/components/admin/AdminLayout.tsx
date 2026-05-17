@@ -79,12 +79,12 @@ export function AdminLayout() {
       </div>
 
       {/* Mobile bottom nav */}
-      <nav className="md:hidden fixed bottom-0 inset-x-0 bg-sidebar border-t border-white/10 z-40">
-        <div className="grid grid-cols-7">
+      <nav className="md:hidden fixed bottom-0 inset-x-0 bg-sidebar border-t border-white/10 z-40 overflow-x-auto">
+        <div className="flex min-w-max">
           {nav.map((n) => {
             const active = isActive(n.to, n.exact);
             return (
-              <Link key={n.to} to={n.to} className={`flex flex-col items-center gap-1 py-2 text-[10px] ${active ? "text-gold" : "text-sidebar-foreground/70"}`}>
+              <Link key={n.to} to={n.to} className={`flex flex-col items-center gap-1 py-2 px-4 text-[10px] shrink-0 ${active ? "text-gold" : "text-sidebar-foreground/70"}`}>
                 <n.icon className="h-5 w-5" />
                 {n.label}
               </Link>
