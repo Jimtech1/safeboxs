@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import {
   MapPin, Banknote, Wallet, MessageSquare, TrendingUp, Clock,
   ShieldCheck, Phone, Users, Star, FileCheck, Lock, Building2,
-  ArrowRight, CheckCircle2, Smartphone,
+  ArrowRight, CheckCircle2, Smartphone, Trophy, Gift, CalendarDays, Sparkles,
 } from "lucide-react";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
