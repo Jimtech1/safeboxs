@@ -13,7 +13,6 @@ import { Card } from "@/components/ui/card";
 import traderImg from "@/assets/trader-woman.jpg";
 import agentImg from "@/assets/agent-man.jpg";
 import communityImg from "@/assets/community.jpg";
-import authImg from "@/assets/withdrawal-auth.jpg";
 
 export const Route = createFileRoute("/")({
   component: Landing,
@@ -242,31 +241,51 @@ function Landing() {
       </section>
 
       {/* WITHDRAWAL AUTHENTICATION */}
-      <section id="security" className="bg-sidebar text-sidebar-foreground py-20">
+      <section id="security" className="overflow-hidden bg-sidebar py-20 text-sidebar-foreground">
         <div className="mx-auto max-w-7xl px-4 md:px-8">
-          <div className="grid gap-12 md:grid-cols-2 items-center">
-            <img src={authImg} alt="SafeBox agent verifying a trader withdrawal using SMS OTP, paper savings card and a biometric fingerprint scanner in a Nigerian market" width={1024} height={1024} className="rounded-2xl shadow-2xl object-cover aspect-square w-full" loading="lazy" />
-            <div>
+          <div className="grid items-center gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:gap-14">
+            <div className="order-1 lg:order-2">
               <p className="text-xs font-semibold uppercase tracking-widest text-gold">Withdrawal Security</p>
               <h2 className="mt-2 text-3xl font-bold md:text-4xl">Layered authentication. <span className="text-gold">Nobody is excluded.</span></h2>
-              <p className="mt-4 text-sidebar-foreground/80 leading-relaxed">
-                SafeBox will supports multiple withdrawal authentication methods to serve traders across all literacy and technology levels. For phone users, we use SMS OTP. For non-phone users, agents verify identity through in-person recognition. Traders also receive a paper savings card that serves as a physical record and can be used for verification. In high-volume markets, we deploy biometric fingerprint scanners as the most secure option. This layered approach ensures no trader is excluded.
+              <p className="mt-4 text-base leading-8 text-sidebar-foreground/80 md:text-lg">
+                SafeBox supports multiple withdrawal authentication methods to serve traders across all literacy and technology levels. For phone users, we use SMS OTP. For non-phone users, agents verify identity through in-person recognition. Traders also receive a paper savings card that serves as a physical record and can be used for verification. In high-volume markets, we deploy biometric fingerprint scanners as the most secure option. This layered approach ensures no trader is excluded.
               </p>
-              <div className="mt-6 grid gap-3 sm:grid-cols-2">
+            </div>
+
+            <div className="order-2 lg:order-1 rounded-2xl border border-sidebar-border bg-sidebar-accent/40 p-4 shadow-2xl sm:p-5">
+              <div className="rounded-xl border border-white/10 bg-white/5 p-4 sm:p-5">
+                <div className="flex items-center justify-between gap-4 border-b border-white/10 pb-4">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-widest text-gold">Agent withdrawal check</p>
+                    <p className="mt-1 text-sm text-sidebar-foreground/70">Choose the strongest method available for each trader.</p>
+                  </div>
+                  <div className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-gold/15 text-gold">
+                    <ShieldCheck className="h-6 w-6" />
+                  </div>
+                </div>
+
+                <div className="mt-5 grid gap-3">
                 {[
                   { icon: MessageSquare, label: "SMS OTP", desc: "Phone users" },
                   { icon: Users, label: "Agent recognition", desc: "Non-phone users" },
                   { icon: FileCheck, label: "Paper savings card", desc: "Physical record" },
                   { icon: ShieldCheck, label: "Biometric fingerprint", desc: "High-volume markets" },
                 ].map((f) => (
-                  <div key={f.label} className="flex items-start gap-3 rounded-lg bg-white/5 p-3 border border-white/10">
-                    <f.icon className="mt-0.5 h-4 w-4 text-gold shrink-0" />
+                  <div key={f.label} className="flex items-center gap-3 rounded-lg border border-white/10 bg-sidebar p-3">
+                    <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-gold/15 text-gold">
+                      <f.icon className="h-5 w-5" />
+                    </div>
                     <div>
                       <p className="text-sm font-semibold">{f.label}</p>
                       <p className="text-[11px] text-sidebar-foreground/70">{f.desc}</p>
                     </div>
                   </div>
                 ))}
+                </div>
+
+                <div className="mt-5 rounded-lg bg-gold px-4 py-3 text-sm font-semibold text-gold-foreground">
+                  Result: verified withdrawal before cash leaves the agent.
+                </div>
               </div>
             </div>
           </div>
