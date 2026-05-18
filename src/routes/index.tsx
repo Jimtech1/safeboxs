@@ -273,6 +273,93 @@ function Landing() {
         </div>
       </section>
 
+      {/* MONTHLY JACKPOT */}
+      <section id="jackpot" className="relative overflow-hidden bg-gradient-to-br from-primary via-primary to-[#063b22] py-20 text-white">
+        <div className="absolute inset-0 opacity-20 pointer-events-none" aria-hidden>
+          <div className="absolute -top-20 -left-10 h-72 w-72 rounded-full bg-gold blur-3xl" />
+          <div className="absolute -bottom-20 -right-10 h-72 w-72 rounded-full bg-accent blur-3xl" />
+        </div>
+        <div className="relative mx-auto max-w-7xl px-4 md:px-8">
+          <div className="grid items-center gap-12 md:grid-cols-2">
+            <div>
+              <div className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-gold/10 px-3 py-1 text-xs font-semibold text-gold">
+                <Sparkles className="h-3.5 w-3.5" /> Monthly Jackpot
+              </div>
+              <h2 className="mt-4 font-display text-3xl md:text-5xl font-bold leading-tight">
+                Win <span className="text-gradient-gold">₦300,000</span> Every Month
+              </h2>
+              <p className="mt-4 text-white/80 text-lg">
+                One lucky trader wins ₦300,000 every single month. No extra fees. No purchase required.
+              </p>
+              <p className="mt-4 text-white/70 leading-relaxed">
+                Each month, SafeBox randomly selects one active trader from a different market location across Nigeria. The winner is someone who saves consistently and avoids unnecessary withdrawals.
+              </p>
+              <p className="mt-3 text-white/70 leading-relaxed">
+                The more you save, the more entries you earn. The longer you save without withdrawing, the higher your chance of winning.
+              </p>
+              <p className="mt-3 text-white/70 leading-relaxed">
+                Winners are announced on the first day of each month via SMS and on our website.
+              </p>
+              <div className="mt-7">
+                <Link to="/register">
+                  <Button size="lg" className="bg-gold text-gold-foreground hover:bg-gold/90">
+                    Start Saving to Win <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+              </div>
+            </div>
+
+            <div className="relative">
+              <div className="relative mx-auto max-w-md rounded-3xl bg-white/5 backdrop-blur-sm border border-white/15 p-6 shadow-2xl">
+                <div className="rounded-2xl bg-gradient-to-br from-gold to-[#b8902c] p-6 text-gold-foreground shadow-lg">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Trophy className="h-6 w-6" />
+                      <span className="text-xs font-bold uppercase tracking-widest">Grand Prize</span>
+                    </div>
+                    <CalendarDays className="h-5 w-5 opacity-70" />
+                  </div>
+                  <p className="mt-4 font-display text-5xl font-extrabold">₦300,000</p>
+                  <p className="mt-1 text-sm font-medium opacity-80">Every month · One winner</p>
+                </div>
+
+                <div className="mt-5 grid grid-cols-3 gap-3 text-center">
+                  {[
+                    { v: "1", l: "Winner / month" },
+                    { v: "₦0", l: "Entry fee" },
+                    { v: "36", l: "States eligible" },
+                  ].map((s) => (
+                    <div key={s.l} className="rounded-xl bg-white/10 border border-white/10 p-3">
+                      <p className="font-display text-xl font-bold text-gold">{s.v}</p>
+                      <p className="mt-1 text-[10px] uppercase tracking-wide text-white/70">{s.l}</p>
+                    </div>
+                  ))}
+                </div>
+
+                <ul className="mt-5 space-y-3 text-sm">
+                  {[
+                    { icon: Gift, t: "More savings = more entries" },
+                    { icon: ShieldCheck, t: "Avoid withdrawals to boost odds" },
+                    { icon: MessageSquare, t: "Winners notified via SMS" },
+                  ].map((r) => (
+                    <li key={r.t} className="flex items-center gap-3">
+                      <span className="grid h-8 w-8 place-items-center rounded-full bg-gold/15 text-gold">
+                        <r.icon className="h-4 w-4" />
+                      </span>
+                      <span className="text-white/85">{r.t}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="absolute -top-3 -right-3 rotate-6 rounded-full bg-accent px-3 py-1 text-[11px] font-bold text-accent-foreground shadow-lg">
+                Next draw: 1st of month
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* TESTIMONIALS */}
       <section className="mx-auto max-w-7xl px-4 py-20 md:px-8">
         <div className="text-center">
