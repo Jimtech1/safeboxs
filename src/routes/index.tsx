@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import {
   MapPin, Banknote, Wallet, MessageSquare, TrendingUp, Clock,
   ShieldCheck, Phone, Users, Star, FileCheck, Lock, Building2,
-  ArrowRight, CheckCircle2, Smartphone, Trophy, Gift, CalendarDays, Sparkles,
+  ArrowRight, CheckCircle2, Trophy, Gift, CalendarDays, Sparkles,
 } from "lucide-react";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
@@ -241,53 +241,35 @@ function Landing() {
       </section>
 
       {/* WITHDRAWAL AUTHENTICATION */}
-      <section id="security" className="overflow-hidden bg-sidebar py-20 text-sidebar-foreground">
+      <section id="security" className="bg-cream py-20">
         <div className="mx-auto max-w-7xl px-4 md:px-8">
-          <div className="grid items-center gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:gap-14">
-            <div className="order-1 lg:order-2">
-              <p className="text-xs font-semibold uppercase tracking-widest text-gold">Withdrawal Security</p>
-              <h2 className="mt-2 text-3xl font-bold md:text-4xl">Layered authentication. <span className="text-gold">Nobody is excluded.</span></h2>
-              <p className="mt-4 text-base leading-8 text-sidebar-foreground/80 md:text-lg">
-                SafeBox supports multiple withdrawal authentication methods to serve traders across all literacy and technology levels. For phone users, we use SMS OTP. For non-phone users, agents verify identity through in-person recognition. Traders also receive a paper savings card that serves as a physical record and can be used for verification. In high-volume markets, we deploy biometric fingerprint scanners as the most secure option. This layered approach ensures no trader is excluded.
-              </p>
-            </div>
+          <div className="max-w-3xl">
+            <p className="text-xs font-semibold uppercase tracking-widest text-accent">Withdrawal Security</p>
+            <h2 className="mt-2 text-3xl font-bold md:text-4xl">Layered authentication. <span className="text-primary">Nobody is excluded.</span></h2>
+            <p className="mt-4 text-base leading-8 text-muted-foreground md:text-lg">
+              SafeBox supports multiple withdrawal authentication methods to serve traders across all literacy and technology levels. For phone users, we use SMS OTP. For non-phone users, agents verify identity through in-person recognition. Traders also receive a paper savings card that serves as a physical record and can be used for verification. In high-volume markets, we deploy biometric fingerprint scanners as the most secure option.
+            </p>
+          </div>
 
-            <div className="order-2 lg:order-1 rounded-2xl border border-sidebar-border bg-sidebar-accent/40 p-4 shadow-2xl sm:p-5">
-              <div className="rounded-xl border border-white/10 bg-white/5 p-4 sm:p-5">
-                <div className="flex items-center justify-between gap-4 border-b border-white/10 pb-4">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-widest text-gold">Agent withdrawal check</p>
-                    <p className="mt-1 text-sm text-sidebar-foreground/70">Choose the strongest method available for each trader.</p>
-                  </div>
-                  <div className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-gold/15 text-gold">
-                    <ShieldCheck className="h-6 w-6" />
-                  </div>
+          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              { icon: MessageSquare, label: "SMS OTP", desc: "Secure codes for traders who own or share a phone." },
+              { icon: Users, label: "Agent recognition", desc: "Trusted field agents verify familiar non-phone users in person." },
+              { icon: FileCheck, label: "Paper savings card", desc: "A physical savings record supports identity checks and receipts." },
+              { icon: ShieldCheck, label: "Biometric fingerprint", desc: "Fingerprint checks support busy, high-volume market locations." },
+            ].map((f) => (
+              <Card key={f.label} className="h-full p-5 shadow-sm">
+                <div className="grid h-11 w-11 place-items-center rounded-lg bg-primary/10 text-primary">
+                  <f.icon className="h-5 w-5" />
                 </div>
+                <h3 className="mt-4 text-base font-semibold">{f.label}</h3>
+                <p className="mt-2 text-sm leading-6 text-muted-foreground">{f.desc}</p>
+              </Card>
+            ))}
+          </div>
 
-                <div className="mt-5 grid gap-3">
-                {[
-                  { icon: MessageSquare, label: "SMS OTP", desc: "Phone users" },
-                  { icon: Users, label: "Agent recognition", desc: "Non-phone users" },
-                  { icon: FileCheck, label: "Paper savings card", desc: "Physical record" },
-                  { icon: ShieldCheck, label: "Biometric fingerprint", desc: "High-volume markets" },
-                ].map((f) => (
-                  <div key={f.label} className="flex items-center gap-3 rounded-lg border border-white/10 bg-sidebar p-3">
-                    <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-gold/15 text-gold">
-                      <f.icon className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold">{f.label}</p>
-                      <p className="text-[11px] text-sidebar-foreground/70">{f.desc}</p>
-                    </div>
-                  </div>
-                ))}
-                </div>
-
-                <div className="mt-5 rounded-lg bg-gold px-4 py-3 text-sm font-semibold text-gold-foreground">
-                  Result: verified withdrawal before cash leaves the agent.
-                </div>
-              </div>
-            </div>
+          <div className="mt-8 rounded-xl border border-primary/20 bg-primary/10 px-5 py-4 text-sm font-semibold text-primary">
+            Result: every withdrawal is verified before cash leaves the agent.
           </div>
         </div>
       </section>
