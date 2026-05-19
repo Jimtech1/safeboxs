@@ -184,7 +184,7 @@ function WithdrawFlow() {
                 <div className="flex justify-between"><span className="text-muted-foreground">New balance</span><span className="font-bold">{formatNaira(newBalance)}</span></div>
               </div>
               <p className="text-xs text-muted-foreground text-center">Disburse cash to trader before confirming. Your float will be refunded by the same amount.</p>
-              <Button className="w-full h-12 bg-destructive hover:bg-destructive/90" onClick={() => { agentStore.recordWithdrawal(amt); setStep(5); toast.success(`Withdrawal of ${formatNaira(amt)} processed. Float refunded.`); }}>
+              <Button className="w-full h-12 bg-destructive hover:bg-destructive/90" onClick={() => { agentStore.recordWithdrawal(amt, { name: trader.name, phone: trader.phone }); setStep(5); toast.success(`SafeBox SMS: ${trader.name.split(" ")[0]}, ${formatNaira(amt)} withdrawn. New balance: ${formatNaira(newBalance)}.`, { duration: 7000 }); }}>
                 Process Withdrawal
               </Button>
             </Card>
