@@ -60,6 +60,9 @@ function TopUp() {
                 </div>
               </div>
               <Button disabled={!amount || Number(amount) < 1000} className="w-full h-12 bg-primary hover:bg-primary/90" onClick={() => setStep(2)}>Continue</Button>
+              <Link to="/agent/float-withdraw" className="block text-center text-xs text-accent font-medium hover:underline">
+                Or withdraw from float to your bank →
+              </Link>
             </Card>
           )}
 
