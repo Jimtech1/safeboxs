@@ -3,18 +3,30 @@ import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { ArrowDownToLine, ArrowUpFromLine, Search } from "lucide-react";
+import { ArrowDownToLine, ArrowUpFromLine, Search, Building2 } from "lucide-react";
 import { transactions, formatNaira } from "@/lib/mockData";
+import { useAgentState } from "@/lib/agentStore";
 
 export const Route = createFileRoute("/agent/transactions")({
   component: TxList,
 });
 
 function TxList() {
+  const s = useAgentState();
   const [tab, setTab] = useState<"today"|"week"|"month">("today");
   const [q, setQ] = useState("");
   const slices = { today: 8, week: 25, month: 60 };
-  const list = transactions.slice(0, slices[tab]).filter((t) => q === "" || t.traderPhone.includes(q) || t.traderName.toLowerCase().includes(q.toLowerCase()));
+  const mock = transactions.slice(0, slices[tab]).map((t) => ({
+    id: t.id, kind: t.type as "Deposit" | "Withdrawal",
+    label: t.traderName, amount: t.amount, timestamp: t.timestamp, status: t.status,
+  }));
+  const live = s.txns.map((t) => ({
+    id: t.id,
+    kind: t.kind === "FloatTopup" ? "FloatTopup" as const : t.kind === "FloatWithdraw" ? "FloatWithdraw" as const : t.kind,
+    label: t.traderName ?? (t.kind === "FloatTopup" ? `Float top-up (${t.channel})` : t.kind === "FloatWithdraw" ? `Bank transfer (${t.channel})` : "—"),
+    amount: t.amount, timestamp: t.timestamp, status: t.status,
+  }));
+  const list = [...live, ...mock].filter((t) => q === "" || t.label.toLowerCase().includes(q.toLowerCase()));
 
   return (
     <div className="space-y-4">
