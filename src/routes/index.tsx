@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useState } from "react";
 import {
   MapPin, Banknote, Wallet, MessageSquare, TrendingUp, Clock,
   ShieldCheck, Phone, Users, Star, FileCheck, Lock, Building2,
@@ -17,6 +18,15 @@ import communityImg from "@/assets/community.jpg";
 export const Route = createFileRoute("/")({
   component: Landing,
 });
+
+const heroSlides = [
+  { eyebrow: "Daily Savings Collection", title: ["Your Daily Savings.", "Safe.", "Simple.", "Rewarding."], desc: "Save daily with a trusted SafeBox agent. Instant SMS receipt every time. Watch your balance grow.", chips: ["Instant SMS", "No Smartphone Needed", "Daily Pickup"] },
+  { eyebrow: "Withdraw Anytime", title: ["Need cash?", "Withdraw.", "Anywhere.", "Instantly."], desc: "Visit any SafeBox agent. Verify with OTP, paper card, or fingerprint. Walk out with your money.", chips: ["OTP Verified", "No Penalties", "Same Day Cash"] },
+  { eyebrow: "Transaction History", title: ["Every kobo.", "Tracked.", "Receipted.", "Yours."], desc: "Every deposit and withdrawal is logged and timestamped. Check your full history any time, any phone.", chips: ["SMS Receipts", "Live Ledger", "Audit Ready"] },
+  { eyebrow: "Float Management", title: ["For agents.", "Top up.", "Withdraw.", "Earn."], desc: "Fund your float from any bank, settle to your account any time. Earn commission on every transaction.", chips: ["USSD Top-up", "Bank Settlement", "Daily Commission"] },
+  { eyebrow: "Security of Funds", title: ["CBN Compliant.", "Insured.", "Verified.", "Trusted."], desc: "SafeBox operates under CBN Agent Banking Guidelines. Your money is protected at every step.", chips: ["CBN Compliant", "NDIC Coverage", "Encrypted"] },
+  { eyebrow: "Monthly Jackpot", title: ["Save more.", "Win.", "₦300,000.", "Monthly."], desc: "One active trader wins ₦300,000 every month. No fees. The more you save, the higher your chances.", chips: ["₦300k Prize", "1 Winner / Month", "Zero Entry Fee"] },
+];
 
 const features = [
   { icon: MessageSquare, title: "Instant SMS Receipts", desc: "Every deposit and withdrawal sends an instant SMS to your phone. You always have proof." },
