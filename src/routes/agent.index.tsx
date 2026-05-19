@@ -12,7 +12,17 @@ export const Route = createFileRoute("/agent/")({
 
 function AgentHome() {
   const s = useAgentState();
-  const recent = transactions.slice(0, 5);
+  const recent = [
+    ...s.txns.slice(0, 5).map((t) => ({
+      id: t.id,
+      type: (t.kind === "Withdrawal" || t.kind === "FloatWithdraw") ? "Withdrawal" as const : "Deposit" as const,
+      traderName: t.traderName ?? (t.kind === "FloatTopup" ? `Float top-up (${t.channel})` : t.kind === "FloatWithdraw" ? `Bank transfer (${t.channel})` : "—"),
+      timestamp: t.timestamp,
+      amount: t.amount,
+      status: t.status,
+    })),
+    ...transactions.slice(0, 5).map((t) => ({ id: t.id, type: t.type, traderName: t.traderName, timestamp: t.timestamp, amount: t.amount, status: t.status })),
+  ].slice(0, 5);
   const lowFloat = s.floatBalance < currentAgent.lowFloatThreshold;
   const utilization = Math.min(100, Math.round((s.depositsCollectedToday / currentAgent.floatCapacity) * 100));
 
