@@ -43,25 +43,29 @@ function TxList() {
         <Input className="pl-9" placeholder="Search trader" value={q} onChange={(e) => setQ(e.target.value)} />
       </div>
       <Card className="divide-y">
-        {list.map((t) => (
-          <div key={t.id} className="flex items-center justify-between p-4">
-            <div className="flex items-center gap-3">
-              <div className={`grid h-9 w-9 place-items-center rounded-full ${t.type === "Deposit" ? "bg-success/15 text-success" : "bg-destructive/15 text-destructive"}`}>
-                {t.type === "Deposit" ? <ArrowDownToLine className="h-4 w-4" /> : <ArrowUpFromLine className="h-4 w-4" />}
+        {list.map((t) => {
+          const isCredit = t.kind === "Deposit" || t.kind === "FloatTopup";
+          const Icon = t.kind === "FloatTopup" || t.kind === "FloatWithdraw" ? Building2 : isCredit ? ArrowDownToLine : ArrowUpFromLine;
+          return (
+            <div key={t.id} className="flex items-center justify-between p-4">
+              <div className="flex items-center gap-3">
+                <div className={`grid h-9 w-9 place-items-center rounded-full ${isCredit ? "bg-success/15 text-success" : "bg-destructive/15 text-destructive"}`}>
+                  <Icon className="h-4 w-4" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium">{t.label}</p>
+                  <p className="text-xs text-muted-foreground">{t.kind} • {t.timestamp}</p>
+                </div>
               </div>
-              <div>
-                <p className="text-sm font-medium">{t.traderName}</p>
-                <p className="text-xs text-muted-foreground">{t.timestamp}</p>
+              <div className="text-right">
+                <p className={`font-semibold text-sm ${isCredit ? "text-success" : "text-destructive"}`}>
+                  {isCredit ? "+" : "−"}{formatNaira(t.amount)}
+                </p>
+                <Badge variant="outline" className="text-[10px] mt-0.5">{t.status}</Badge>
               </div>
             </div>
-            <div className="text-right">
-              <p className={`font-semibold text-sm ${t.type === "Deposit" ? "text-success" : "text-destructive"}`}>
-                {t.type === "Deposit" ? "+" : "−"}{formatNaira(t.amount)}
-              </p>
-              <Badge variant="outline" className="text-[10px] mt-0.5">{t.status}</Badge>
-            </div>
-          </div>
-        ))}
+          );
+        })}
         {list.length === 0 && <p className="p-6 text-center text-sm text-muted-foreground">No transactions found.</p>}
       </Card>
     </div>
