@@ -90,7 +90,7 @@ function TopUp() {
                 <hr />
                 <div className="flex justify-between"><span className="text-muted-foreground">New float balance</span><span className="font-display text-lg font-bold text-primary">{formatNaira(newBalance)}</span></div>
               </div>
-              <Button className="w-full h-12 bg-success hover:bg-success/90" onClick={() => { agentStore.topupFloat(Number(amount)); setStep(4); toast.success(`Float topped up by ${formatNaira(Number(amount))}.`); }}>Pay Now</Button>
+              <Button className="w-full h-12 bg-success hover:bg-success/90" onClick={() => { agentStore.topupFloat(Number(amount), channels.find(c => c.id === channel)?.label); setStep(4); toast.success(`Float topped up by ${formatNaira(Number(amount))}.`); }}>Pay Now</Button>
             </Card>
           )}
 
