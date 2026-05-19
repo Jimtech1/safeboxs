@@ -26,6 +26,7 @@ import { Route as AgentTradersRouteImport } from './routes/agent.traders'
 import { Route as AgentTopupRouteImport } from './routes/agent.topup'
 import { Route as AgentSettingsRouteImport } from './routes/agent.settings'
 import { Route as AgentPerformanceRouteImport } from './routes/agent.performance'
+import { Route as AgentFloatWithdrawRouteImport } from './routes/agent.float-withdraw'
 import { Route as AgentDepositRouteImport } from './routes/agent.deposit'
 import { Route as AgentBalanceRouteImport } from './routes/agent.balance'
 import { Route as AdminWithdrawalsRouteImport } from './routes/admin.withdrawals'
@@ -122,6 +123,11 @@ const AgentPerformanceRoute = AgentPerformanceRouteImport.update({
   path: '/performance',
   getParentRoute: () => AgentRoute,
 } as any)
+const AgentFloatWithdrawRoute = AgentFloatWithdrawRouteImport.update({
+  id: '/float-withdraw',
+  path: '/float-withdraw',
+  getParentRoute: () => AgentRoute,
+} as any)
 const AgentDepositRoute = AgentDepositRouteImport.update({
   id: '/deposit',
   path: '/deposit',
@@ -193,6 +199,7 @@ export interface FileRoutesByFullPath {
   '/admin/withdrawals': typeof AdminWithdrawalsRoute
   '/agent/balance': typeof AgentBalanceRoute
   '/agent/deposit': typeof AgentDepositRoute
+  '/agent/float-withdraw': typeof AgentFloatWithdrawRoute
   '/agent/performance': typeof AgentPerformanceRoute
   '/agent/settings': typeof AgentSettingsRoute
   '/agent/topup': typeof AgentTopupRoute
@@ -220,6 +227,7 @@ export interface FileRoutesByTo {
   '/admin/withdrawals': typeof AdminWithdrawalsRoute
   '/agent/balance': typeof AgentBalanceRoute
   '/agent/deposit': typeof AgentDepositRoute
+  '/agent/float-withdraw': typeof AgentFloatWithdrawRoute
   '/agent/performance': typeof AgentPerformanceRoute
   '/agent/settings': typeof AgentSettingsRoute
   '/agent/topup': typeof AgentTopupRoute
@@ -250,6 +258,7 @@ export interface FileRoutesById {
   '/admin/withdrawals': typeof AdminWithdrawalsRoute
   '/agent/balance': typeof AgentBalanceRoute
   '/agent/deposit': typeof AgentDepositRoute
+  '/agent/float-withdraw': typeof AgentFloatWithdrawRoute
   '/agent/performance': typeof AgentPerformanceRoute
   '/agent/settings': typeof AgentSettingsRoute
   '/agent/topup': typeof AgentTopupRoute
@@ -281,6 +290,7 @@ export interface FileRouteTypes {
     | '/admin/withdrawals'
     | '/agent/balance'
     | '/agent/deposit'
+    | '/agent/float-withdraw'
     | '/agent/performance'
     | '/agent/settings'
     | '/agent/topup'
@@ -308,6 +318,7 @@ export interface FileRouteTypes {
     | '/admin/withdrawals'
     | '/agent/balance'
     | '/agent/deposit'
+    | '/agent/float-withdraw'
     | '/agent/performance'
     | '/agent/settings'
     | '/agent/topup'
@@ -337,6 +348,7 @@ export interface FileRouteTypes {
     | '/admin/withdrawals'
     | '/agent/balance'
     | '/agent/deposit'
+    | '/agent/float-withdraw'
     | '/agent/performance'
     | '/agent/settings'
     | '/agent/topup'
@@ -480,6 +492,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AgentPerformanceRouteImport
       parentRoute: typeof AgentRoute
     }
+    '/agent/float-withdraw': {
+      id: '/agent/float-withdraw'
+      path: '/float-withdraw'
+      fullPath: '/agent/float-withdraw'
+      preLoaderRoute: typeof AgentFloatWithdrawRouteImport
+      parentRoute: typeof AgentRoute
+    }
     '/agent/deposit': {
       id: '/agent/deposit'
       path: '/deposit'
@@ -582,6 +601,7 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 interface AgentRouteChildren {
   AgentBalanceRoute: typeof AgentBalanceRoute
   AgentDepositRoute: typeof AgentDepositRoute
+  AgentFloatWithdrawRoute: typeof AgentFloatWithdrawRoute
   AgentPerformanceRoute: typeof AgentPerformanceRoute
   AgentSettingsRoute: typeof AgentSettingsRoute
   AgentTopupRoute: typeof AgentTopupRoute
@@ -594,6 +614,7 @@ interface AgentRouteChildren {
 const AgentRouteChildren: AgentRouteChildren = {
   AgentBalanceRoute: AgentBalanceRoute,
   AgentDepositRoute: AgentDepositRoute,
+  AgentFloatWithdrawRoute: AgentFloatWithdrawRoute,
   AgentPerformanceRoute: AgentPerformanceRoute,
   AgentSettingsRoute: AgentSettingsRoute,
   AgentTopupRoute: AgentTopupRoute,

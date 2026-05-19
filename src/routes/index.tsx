@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useState } from "react";
 import {
   MapPin, Banknote, Wallet, MessageSquare, TrendingUp, Clock,
   ShieldCheck, Phone, Users, Star, FileCheck, Lock, Building2,
@@ -18,6 +19,15 @@ export const Route = createFileRoute("/")({
   component: Landing,
 });
 
+const heroSlides = [
+  { eyebrow: "Daily Savings Collection", title: ["Your Daily Savings.", "Safe.", "Simple.", "Rewarding."], desc: "Save daily with a trusted SafeBox agent. Instant SMS receipt every time. Watch your balance grow.", chips: ["Instant SMS", "No Smartphone Needed", "Daily Pickup"] },
+  { eyebrow: "Withdraw Anytime", title: ["Need cash?", "Withdraw.", "Anywhere.", "Instantly."], desc: "Visit any SafeBox agent. Verify with OTP, paper card, or fingerprint. Walk out with your money.", chips: ["OTP Verified", "No Penalties", "Same Day Cash"] },
+  { eyebrow: "Transaction History", title: ["Every kobo.", "Tracked.", "Receipted.", "Yours."], desc: "Every deposit and withdrawal is logged and timestamped. Check your full history any time, any phone.", chips: ["SMS Receipts", "Live Ledger", "Audit Ready"] },
+  { eyebrow: "Float Management", title: ["For agents.", "Top up.", "Withdraw.", "Earn."], desc: "Fund your float from any bank, settle to your account any time. Earn commission on every transaction.", chips: ["USSD Top-up", "Bank Settlement", "Daily Commission"] },
+  { eyebrow: "Security of Funds", title: ["CBN Compliant.", "Insured.", "Verified.", "Trusted."], desc: "SafeBox operates under CBN Agent Banking Guidelines. Your money is protected at every step.", chips: ["CBN Compliant", "NDIC Coverage", "Encrypted"] },
+  { eyebrow: "Monthly Jackpot", title: ["Save more.", "Win.", "₦300,000.", "Monthly."], desc: "One active trader wins ₦300,000 every month. No fees. The more you save, the higher your chances.", chips: ["₦300k Prize", "1 Winner / Month", "Zero Entry Fee"] },
+];
+
 const features = [
   { icon: MessageSquare, title: "Instant SMS Receipts", desc: "Every deposit and withdrawal sends an instant SMS to your phone. You always have proof." },
   { icon: TrendingUp, title: "Earn Yield on Savings", desc: "Your savings don't just sit. They grow. Earn up to 10% annually on your balance." },
@@ -34,6 +44,13 @@ const testimonials = [
 ];
 
 function Landing() {
+  const [slide, setSlide] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setSlide((s) => (s + 1) % heroSlides.length), 4000);
+    return () => clearInterval(id);
+  }, []);
+  const current = heroSlides[slide];
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -43,22 +60,42 @@ function Landing() {
         <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 py-16 md:grid-cols-2 md:px-8 md:py-24">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
             <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-white/70 px-3 py-1 text-xs font-medium text-primary">
-              <ShieldCheck className="h-3.5 w-3.5" /> CBN Agent Banking Compliant
+              <ShieldCheck className="h-3.5 w-3.5" /> {current.eyebrow}
             </div>
-            <h1 className="mt-5 text-4xl font-bold leading-[1.05] md:text-6xl">
-              Your Daily Savings.{" "}
-              <span className="text-primary">Safe.</span>{" "}
-              <span className="text-gradient-gold">Simple.</span>{" "}
-              <span className="text-accent">Rewarding.</span>
-            </h1>
-            <p className="mt-5 max-w-lg text-lg text-muted-foreground">
-              SafeBox helps market traders save daily without fear. No more disappearing collectors. Instant SMS receipts. Withdraw anytime. Earn yield on your savings.
-            </p>
-            <div className="mt-6 flex flex-wrap gap-2">
-              {["CBN Compliant", "Instant SMS", "Earn Up to 10% Annually"].map((p) => (
-                <span key={p} className="rounded-full bg-white px-3 py-1 text-xs font-medium text-foreground/80 shadow-sm border">
-                  {p}
-                </span>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={slide}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -12 }}
+                transition={{ duration: 0.5 }}
+              >
+                <h1 className="mt-5 text-4xl font-bold leading-[1.05] md:text-6xl min-h-[8rem] md:min-h-[12rem]">
+                  {current.title[0]}{" "}
+                  <span className="text-primary">{current.title[1]}</span>{" "}
+                  <span className="text-gradient-gold">{current.title[2]}</span>{" "}
+                  <span className="text-accent">{current.title[3]}</span>
+                </h1>
+                <p className="mt-5 max-w-lg text-lg text-muted-foreground min-h-[5rem]">
+                  {current.desc}
+                </p>
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {current.chips.map((p) => (
+                    <span key={p} className="rounded-full bg-white px-3 py-1 text-xs font-medium text-foreground/80 shadow-sm border">
+                      {p}
+                    </span>
+                  ))}
+                </div>
+              </motion.div>
+            </AnimatePresence>
+            <div className="mt-6 flex items-center gap-1.5">
+              {heroSlides.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setSlide(i)}
+                  aria-label={`Go to slide ${i + 1}`}
+                  className={`h-1.5 rounded-full transition-all ${i === slide ? "w-8 bg-primary" : "w-2 bg-primary/30"}`}
+                />
               ))}
             </div>
             <div className="mt-8 flex flex-wrap gap-3">

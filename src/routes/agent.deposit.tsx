@@ -107,7 +107,7 @@ function DepositFlow() {
                 <Row label="Amount" value={formatNaira(Number(amount))} bold />
                 <Row label="New balance" value={formatNaira(newBalance)} bold />
               </div>
-              <Button className="w-full h-12 bg-success hover:bg-success/90" onClick={() => { agentStore.recordDeposit(Number(amount)); setStep(4); toast.success(`Deposit of ${formatNaira(Number(amount))} processed. SMS sent to trader.`); }}>
+              <Button className="w-full h-12 bg-success hover:bg-success/90" onClick={() => { agentStore.recordDeposit(Number(amount), { name: trader.name, phone: trader.phone }); setStep(4); toast.success(`SafeBox SMS: ${trader.name.split(" ")[0]}, you saved ${formatNaira(Number(amount))}. New balance: ${formatNaira(newBalance)}.`, { duration: 7000 }); }}>
                 Process Deposit
               </Button>
             </Card>

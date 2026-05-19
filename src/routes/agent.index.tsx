@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowDownToLine, ArrowUpFromLine, Search, MapPin, Calendar, Plus, Wallet, AlertTriangle, Info } from "lucide-react";
+import { ArrowDownToLine, ArrowUpFromLine, Search, MapPin, Calendar, Plus, Wallet, AlertTriangle, Info, Building2 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -12,7 +12,17 @@ export const Route = createFileRoute("/agent/")({
 
 function AgentHome() {
   const s = useAgentState();
-  const recent = transactions.slice(0, 5);
+  const recent = [
+    ...s.txns.slice(0, 5).map((t) => ({
+      id: t.id,
+      type: (t.kind === "Withdrawal" || t.kind === "FloatWithdraw") ? "Withdrawal" as const : "Deposit" as const,
+      traderName: t.traderName ?? (t.kind === "FloatTopup" ? `Float top-up (${t.channel})` : t.kind === "FloatWithdraw" ? `Bank transfer (${t.channel})` : "—"),
+      timestamp: t.timestamp,
+      amount: t.amount,
+      status: t.status,
+    })),
+    ...transactions.slice(0, 5).map((t) => ({ id: t.id, type: t.type, traderName: t.traderName, timestamp: t.timestamp, amount: t.amount, status: t.status })),
+  ].slice(0, 5);
   const lowFloat = s.floatBalance < currentAgent.lowFloatThreshold;
   const utilization = Math.min(100, Math.round((s.depositsCollectedToday / currentAgent.floatCapacity) * 100));
 
@@ -35,9 +45,14 @@ function AgentHome() {
           <p className="font-display text-4xl font-bold mt-1">{formatNaira(s.floatBalance)}</p>
           <p className="text-xs text-primary-foreground/70 mt-1">Updates live: starting float − deposits + withdrawals</p>
 
-          <Link to="/agent/topup" className="mt-4 flex items-center justify-center gap-2 w-full rounded-xl bg-gold text-gold-foreground py-3 font-semibold hover:bg-gold/90 transition">
-            <Plus className="h-5 w-5" /> Add Money to Float
-          </Link>
+          <div className="mt-4 grid grid-cols-2 gap-2">
+            <Link to="/agent/topup" className="flex items-center justify-center gap-2 rounded-xl bg-gold text-gold-foreground py-3 font-semibold hover:bg-gold/90 transition">
+              <Plus className="h-5 w-5" /> Add Money
+            </Link>
+            <Link to="/agent/float-withdraw" className="flex items-center justify-center gap-2 rounded-xl bg-white/15 text-primary-foreground py-3 font-semibold hover:bg-white/25 transition border border-white/30">
+              <Building2 className="h-5 w-5" /> Withdraw
+            </Link>
+          </div>
         </div>
       </Card>
 
