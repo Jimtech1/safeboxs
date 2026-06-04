@@ -101,11 +101,11 @@ function Landing() {
               ))}
             </div>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link to="/register"><Button size="lg" className="bg-primary hover:bg-primary/90">
-                Start Saving Today <ArrowRight className="ml-2 h-4 w-4" />
+              <Link to={current.cta.to}><Button size="lg" className="bg-primary hover:bg-primary/90">
+                {current.cta.label} <ArrowRight className="ml-2 h-4 w-4" />
               </Button></Link>
-              <Link to="/register"><Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
-                Become an Agent
+              <Link to="/trader/login"><Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+                Trader Login
               </Button></Link>
             </div>
           </motion.div>
