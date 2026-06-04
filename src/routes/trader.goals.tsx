@@ -11,7 +11,7 @@ import { getCurrentTrader, getGoals, upsertGoal, deleteGoal, addToGoal, formatNG
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/trader/goals")({
-  component: TraderGoals;
+  component: TraderGoals,
 });
 
 function TraderGoals() {
