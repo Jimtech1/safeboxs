@@ -210,6 +210,9 @@ function Landing() {
         </div>
       </section>
 
+      {/* TRADER DEMO WIDGET */}
+      <TraderDemoSection />
+
       {/* FEATURES GRID */}
       <section className="bg-cream py-20">
         <div className="mx-auto max-w-7xl px-4 md:px-8">
