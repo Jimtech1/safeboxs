@@ -454,3 +454,96 @@ function Landing() {
     </div>
   );
 }
+
+function TraderDemoSection() {
+  const [phone, setPhone] = useState("");
+  const [result, setResult] = useState<null | { name: string; balance: number; thisMonth: number; interest: number; streakDays: number; found: boolean }>(null);
+
+  const check = (e: React.FormEvent) => {
+    e.preventDefault();
+    // dynamic import safe — but we already import lib at top to avoid SSR issues
+    import("@/lib/mockTraderData").then(({ lookupByPhone }) => {
+      const normalized = phone.replace(/\s+/g, "");
+      const t = lookupByPhone(normalized);
+      if (!t) {
+        setResult({ name: "—", balance: 0, thisMonth: 0, interest: 0, streakDays: 0, found: false });
+        return;
+      }
+      const thisMonth = Math.round(t.totalSaved * 0.18);
+      setResult({ name: t.name, balance: t.balance, thisMonth, interest: t.interestEarned, streakDays: t.streakDays, found: true });
+    });
+  };
+
+  const fmt = (n: number) => `₦${n.toLocaleString("en-NG")}`;
+
+  return (
+    <section className="bg-cream py-20">
+      <div className="mx-auto max-w-6xl px-4 md:px-8">
+        <div className="text-center">
+          <p className="text-xs font-semibold uppercase tracking-widest text-accent">Try It Now</p>
+          <h2 className="mt-2 text-3xl font-bold md:text-4xl">See How SafeBox Works for Traders</h2>
+          <p className="mt-3 text-muted-foreground">Enter a phone number and check the balance — just like a real SafeBox trader would.</p>
+        </div>
+
+        <div className="mt-10 grid gap-6 md:grid-cols-2 items-stretch">
+          <Card className="p-6">
+            <form onSubmit={check} className="space-y-4">
+              <label className="text-sm font-medium">Enter your phone number</label>
+              <input
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="e.g. 08012345678"
+                className="w-full h-11 rounded-md border border-input bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+              <Button type="submit" className="w-full bg-primary hover:bg-primary/90">Check Balance</Button>
+              <p className="text-[11px] text-muted-foreground text-center">Try the demo number <code className="font-mono">08012345678</code></p>
+            </form>
+          </Card>
+
+          <Card className="p-6 bg-sidebar text-sidebar-foreground">
+            {!result ? (
+              <div className="h-full grid place-items-center text-center text-sidebar-foreground/70 py-10">
+                <div>
+                  <Wallet className="h-8 w-8 mx-auto mb-3 text-gold" />
+                  <p className="text-sm">Your balance will appear here.</p>
+                </div>
+              </div>
+            ) : !result.found ? (
+              <div className="grid place-items-center text-center py-10">
+                <p className="text-sm">No SafeBox account found for that number.</p>
+                <p className="mt-2 text-xs text-sidebar-foreground/60">Visit your nearest SafeBox agent to open an account.</p>
+              </div>
+            ) : (
+              <div>
+                <p className="text-xs uppercase tracking-widest text-gold">Account holder</p>
+                <p className="font-display text-2xl font-bold">{result.name}</p>
+                <div className="mt-5 rounded-xl bg-white/5 border border-white/10 p-5">
+                  <p className="text-xs text-sidebar-foreground/70">Current balance</p>
+                  <p className="font-display text-4xl font-bold text-gold mt-1">{fmt(result.balance)}</p>
+                </div>
+                <div className="mt-4 grid grid-cols-3 gap-2 text-center">
+                  <Mini label="Saved this month" value={fmt(result.thisMonth)} />
+                  <Mini label="Interest earned" value={fmt(result.interest)} />
+                  <Mini label="Streak (days)" value={String(result.streakDays)} />
+                </div>
+                <Link to="/trader/login">
+                  <Button className="w-full mt-5 bg-gold text-gold-foreground hover:bg-gold/90">Login to Full Dashboard</Button>
+                </Link>
+              </div>
+            )}
+          </Card>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Mini({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-lg bg-white/5 border border-white/10 px-2 py-3">
+      <p className="font-semibold text-sm text-gold">{value}</p>
+      <p className="text-[10px] uppercase text-sidebar-foreground/70 mt-1 leading-tight">{label}</p>
+    </div>
+  );
+}
+
