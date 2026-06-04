@@ -20,12 +20,13 @@ export const Route = createFileRoute("/")({
 });
 
 const heroSlides = [
-  { eyebrow: "Daily Savings Collection", title: ["Your Daily Savings.", "Safe.", "Simple.", "Rewarding."], desc: "Save daily with a trusted SafeBox agent. Instant SMS receipt every time. Watch your balance grow.", chips: ["Instant SMS", "No Smartphone Needed", "Daily Pickup"] },
-  { eyebrow: "Withdraw Anytime", title: ["Need cash?", "Withdraw.", "Anywhere.", "Instantly."], desc: "Visit any SafeBox agent. Verify with OTP, paper card, or fingerprint. Walk out with your money.", chips: ["OTP Verified", "No Penalties", "Same Day Cash"] },
-  { eyebrow: "Transaction History", title: ["Every kobo.", "Tracked.", "Receipted.", "Yours."], desc: "Every deposit and withdrawal is logged and timestamped. Check your full history any time, any phone.", chips: ["SMS Receipts", "Live Ledger", "Audit Ready"] },
-  { eyebrow: "Float Management", title: ["For agents.", "Top up.", "Withdraw.", "Earn."], desc: "Fund your float from any bank, settle to your account any time. Earn commission on every transaction.", chips: ["USSD Top-up", "Bank Settlement", "Daily Commission"] },
-  { eyebrow: "Security of Funds", title: ["CBN Compliant.", "Insured.", "Verified.", "Trusted."], desc: "SafeBox operates under CBN Agent Banking Guidelines. Your money is protected at every step.", chips: ["CBN Compliant", "NDIC Coverage", "Encrypted"] },
-  { eyebrow: "Monthly Jackpot", title: ["Save more.", "Win.", "₦300,000.", "Monthly."], desc: "One active trader wins ₦300,000 every month. No fees. The more you save, the higher your chances.", chips: ["₦300k Prize", "1 Winner / Month", "Zero Entry Fee"] },
+  { eyebrow: "Daily Savings Collection", title: ["Your Daily Savings.", "Safe.", "Simple.", "Rewarding."], desc: "Save daily with a trusted SafeBox agent. Instant SMS receipt every time. Watch your balance grow.", chips: ["Instant SMS", "No Smartphone Needed", "Daily Pickup"], cta: { to: "/register" as const, label: "Start Saving Today" } },
+  { eyebrow: "Withdraw Anytime", title: ["Need cash?", "Withdraw.", "Anywhere.", "Instantly."], desc: "Visit any SafeBox agent. Verify with OTP, paper card, or fingerprint. Walk out with your money.", chips: ["OTP Verified", "No Penalties", "Same Day Cash"], cta: { to: "/register" as const, label: "Start Saving Today" } },
+  { eyebrow: "Transaction History", title: ["Every kobo.", "Tracked.", "Receipted.", "Yours."], desc: "Every deposit and withdrawal is logged and timestamped. Check your full history any time, any phone.", chips: ["SMS Receipts", "Live Ledger", "Audit Ready"], cta: { to: "/register" as const, label: "Start Saving Today" } },
+  { eyebrow: "Float Management", title: ["For agents.", "Top up.", "Withdraw.", "Earn."], desc: "Fund your float from any bank, settle to your account any time. Earn commission on every transaction.", chips: ["USSD Top-up", "Bank Settlement", "Daily Commission"], cta: { to: "/register" as const, label: "Become an Agent" } },
+  { eyebrow: "Security of Funds", title: ["CBN Compliant.", "Insured.", "Verified.", "Trusted."], desc: "SafeBox operates under CBN Agent Banking Guidelines. Your money is protected at every step.", chips: ["CBN Compliant", "NDIC Coverage", "Encrypted"], cta: { to: "/register" as const, label: "Start Saving Today" } },
+  { eyebrow: "Monthly Jackpot", title: ["Save more.", "Win.", "₦300,000.", "Monthly."], desc: "One active trader wins ₦300,000 every month. No fees. The more you save, the higher your chances.", chips: ["₦300k Prize", "1 Winner / Month", "Zero Entry Fee"], cta: { to: "/register" as const, label: "Start Saving Today" } },
+  { eyebrow: "Trader Dashboard", title: ["Track Your Savings.", "Anytime.", "Anywhere.", "Yours."], desc: "Log in to your personal dashboard. See your balance, view your full transaction history, and request withdrawals with one click.", chips: ["Real-Time Balance", "Transaction History", "Easy Withdrawals"], cta: { to: "/trader/login" as const, label: "Trader Login" } },
 ];
 
 const features = [
@@ -39,8 +40,9 @@ const features = [
 
 const testimonials = [
   { name: "Mama Ngozi", role: "Trader", location: "Mile 12 Market, Lagos", quote: "I used to hide my savings under my mattress. Now I save with SafeBox. I can see my balance grow every day.", rating: 5 },
+  { name: "Fatima", role: "Trader", location: "Bodija Market, Ibadan", quote: "I can see my savings grow every day. SafeBox gives me peace of mind.", rating: 5 },
+  { name: "Chinedu", role: "Trader", location: "Onitsha Main Market", quote: "The SMS alerts and online dashboard help me track my money. I trust my collector more now.", rating: 5 },
   { name: "Adebayo O.", role: "SafeBox Agent", location: "Bodija Market, Ibadan", quote: "Being a SafeBox agent gives me steady income. My community trusts me.", rating: 5 },
-  { name: "Director, Partner MFB", role: "Principal", location: "Lagos", quote: "SafeBox helped us reach thousands of unbanked traders. Their technology is solid.", rating: 5 },
 ];
 
 function Landing() {

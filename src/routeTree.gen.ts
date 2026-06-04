@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TraderRouteImport } from './routes/trader'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ForTradersRouteImport } from './routes/for-traders'
@@ -18,8 +19,14 @@ import { Route as AgentRouteImport } from './routes/agent'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TraderIndexRouteImport } from './routes/trader.index'
 import { Route as AgentIndexRouteImport } from './routes/agent.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as TraderWithdrawRouteImport } from './routes/trader.withdraw'
+import { Route as TraderTransactionsRouteImport } from './routes/trader.transactions'
+import { Route as TraderProfileRouteImport } from './routes/trader.profile'
+import { Route as TraderLoginRouteImport } from './routes/trader.login'
+import { Route as TraderGoalsRouteImport } from './routes/trader.goals'
 import { Route as AgentWithdrawRouteImport } from './routes/agent.withdraw'
 import { Route as AgentTransactionsRouteImport } from './routes/agent.transactions'
 import { Route as AgentTradersRouteImport } from './routes/agent.traders'
@@ -38,6 +45,11 @@ import { Route as AdminDepositsRouteImport } from './routes/admin.deposits'
 import { Route as AdminComplianceRouteImport } from './routes/admin.compliance'
 import { Route as AdminAgentsRouteImport } from './routes/admin.agents'
 
+const TraderRoute = TraderRouteImport.update({
+  id: '/trader',
+  path: '/trader',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
   path: '/register',
@@ -83,6 +95,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TraderIndexRoute = TraderIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => TraderRoute,
+} as any)
 const AgentIndexRoute = AgentIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -92,6 +109,31 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AdminRoute,
+} as any)
+const TraderWithdrawRoute = TraderWithdrawRouteImport.update({
+  id: '/withdraw',
+  path: '/withdraw',
+  getParentRoute: () => TraderRoute,
+} as any)
+const TraderTransactionsRoute = TraderTransactionsRouteImport.update({
+  id: '/transactions',
+  path: '/transactions',
+  getParentRoute: () => TraderRoute,
+} as any)
+const TraderProfileRoute = TraderProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => TraderRoute,
+} as any)
+const TraderLoginRoute = TraderLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => TraderRoute,
+} as any)
+const TraderGoalsRoute = TraderGoalsRouteImport.update({
+  id: '/goals',
+  path: '/goals',
+  getParentRoute: () => TraderRoute,
 } as any)
 const AgentWithdrawRoute = AgentWithdrawRouteImport.update({
   id: '/withdraw',
@@ -189,6 +231,7 @@ export interface FileRoutesByFullPath {
   '/for-traders': typeof ForTradersRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/trader': typeof TraderRouteWithChildren
   '/admin/agents': typeof AdminAgentsRoute
   '/admin/compliance': typeof AdminComplianceRoute
   '/admin/deposits': typeof AdminDepositsRoute
@@ -206,8 +249,14 @@ export interface FileRoutesByFullPath {
   '/agent/traders': typeof AgentTradersRoute
   '/agent/transactions': typeof AgentTransactionsRoute
   '/agent/withdraw': typeof AgentWithdrawRoute
+  '/trader/goals': typeof TraderGoalsRoute
+  '/trader/login': typeof TraderLoginRoute
+  '/trader/profile': typeof TraderProfileRoute
+  '/trader/transactions': typeof TraderTransactionsRoute
+  '/trader/withdraw': typeof TraderWithdrawRoute
   '/admin/': typeof AdminIndexRoute
   '/agent/': typeof AgentIndexRoute
+  '/trader/': typeof TraderIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -234,8 +283,14 @@ export interface FileRoutesByTo {
   '/agent/traders': typeof AgentTradersRoute
   '/agent/transactions': typeof AgentTransactionsRoute
   '/agent/withdraw': typeof AgentWithdrawRoute
+  '/trader/goals': typeof TraderGoalsRoute
+  '/trader/login': typeof TraderLoginRoute
+  '/trader/profile': typeof TraderProfileRoute
+  '/trader/transactions': typeof TraderTransactionsRoute
+  '/trader/withdraw': typeof TraderWithdrawRoute
   '/admin': typeof AdminIndexRoute
   '/agent': typeof AgentIndexRoute
+  '/trader': typeof TraderIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -248,6 +303,7 @@ export interface FileRoutesById {
   '/for-traders': typeof ForTradersRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/trader': typeof TraderRouteWithChildren
   '/admin/agents': typeof AdminAgentsRoute
   '/admin/compliance': typeof AdminComplianceRoute
   '/admin/deposits': typeof AdminDepositsRoute
@@ -265,8 +321,14 @@ export interface FileRoutesById {
   '/agent/traders': typeof AgentTradersRoute
   '/agent/transactions': typeof AgentTransactionsRoute
   '/agent/withdraw': typeof AgentWithdrawRoute
+  '/trader/goals': typeof TraderGoalsRoute
+  '/trader/login': typeof TraderLoginRoute
+  '/trader/profile': typeof TraderProfileRoute
+  '/trader/transactions': typeof TraderTransactionsRoute
+  '/trader/withdraw': typeof TraderWithdrawRoute
   '/admin/': typeof AdminIndexRoute
   '/agent/': typeof AgentIndexRoute
+  '/trader/': typeof TraderIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -280,6 +342,7 @@ export interface FileRouteTypes {
     | '/for-traders'
     | '/login'
     | '/register'
+    | '/trader'
     | '/admin/agents'
     | '/admin/compliance'
     | '/admin/deposits'
@@ -297,8 +360,14 @@ export interface FileRouteTypes {
     | '/agent/traders'
     | '/agent/transactions'
     | '/agent/withdraw'
+    | '/trader/goals'
+    | '/trader/login'
+    | '/trader/profile'
+    | '/trader/transactions'
+    | '/trader/withdraw'
     | '/admin/'
     | '/agent/'
+    | '/trader/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -325,8 +394,14 @@ export interface FileRouteTypes {
     | '/agent/traders'
     | '/agent/transactions'
     | '/agent/withdraw'
+    | '/trader/goals'
+    | '/trader/login'
+    | '/trader/profile'
+    | '/trader/transactions'
+    | '/trader/withdraw'
     | '/admin'
     | '/agent'
+    | '/trader'
   id:
     | '__root__'
     | '/'
@@ -338,6 +413,7 @@ export interface FileRouteTypes {
     | '/for-traders'
     | '/login'
     | '/register'
+    | '/trader'
     | '/admin/agents'
     | '/admin/compliance'
     | '/admin/deposits'
@@ -355,8 +431,14 @@ export interface FileRouteTypes {
     | '/agent/traders'
     | '/agent/transactions'
     | '/agent/withdraw'
+    | '/trader/goals'
+    | '/trader/login'
+    | '/trader/profile'
+    | '/trader/transactions'
+    | '/trader/withdraw'
     | '/admin/'
     | '/agent/'
+    | '/trader/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -369,10 +451,18 @@ export interface RootRouteChildren {
   ForTradersRoute: typeof ForTradersRoute
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
+  TraderRoute: typeof TraderRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/trader': {
+      id: '/trader'
+      path: '/trader'
+      fullPath: '/trader'
+      preLoaderRoute: typeof TraderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/register': {
       id: '/register'
       path: '/register'
@@ -436,6 +526,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/trader/': {
+      id: '/trader/'
+      path: '/'
+      fullPath: '/trader/'
+      preLoaderRoute: typeof TraderIndexRouteImport
+      parentRoute: typeof TraderRoute
+    }
     '/agent/': {
       id: '/agent/'
       path: '/'
@@ -449,6 +546,41 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
+    }
+    '/trader/withdraw': {
+      id: '/trader/withdraw'
+      path: '/withdraw'
+      fullPath: '/trader/withdraw'
+      preLoaderRoute: typeof TraderWithdrawRouteImport
+      parentRoute: typeof TraderRoute
+    }
+    '/trader/transactions': {
+      id: '/trader/transactions'
+      path: '/transactions'
+      fullPath: '/trader/transactions'
+      preLoaderRoute: typeof TraderTransactionsRouteImport
+      parentRoute: typeof TraderRoute
+    }
+    '/trader/profile': {
+      id: '/trader/profile'
+      path: '/profile'
+      fullPath: '/trader/profile'
+      preLoaderRoute: typeof TraderProfileRouteImport
+      parentRoute: typeof TraderRoute
+    }
+    '/trader/login': {
+      id: '/trader/login'
+      path: '/login'
+      fullPath: '/trader/login'
+      preLoaderRoute: typeof TraderLoginRouteImport
+      parentRoute: typeof TraderRoute
+    }
+    '/trader/goals': {
+      id: '/trader/goals'
+      path: '/goals'
+      fullPath: '/trader/goals'
+      preLoaderRoute: typeof TraderGoalsRouteImport
+      parentRoute: typeof TraderRoute
     }
     '/agent/withdraw': {
       id: '/agent/withdraw'
@@ -626,6 +758,27 @@ const AgentRouteChildren: AgentRouteChildren = {
 
 const AgentRouteWithChildren = AgentRoute._addFileChildren(AgentRouteChildren)
 
+interface TraderRouteChildren {
+  TraderGoalsRoute: typeof TraderGoalsRoute
+  TraderLoginRoute: typeof TraderLoginRoute
+  TraderProfileRoute: typeof TraderProfileRoute
+  TraderTransactionsRoute: typeof TraderTransactionsRoute
+  TraderWithdrawRoute: typeof TraderWithdrawRoute
+  TraderIndexRoute: typeof TraderIndexRoute
+}
+
+const TraderRouteChildren: TraderRouteChildren = {
+  TraderGoalsRoute: TraderGoalsRoute,
+  TraderLoginRoute: TraderLoginRoute,
+  TraderProfileRoute: TraderProfileRoute,
+  TraderTransactionsRoute: TraderTransactionsRoute,
+  TraderWithdrawRoute: TraderWithdrawRoute,
+  TraderIndexRoute: TraderIndexRoute,
+}
+
+const TraderRouteWithChildren =
+  TraderRoute._addFileChildren(TraderRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
@@ -636,6 +789,7 @@ const rootRouteChildren: RootRouteChildren = {
   ForTradersRoute: ForTradersRoute,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
+  TraderRoute: TraderRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
