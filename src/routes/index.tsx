@@ -406,7 +406,7 @@ function Landing() {
           <p className="text-xs font-semibold uppercase tracking-widest text-accent">Voices from the market</p>
           <h2 className="mt-2 text-3xl font-bold md:text-4xl">Trusted by traders, agents, and partners</h2>
         </div>
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
+        <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {testimonials.map((t, i) => (
             <motion.div key={t.name} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}>
               <Card className="h-full p-6">
