@@ -20,12 +20,13 @@ export const Route = createFileRoute("/")({
 });
 
 const heroSlides = [
-  { eyebrow: "Daily Savings Collection", title: ["Your Daily Savings.", "Safe.", "Simple.", "Rewarding."], desc: "Save daily with a trusted SafeBox agent. Instant SMS receipt every time. Watch your balance grow.", chips: ["Instant SMS", "No Smartphone Needed", "Daily Pickup"] },
-  { eyebrow: "Withdraw Anytime", title: ["Need cash?", "Withdraw.", "Anywhere.", "Instantly."], desc: "Visit any SafeBox agent. Verify with OTP, paper card, or fingerprint. Walk out with your money.", chips: ["OTP Verified", "No Penalties", "Same Day Cash"] },
-  { eyebrow: "Transaction History", title: ["Every kobo.", "Tracked.", "Receipted.", "Yours."], desc: "Every deposit and withdrawal is logged and timestamped. Check your full history any time, any phone.", chips: ["SMS Receipts", "Live Ledger", "Audit Ready"] },
-  { eyebrow: "Float Management", title: ["For agents.", "Top up.", "Withdraw.", "Earn."], desc: "Fund your float from any bank, settle to your account any time. Earn commission on every transaction.", chips: ["USSD Top-up", "Bank Settlement", "Daily Commission"] },
-  { eyebrow: "Security of Funds", title: ["CBN Compliant.", "Insured.", "Verified.", "Trusted."], desc: "SafeBox operates under CBN Agent Banking Guidelines. Your money is protected at every step.", chips: ["CBN Compliant", "NDIC Coverage", "Encrypted"] },
-  { eyebrow: "Monthly Jackpot", title: ["Save more.", "Win.", "₦300,000.", "Monthly."], desc: "One active trader wins ₦300,000 every month. No fees. The more you save, the higher your chances.", chips: ["₦300k Prize", "1 Winner / Month", "Zero Entry Fee"] },
+  { eyebrow: "Daily Savings Collection", title: ["Your Daily Savings.", "Safe.", "Simple.", "Rewarding."], desc: "Save daily with a trusted SafeBox agent. Instant SMS receipt every time. Watch your balance grow.", chips: ["Instant SMS", "No Smartphone Needed", "Daily Pickup"], cta: { to: "/register" as const, label: "Start Saving Today" } },
+  { eyebrow: "Withdraw Anytime", title: ["Need cash?", "Withdraw.", "Anywhere.", "Instantly."], desc: "Visit any SafeBox agent. Verify with OTP, paper card, or fingerprint. Walk out with your money.", chips: ["OTP Verified", "No Penalties", "Same Day Cash"], cta: { to: "/register" as const, label: "Start Saving Today" } },
+  { eyebrow: "Transaction History", title: ["Every kobo.", "Tracked.", "Receipted.", "Yours."], desc: "Every deposit and withdrawal is logged and timestamped. Check your full history any time, any phone.", chips: ["SMS Receipts", "Live Ledger", "Audit Ready"], cta: { to: "/register" as const, label: "Start Saving Today" } },
+  { eyebrow: "Float Management", title: ["For agents.", "Top up.", "Withdraw.", "Earn."], desc: "Fund your float from any bank, settle to your account any time. Earn commission on every transaction.", chips: ["USSD Top-up", "Bank Settlement", "Daily Commission"], cta: { to: "/register" as const, label: "Become an Agent" } },
+  { eyebrow: "Security of Funds", title: ["CBN Compliant.", "Insured.", "Verified.", "Trusted."], desc: "SafeBox operates under CBN Agent Banking Guidelines. Your money is protected at every step.", chips: ["CBN Compliant", "NDIC Coverage", "Encrypted"], cta: { to: "/register" as const, label: "Start Saving Today" } },
+  { eyebrow: "Monthly Jackpot", title: ["Save more.", "Win.", "₦300,000.", "Monthly."], desc: "One active trader wins ₦300,000 every month. No fees. The more you save, the higher your chances.", chips: ["₦300k Prize", "1 Winner / Month", "Zero Entry Fee"], cta: { to: "/register" as const, label: "Start Saving Today" } },
+  { eyebrow: "Trader Dashboard", title: ["Track Your Savings.", "Anytime.", "Anywhere.", "Yours."], desc: "Log in to your personal dashboard. See your balance, view your full transaction history, and request withdrawals with one click.", chips: ["Real-Time Balance", "Transaction History", "Easy Withdrawals"], cta: { to: "/trader/login" as const, label: "Trader Login" } },
 ];
 
 const features = [
@@ -39,8 +40,9 @@ const features = [
 
 const testimonials = [
   { name: "Mama Ngozi", role: "Trader", location: "Mile 12 Market, Lagos", quote: "I used to hide my savings under my mattress. Now I save with SafeBox. I can see my balance grow every day.", rating: 5 },
+  { name: "Fatima", role: "Trader", location: "Bodija Market, Ibadan", quote: "I can see my savings grow every day. SafeBox gives me peace of mind.", rating: 5 },
+  { name: "Chinedu", role: "Trader", location: "Onitsha Main Market", quote: "The SMS alerts and online dashboard help me track my money. I trust my collector more now.", rating: 5 },
   { name: "Adebayo O.", role: "SafeBox Agent", location: "Bodija Market, Ibadan", quote: "Being a SafeBox agent gives me steady income. My community trusts me.", rating: 5 },
-  { name: "Director, Partner MFB", role: "Principal", location: "Lagos", quote: "SafeBox helped us reach thousands of unbanked traders. Their technology is solid.", rating: 5 },
 ];
 
 function Landing() {
@@ -99,11 +101,11 @@ function Landing() {
               ))}
             </div>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link to="/register"><Button size="lg" className="bg-primary hover:bg-primary/90">
-                Start Saving Today <ArrowRight className="ml-2 h-4 w-4" />
+              <Link to={current.cta.to}><Button size="lg" className="bg-primary hover:bg-primary/90">
+                {current.cta.label} <ArrowRight className="ml-2 h-4 w-4" />
               </Button></Link>
-              <Link to="/register"><Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
-                Become an Agent
+              <Link to="/trader/login"><Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+                Trader Login
               </Button></Link>
             </div>
           </motion.div>
@@ -207,6 +209,9 @@ function Landing() {
           ))}
         </div>
       </section>
+
+      {/* TRADER DEMO WIDGET */}
+      <TraderDemoSection />
 
       {/* FEATURES GRID */}
       <section className="bg-cream py-20">
@@ -404,7 +409,7 @@ function Landing() {
           <p className="text-xs font-semibold uppercase tracking-widest text-accent">Voices from the market</p>
           <h2 className="mt-2 text-3xl font-bold md:text-4xl">Trusted by traders, agents, and partners</h2>
         </div>
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
+        <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {testimonials.map((t, i) => (
             <motion.div key={t.name} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}>
               <Card className="h-full p-6">
@@ -449,3 +454,96 @@ function Landing() {
     </div>
   );
 }
+
+function TraderDemoSection() {
+  const [phone, setPhone] = useState("");
+  const [result, setResult] = useState<null | { name: string; balance: number; thisMonth: number; interest: number; streakDays: number; found: boolean }>(null);
+
+  const check = (e: React.FormEvent) => {
+    e.preventDefault();
+    // dynamic import safe — but we already import lib at top to avoid SSR issues
+    import("@/lib/mockTraderData").then(({ lookupByPhone }) => {
+      const normalized = phone.replace(/\s+/g, "");
+      const t = lookupByPhone(normalized);
+      if (!t) {
+        setResult({ name: "—", balance: 0, thisMonth: 0, interest: 0, streakDays: 0, found: false });
+        return;
+      }
+      const thisMonth = Math.round(t.totalSaved * 0.18);
+      setResult({ name: t.name, balance: t.balance, thisMonth, interest: t.interestEarned, streakDays: t.streakDays, found: true });
+    });
+  };
+
+  const fmt = (n: number) => `₦${n.toLocaleString("en-NG")}`;
+
+  return (
+    <section className="bg-cream py-20">
+      <div className="mx-auto max-w-6xl px-4 md:px-8">
+        <div className="text-center">
+          <p className="text-xs font-semibold uppercase tracking-widest text-accent">Try It Now</p>
+          <h2 className="mt-2 text-3xl font-bold md:text-4xl">See How SafeBox Works for Traders</h2>
+          <p className="mt-3 text-muted-foreground">Enter a phone number and check the balance — just like a real SafeBox trader would.</p>
+        </div>
+
+        <div className="mt-10 grid gap-6 md:grid-cols-2 items-stretch">
+          <Card className="p-6">
+            <form onSubmit={check} className="space-y-4">
+              <label className="text-sm font-medium">Enter your phone number</label>
+              <input
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="e.g. 08012345678"
+                className="w-full h-11 rounded-md border border-input bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+              <Button type="submit" className="w-full bg-primary hover:bg-primary/90">Check Balance</Button>
+              <p className="text-[11px] text-muted-foreground text-center">Try the demo number <code className="font-mono">08012345678</code></p>
+            </form>
+          </Card>
+
+          <Card className="p-6 bg-sidebar text-sidebar-foreground">
+            {!result ? (
+              <div className="h-full grid place-items-center text-center text-sidebar-foreground/70 py-10">
+                <div>
+                  <Wallet className="h-8 w-8 mx-auto mb-3 text-gold" />
+                  <p className="text-sm">Your balance will appear here.</p>
+                </div>
+              </div>
+            ) : !result.found ? (
+              <div className="grid place-items-center text-center py-10">
+                <p className="text-sm">No SafeBox account found for that number.</p>
+                <p className="mt-2 text-xs text-sidebar-foreground/60">Visit your nearest SafeBox agent to open an account.</p>
+              </div>
+            ) : (
+              <div>
+                <p className="text-xs uppercase tracking-widest text-gold">Account holder</p>
+                <p className="font-display text-2xl font-bold">{result.name}</p>
+                <div className="mt-5 rounded-xl bg-white/5 border border-white/10 p-5">
+                  <p className="text-xs text-sidebar-foreground/70">Current balance</p>
+                  <p className="font-display text-4xl font-bold text-gold mt-1">{fmt(result.balance)}</p>
+                </div>
+                <div className="mt-4 grid grid-cols-3 gap-2 text-center">
+                  <Mini label="Saved this month" value={fmt(result.thisMonth)} />
+                  <Mini label="Interest earned" value={fmt(result.interest)} />
+                  <Mini label="Streak (days)" value={String(result.streakDays)} />
+                </div>
+                <Link to="/trader/login">
+                  <Button className="w-full mt-5 bg-gold text-gold-foreground hover:bg-gold/90">Login to Full Dashboard</Button>
+                </Link>
+              </div>
+            )}
+          </Card>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Mini({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-lg bg-white/5 border border-white/10 px-2 py-3">
+      <p className="font-semibold text-sm text-gold">{value}</p>
+      <p className="text-[10px] uppercase text-sidebar-foreground/70 mt-1 leading-tight">{label}</p>
+    </div>
+  );
+}
+
