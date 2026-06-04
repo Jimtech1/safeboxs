@@ -34,6 +34,7 @@ export function Navbar() {
           ))}
         </nav>
         <div className="hidden items-center gap-3 md:flex">
+          <Link to="/trader/login"><Button variant="ghost">Trader Login</Button></Link>
           <Link to="/login"><Button variant="outline">Agent Login</Button></Link>
           <Link to="/register"><Button className="bg-gold text-gold-foreground hover:bg-gold/90">Open Account</Button></Link>
         </div>
@@ -46,9 +47,12 @@ export function Navbar() {
           {links.map((l) => (
             <Link key={l.to} to={l.to} onClick={() => setOpen(false)} className="block py-2 text-foreground/80">{l.label}</Link>
           ))}
-          <div className="flex gap-2 pt-2">
-            <Link to="/login" className="flex-1" onClick={() => setOpen(false)}><Button variant="outline" className="w-full">Agent Login</Button></Link>
-            <Link to="/register" className="flex-1" onClick={() => setOpen(false)}><Button className="w-full bg-gold text-gold-foreground hover:bg-gold/90">Open Account</Button></Link>
+          <div className="flex flex-col gap-2 pt-2">
+            <Link to="/trader/login" onClick={() => setOpen(false)}><Button variant="ghost" className="w-full">Trader Login</Button></Link>
+            <div className="flex gap-2">
+              <Link to="/login" className="flex-1" onClick={() => setOpen(false)}><Button variant="outline" className="w-full">Agent Login</Button></Link>
+              <Link to="/register" className="flex-1" onClick={() => setOpen(false)}><Button className="w-full bg-gold text-gold-foreground hover:bg-gold/90">Open Account</Button></Link>
+            </div>
           </div>
         </div>
       )}

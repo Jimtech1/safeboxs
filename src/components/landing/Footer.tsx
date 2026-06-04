@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Facebook, Instagram, Linkedin, MessageCircle } from "lucide-react";
 
 const cols = [
-  { title: "Product", items: ["For Traders", "For Agents", "For Partners", "Pricing"] },
+  { title: "Product", items: ["For Traders", "For Agents", "Trader Login", "Agent Login", "Pricing"] },
   { title: "Company", items: ["About", "Blog", "Careers", "Press"] },
   { title: "Resources", items: ["FAQ", "Contact", "Agent Training", "Compliance"] },
   { title: "Legal", items: ["Privacy Policy", "Terms of Service", "CBN Compliance"] },
