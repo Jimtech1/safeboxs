@@ -1,20 +1,17 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { SafeBoxLogo } from "@/components/SafeBoxLogo";
-import { loginTrader } from "@/lib/mockTraderData";
-import { toast } from "sonner";
-import { ShieldCheck } from "lucide-react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
 
 export const Route = createFileRoute("/trader/login")({
-  component: TraderLogin,
+  component: TraderLoginRedirect,
 });
 
-function TraderLogin() {
+function TraderLoginRedirect() {
+  const navigate = useNavigate();
+  useEffect(() => { navigate({ to: "/login", replace: true }); }, [navigate]);
+  return null;
+}
+
+const _unused = () => {
   const navigate = useNavigate();
   const [phone, setPhone] = useState("08012345678");
   const [pin, setPin] = useState("");
