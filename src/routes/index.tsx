@@ -104,7 +104,7 @@ function Landing() {
               <Link to={current.cta.to}><Button size="lg" className="bg-primary hover:bg-primary/90">
                 {current.cta.label} <ArrowRight className="ml-2 h-4 w-4" />
               </Button></Link>
-              <Link to="/trader/login"><Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+              <Link to="/login"><Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
                 Trader Login
               </Button></Link>
             </div>
@@ -526,7 +526,7 @@ function TraderDemoSection() {
                   <Mini label="Interest earned" value={fmt(result.interest)} />
                   <Mini label="Streak (days)" value={String(result.streakDays)} />
                 </div>
-                <Link to="/trader/login">
+                <Link to="/login">
                   <Button className="w-full mt-5 bg-gold text-gold-foreground hover:bg-gold/90">Login to Full Dashboard</Button>
                 </Link>
               </div>

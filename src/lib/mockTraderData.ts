@@ -200,6 +200,32 @@ export function loginTrader(phone: string, pin: string): Trader | null {
   return t;
 }
 
+export function signupTrader(input: {
+  name: string; phone: string; email?: string; market: string; pin: string;
+}): Trader | { error: string } {
+  const s = load();
+  const normalizedPhone = input.phone.replace(/\s+/g, "");
+  if (!/^0\d{10}$/.test(normalizedPhone)) return { error: "Phone must be 11 digits starting with 0" };
+  if (input.pin.length < 4) return { error: "PIN must be at least 4 digits" };
+  if (s.traders.some((t) => t.phone === normalizedPhone)) return { error: "An account with this phone already exists" };
+  const id = `TRD_${String(s.traders.length + 1).padStart(3, "0")}`;
+  const now = new Date().toISOString();
+  const trader: Trader = {
+    id, name: input.name, phone: normalizedPhone, email: input.email,
+    agentId: "AGT_001", agentName: "Adebayo Ogunlesi",
+    agentPhone: "08033112233", agentLocation: input.market,
+    balance: 0, totalSaved: 0, interestEarned: 0, streakDays: 0,
+    joinDate: now, lastActive: now, status: "active", pin: input.pin,
+    smsAlerts: true, emailAlerts: !!input.email,
+  };
+  s.traders.push(trader);
+  s.txnsByTrader[id] = [];
+  s.goalsByTrader[id] = [];
+  s.currentTraderId = id;
+  save(s);
+  return trader;
+}
+
 export function logoutTrader() {
   const s = load(); s.currentTraderId = undefined; save(s);
 }
