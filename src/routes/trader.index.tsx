@@ -3,9 +3,11 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Wallet, TrendingUp, Coins, Flame, ArrowUpFromLine, Receipt, Download } from "lucide-react";
+import { Wallet, TrendingUp, Coins, Flame, ArrowUpFromLine, Receipt, Download, Percent, Landmark, Copy } from "lucide-react";
 import { getCurrentTrader, getTransactions, getGoals, formatNGN, type Trader, type TraderTxn, type Goal } from "@/lib/mockTraderData";
+import { NOMBA, dailyInterest, projectedAnnual, formatKobo, virtualAccountFor } from "@/lib/yieldData";
 import { toast } from "sonner";
+
 
 export const Route = createFileRoute("/trader/")({
   component: TraderDashboard,
@@ -63,7 +65,59 @@ function TraderDashboard() {
         ))}
       </div>
 
+      {/* Yield + virtual account */}
+      <div className="grid gap-4 lg:grid-cols-2">
+        <Card className="p-5">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-semibold flex items-center gap-2"><Percent className="h-4 w-4 text-gold-foreground" />Daily Interest</p>
+              <p className="text-xs text-muted-foreground">{NOMBA.provider} • {(NOMBA.annualRate * 100).toFixed(1)}% p.a.</p>
+            </div>
+            <Link to="/trader/interest" className="text-xs text-primary hover:underline">Details →</Link>
+          </div>
+          <div className="mt-4 grid grid-cols-3 gap-3 text-center">
+            <div className="rounded-xl bg-cream p-3">
+              <p className="text-[10px] uppercase tracking-wide text-muted-foreground">Today</p>
+              <p className="mt-1 font-display text-base font-bold text-success">+{formatKobo(dailyInterest(trader.balance))}</p>
+            </div>
+            <div className="rounded-xl bg-cream p-3">
+              <p className="text-[10px] uppercase tracking-wide text-muted-foreground">Total earned</p>
+              <p className="mt-1 font-display text-base font-bold">{formatNGN(trader.interestEarned)}</p>
+            </div>
+            <div className="rounded-xl bg-cream p-3">
+              <p className="text-[10px] uppercase tracking-wide text-muted-foreground">Per year</p>
+              <p className="mt-1 font-display text-base font-bold">{formatNGN(projectedAnnual(trader.balance))}</p>
+            </div>
+          </div>
+          <p className="mt-3 text-[11px] text-muted-foreground">Interest is credited automatically at {NOMBA.payoutTime}.</p>
+        </Card>
+
+        <Card className="p-5">
+          <p className="text-sm font-semibold flex items-center gap-2"><Landmark className="h-4 w-4 text-primary" />Your Virtual Account</p>
+          <p className="text-xs text-muted-foreground">Fund your savings by transfer from any bank</p>
+          {(() => {
+            const va = virtualAccountFor(trader.id, trader.name);
+            return (
+              <div className="mt-4 rounded-xl bg-cream p-4 text-sm space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">Account number</span>
+                  <button
+                    onClick={() => { navigator.clipboard?.writeText(va.accountNumber); toast.success("Account number copied"); }}
+                    className="flex items-center gap-2 font-display text-lg font-bold text-primary"
+                  >
+                    {va.accountNumber}<Copy className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+                <div className="flex items-center justify-between"><span className="text-muted-foreground">Bank</span><span className="font-medium">{va.bankName}</span></div>
+                <div className="flex items-center justify-between gap-2"><span className="text-muted-foreground">Name</span><span className="font-medium text-right">{va.accountName}</span></div>
+              </div>
+            );
+          })()}
+        </Card>
+      </div>
+
       <div className="grid gap-4 lg:grid-cols-3">
+
         <Card className="p-6 lg:col-span-1">
           <p className="text-sm font-semibold">Top Savings Goal</p>
           {primaryGoal ? (
