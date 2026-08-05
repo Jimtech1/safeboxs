@@ -56,8 +56,25 @@ function AgentHome() {
               <Building2 className="h-5 w-5" /> Withdraw
             </Link>
           </div>
+
+          <div className="mt-4 rounded-xl bg-white/10 border border-white/20 p-3">
+            <div className="flex items-center justify-between">
+              <p className="text-[10px] uppercase tracking-wide text-primary-foreground/70">Float virtual account ({va.bankName})</p>
+              <Percent className="h-3.5 w-3.5 text-gold" />
+            </div>
+            <button
+              onClick={() => { navigator.clipboard?.writeText(va.accountNumber); toast.success("Float account number copied"); }}
+              className="mt-1 flex items-center gap-2 font-display text-xl font-bold"
+            >
+              {va.accountNumber}<Copy className="h-3.5 w-3.5 opacity-70" />
+            </button>
+            <p className="text-[11px] text-primary-foreground/70 mt-1">
+              Idle float earns {(NOMBA.agentFloatRate * 100).toFixed(1)}% p.a. • today: +{formatKobo(floatYield)}
+            </p>
+          </div>
         </div>
       </Card>
+
 
       {lowFloat && (
         <Card className="p-4 border-2 border-warning bg-warning/10">
