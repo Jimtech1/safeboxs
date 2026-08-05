@@ -28,7 +28,7 @@ function AgentHome() {
   ].slice(0, 5);
   const lowFloat = s.floatBalance < currentAgent.lowFloatThreshold;
   const utilization = Math.min(100, Math.round((s.depositsCollectedToday / currentAgent.floatCapacity) * 100));
-  const va = virtualAccountFor(currentAgent.id, currentAgent.name, "91");
+  const va = virtualAccountFor(currentAgent.name, currentAgent.name, "91");
   const floatYield = dailyInterest(s.floatBalance, NOMBA.agentFloatRate);
 
 
