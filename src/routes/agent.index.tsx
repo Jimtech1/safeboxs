@@ -1,10 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowDownToLine, ArrowUpFromLine, Search, MapPin, Calendar, Plus, Wallet, AlertTriangle, Info, Building2 } from "lucide-react";
+import { ArrowDownToLine, ArrowUpFromLine, Search, MapPin, Calendar, Plus, Wallet, AlertTriangle, Info, Building2, Percent, Copy } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { currentAgent, transactions, formatNaira } from "@/lib/mockData";
 import { useAgentState } from "@/lib/agentStore";
+import { NOMBA, dailyInterest, formatKobo, virtualAccountFor } from "@/lib/yieldData";
+import { toast } from "sonner";
+
 
 export const Route = createFileRoute("/agent/")({
   component: AgentHome,
@@ -25,6 +28,9 @@ function AgentHome() {
   ].slice(0, 5);
   const lowFloat = s.floatBalance < currentAgent.lowFloatThreshold;
   const utilization = Math.min(100, Math.round((s.depositsCollectedToday / currentAgent.floatCapacity) * 100));
+  const va = virtualAccountFor(currentAgent.name, currentAgent.name, "91");
+  const floatYield = dailyInterest(s.floatBalance, NOMBA.agentFloatRate);
+
 
   return (
     <div className="space-y-5">
@@ -53,8 +59,25 @@ function AgentHome() {
               <Building2 className="h-5 w-5" /> Withdraw
             </Link>
           </div>
+
+          <div className="mt-4 rounded-xl bg-white/10 border border-white/20 p-3">
+            <div className="flex items-center justify-between">
+              <p className="text-[10px] uppercase tracking-wide text-primary-foreground/70">Float virtual account ({va.bankName})</p>
+              <Percent className="h-3.5 w-3.5 text-gold" />
+            </div>
+            <button
+              onClick={() => { navigator.clipboard?.writeText(va.accountNumber); toast.success("Float account number copied"); }}
+              className="mt-1 flex items-center gap-2 font-display text-xl font-bold"
+            >
+              {va.accountNumber}<Copy className="h-3.5 w-3.5 opacity-70" />
+            </button>
+            <p className="text-[11px] text-primary-foreground/70 mt-1">
+              Idle float earns {(NOMBA.agentFloatRate * 100).toFixed(1)}% p.a. • today: +{formatKobo(floatYield)}
+            </p>
+          </div>
         </div>
       </Card>
+
 
       {lowFloat && (
         <Card className="p-4 border-2 border-warning bg-warning/10">

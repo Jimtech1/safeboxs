@@ -1,5 +1,5 @@
 import { Link, Outlet, useRouterState } from "@tanstack/react-router";
-import { LayoutDashboard, Users, UserCog, ArrowLeftRight, Wallet, ShieldCheck, Settings, Bell, Search, ArrowDownToLine, ArrowUpFromLine } from "lucide-react";
+import { LayoutDashboard, Users, UserCog, ArrowLeftRight, Wallet, ShieldCheck, Settings, Bell, Search, ArrowDownToLine, ArrowUpFromLine, Percent } from "lucide-react";
 import { SafeBoxLogo } from "@/components/SafeBoxLogo";
 import { Input } from "@/components/ui/input";
 
@@ -10,10 +10,12 @@ const nav = [
   { to: "/admin/deposits", label: "Deposits", icon: ArrowDownToLine },
   { to: "/admin/withdrawals", label: "Withdrawals", icon: ArrowUpFromLine },
   { to: "/admin/float", label: "Float", icon: Wallet },
+  { to: "/admin/yield", label: "Yield", icon: Percent },
   { to: "/admin/transactions", label: "Txns", icon: ArrowLeftRight },
   { to: "/admin/compliance", label: "Compliance", icon: ShieldCheck },
   { to: "/admin/settings", label: "Settings", icon: Settings },
 ];
+
 
 export function AdminLayout() {
   const path = useRouterState({ select: (s) => s.location.pathname });

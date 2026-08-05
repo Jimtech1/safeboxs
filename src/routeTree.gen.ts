@@ -26,6 +26,7 @@ import { Route as TraderWithdrawRouteImport } from './routes/trader.withdraw'
 import { Route as TraderTransactionsRouteImport } from './routes/trader.transactions'
 import { Route as TraderProfileRouteImport } from './routes/trader.profile'
 import { Route as TraderLoginRouteImport } from './routes/trader.login'
+import { Route as TraderInterestRouteImport } from './routes/trader.interest'
 import { Route as TraderGoalsRouteImport } from './routes/trader.goals'
 import { Route as AgentWithdrawRouteImport } from './routes/agent.withdraw'
 import { Route as AgentTransactionsRouteImport } from './routes/agent.transactions'
@@ -36,6 +37,7 @@ import { Route as AgentPerformanceRouteImport } from './routes/agent.performance
 import { Route as AgentFloatWithdrawRouteImport } from './routes/agent.float-withdraw'
 import { Route as AgentDepositRouteImport } from './routes/agent.deposit'
 import { Route as AgentBalanceRouteImport } from './routes/agent.balance'
+import { Route as AdminYieldRouteImport } from './routes/admin.yield'
 import { Route as AdminWithdrawalsRouteImport } from './routes/admin.withdrawals'
 import { Route as AdminTransactionsRouteImport } from './routes/admin.transactions'
 import { Route as AdminTradersRouteImport } from './routes/admin.traders'
@@ -130,6 +132,11 @@ const TraderLoginRoute = TraderLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => TraderRoute,
 } as any)
+const TraderInterestRoute = TraderInterestRouteImport.update({
+  id: '/interest',
+  path: '/interest',
+  getParentRoute: () => TraderRoute,
+} as any)
 const TraderGoalsRoute = TraderGoalsRouteImport.update({
   id: '/goals',
   path: '/goals',
@@ -179,6 +186,11 @@ const AgentBalanceRoute = AgentBalanceRouteImport.update({
   id: '/balance',
   path: '/balance',
   getParentRoute: () => AgentRoute,
+} as any)
+const AdminYieldRoute = AdminYieldRouteImport.update({
+  id: '/yield',
+  path: '/yield',
+  getParentRoute: () => AdminRoute,
 } as any)
 const AdminWithdrawalsRoute = AdminWithdrawalsRouteImport.update({
   id: '/withdrawals',
@@ -240,6 +252,7 @@ export interface FileRoutesByFullPath {
   '/admin/traders': typeof AdminTradersRoute
   '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/withdrawals': typeof AdminWithdrawalsRoute
+  '/admin/yield': typeof AdminYieldRoute
   '/agent/balance': typeof AgentBalanceRoute
   '/agent/deposit': typeof AgentDepositRoute
   '/agent/float-withdraw': typeof AgentFloatWithdrawRoute
@@ -250,6 +263,7 @@ export interface FileRoutesByFullPath {
   '/agent/transactions': typeof AgentTransactionsRoute
   '/agent/withdraw': typeof AgentWithdrawRoute
   '/trader/goals': typeof TraderGoalsRoute
+  '/trader/interest': typeof TraderInterestRoute
   '/trader/login': typeof TraderLoginRoute
   '/trader/profile': typeof TraderProfileRoute
   '/trader/transactions': typeof TraderTransactionsRoute
@@ -274,6 +288,7 @@ export interface FileRoutesByTo {
   '/admin/traders': typeof AdminTradersRoute
   '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/withdrawals': typeof AdminWithdrawalsRoute
+  '/admin/yield': typeof AdminYieldRoute
   '/agent/balance': typeof AgentBalanceRoute
   '/agent/deposit': typeof AgentDepositRoute
   '/agent/float-withdraw': typeof AgentFloatWithdrawRoute
@@ -284,6 +299,7 @@ export interface FileRoutesByTo {
   '/agent/transactions': typeof AgentTransactionsRoute
   '/agent/withdraw': typeof AgentWithdrawRoute
   '/trader/goals': typeof TraderGoalsRoute
+  '/trader/interest': typeof TraderInterestRoute
   '/trader/login': typeof TraderLoginRoute
   '/trader/profile': typeof TraderProfileRoute
   '/trader/transactions': typeof TraderTransactionsRoute
@@ -312,6 +328,7 @@ export interface FileRoutesById {
   '/admin/traders': typeof AdminTradersRoute
   '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/withdrawals': typeof AdminWithdrawalsRoute
+  '/admin/yield': typeof AdminYieldRoute
   '/agent/balance': typeof AgentBalanceRoute
   '/agent/deposit': typeof AgentDepositRoute
   '/agent/float-withdraw': typeof AgentFloatWithdrawRoute
@@ -322,6 +339,7 @@ export interface FileRoutesById {
   '/agent/transactions': typeof AgentTransactionsRoute
   '/agent/withdraw': typeof AgentWithdrawRoute
   '/trader/goals': typeof TraderGoalsRoute
+  '/trader/interest': typeof TraderInterestRoute
   '/trader/login': typeof TraderLoginRoute
   '/trader/profile': typeof TraderProfileRoute
   '/trader/transactions': typeof TraderTransactionsRoute
@@ -351,6 +369,7 @@ export interface FileRouteTypes {
     | '/admin/traders'
     | '/admin/transactions'
     | '/admin/withdrawals'
+    | '/admin/yield'
     | '/agent/balance'
     | '/agent/deposit'
     | '/agent/float-withdraw'
@@ -361,6 +380,7 @@ export interface FileRouteTypes {
     | '/agent/transactions'
     | '/agent/withdraw'
     | '/trader/goals'
+    | '/trader/interest'
     | '/trader/login'
     | '/trader/profile'
     | '/trader/transactions'
@@ -385,6 +405,7 @@ export interface FileRouteTypes {
     | '/admin/traders'
     | '/admin/transactions'
     | '/admin/withdrawals'
+    | '/admin/yield'
     | '/agent/balance'
     | '/agent/deposit'
     | '/agent/float-withdraw'
@@ -395,6 +416,7 @@ export interface FileRouteTypes {
     | '/agent/transactions'
     | '/agent/withdraw'
     | '/trader/goals'
+    | '/trader/interest'
     | '/trader/login'
     | '/trader/profile'
     | '/trader/transactions'
@@ -422,6 +444,7 @@ export interface FileRouteTypes {
     | '/admin/traders'
     | '/admin/transactions'
     | '/admin/withdrawals'
+    | '/admin/yield'
     | '/agent/balance'
     | '/agent/deposit'
     | '/agent/float-withdraw'
@@ -432,6 +455,7 @@ export interface FileRouteTypes {
     | '/agent/transactions'
     | '/agent/withdraw'
     | '/trader/goals'
+    | '/trader/interest'
     | '/trader/login'
     | '/trader/profile'
     | '/trader/transactions'
@@ -575,6 +599,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TraderLoginRouteImport
       parentRoute: typeof TraderRoute
     }
+    '/trader/interest': {
+      id: '/trader/interest'
+      path: '/interest'
+      fullPath: '/trader/interest'
+      preLoaderRoute: typeof TraderInterestRouteImport
+      parentRoute: typeof TraderRoute
+    }
     '/trader/goals': {
       id: '/trader/goals'
       path: '/goals'
@@ -645,6 +676,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AgentBalanceRouteImport
       parentRoute: typeof AgentRoute
     }
+    '/admin/yield': {
+      id: '/admin/yield'
+      path: '/yield'
+      fullPath: '/admin/yield'
+      preLoaderRoute: typeof AdminYieldRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/withdrawals': {
       id: '/admin/withdrawals'
       path: '/withdrawals'
@@ -713,6 +751,7 @@ interface AdminRouteChildren {
   AdminTradersRoute: typeof AdminTradersRoute
   AdminTransactionsRoute: typeof AdminTransactionsRoute
   AdminWithdrawalsRoute: typeof AdminWithdrawalsRoute
+  AdminYieldRoute: typeof AdminYieldRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
@@ -725,6 +764,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminTradersRoute: AdminTradersRoute,
   AdminTransactionsRoute: AdminTransactionsRoute,
   AdminWithdrawalsRoute: AdminWithdrawalsRoute,
+  AdminYieldRoute: AdminYieldRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
@@ -760,6 +800,7 @@ const AgentRouteWithChildren = AgentRoute._addFileChildren(AgentRouteChildren)
 
 interface TraderRouteChildren {
   TraderGoalsRoute: typeof TraderGoalsRoute
+  TraderInterestRoute: typeof TraderInterestRoute
   TraderLoginRoute: typeof TraderLoginRoute
   TraderProfileRoute: typeof TraderProfileRoute
   TraderTransactionsRoute: typeof TraderTransactionsRoute
@@ -769,6 +810,7 @@ interface TraderRouteChildren {
 
 const TraderRouteChildren: TraderRouteChildren = {
   TraderGoalsRoute: TraderGoalsRoute,
+  TraderInterestRoute: TraderInterestRoute,
   TraderLoginRoute: TraderLoginRoute,
   TraderProfileRoute: TraderProfileRoute,
   TraderTransactionsRoute: TraderTransactionsRoute,
