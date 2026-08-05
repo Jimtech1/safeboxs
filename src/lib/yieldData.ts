@@ -10,7 +10,7 @@ export const NOMBA = {
   payoutTime: "02:00 WAT daily",
 } as const;
 
-export const dailyRate = (annual = NOMBA.annualRate) => annual / 365;
+export const dailyRate = (annual: number = NOMBA.annualRate) => annual / 365;
 
 /** Deterministic pseudo-random from a string seed (stable across renders/reloads). */
 function seedFrom(input: string) {
@@ -52,7 +52,7 @@ export type YieldEntry = {
 };
 
 /** Simulated daily interest accrual for the last `days` days. */
-export function buildYieldLedger(balance: number, days = 30, annual = NOMBA.annualRate): YieldEntry[] {
+export function buildYieldLedger(balance: number, days = 30, annual: number = NOMBA.annualRate): YieldEntry[] {
   const out: YieldEntry[] = [];
   let cumulative = 0;
   const seed = seedFrom(String(Math.round(balance)) + days);
@@ -75,10 +75,10 @@ export function buildYieldLedger(balance: number, days = 30, annual = NOMBA.annu
   return out;
 }
 
-export const dailyInterest = (balance: number, annual = NOMBA.annualRate) =>
+export const dailyInterest = (balance: number, annual: number = NOMBA.annualRate) =>
   Math.round(balance * dailyRate(annual) * NOMBA.traderShare * 100) / 100;
 
-export const projectedAnnual = (balance: number, annual = NOMBA.annualRate) =>
+export const projectedAnnual = (balance: number, annual: number = NOMBA.annualRate) =>
   Math.round(balance * annual * NOMBA.traderShare);
 
 export const formatKobo = (n: number) =>
