@@ -1,10 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowDownToLine, ArrowUpFromLine, Search, MapPin, Calendar, Plus, Wallet, AlertTriangle, Info, Building2 } from "lucide-react";
+import { ArrowDownToLine, ArrowUpFromLine, Search, MapPin, Calendar, Plus, Wallet, AlertTriangle, Info, Building2, Percent, Copy } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { currentAgent, transactions, formatNaira } from "@/lib/mockData";
 import { useAgentState } from "@/lib/agentStore";
+import { NOMBA, dailyInterest, formatKobo, virtualAccountFor } from "@/lib/yieldData";
+import { toast } from "sonner";
+
 
 export const Route = createFileRoute("/agent/")({
   component: AgentHome,
