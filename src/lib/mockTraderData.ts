@@ -56,6 +56,7 @@ export type Trader = {
   agentName: string;
   agentPhone: string;
   agentLocation: string;
+  market?: string;
   balance: number;
   totalSaved: number;
   interestEarned: number;
@@ -63,7 +64,10 @@ export type Trader = {
   joinDate: string;
   lastActive: string;
   status: "active" | "inactive" | "suspended";
+  /** Hashed PIN — plain PINs are never persisted. */
   pin: string;
+  photo?: string;
+  kycStatus?: "Tier 1" | "Pending review" | "Verified" | "Rejected";
   bankAccount?: { bankName: string; accountNumber: string; accountName: string };
   smsAlerts: boolean;
   emailAlerts: boolean;
@@ -72,31 +76,77 @@ export type Trader = {
 export const formatNGN = (n: number) =>
   `₦${Math.round(n).toLocaleString("en-NG")}`;
 
+export const relativeTime = (iso: string) => {
+  const diff = Date.now() - new Date(iso).getTime();
+  if (Number.isNaN(diff)) return "—";
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return "Just now";
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  return `${Math.floor(hrs / 24)}d ago`;
+};
+
 // ---------- Seed data ----------
-const seedTraders: Trader[] = [
+const demoTraders: Trader[] = [
   {
     id: "TRD_001", name: "Fatima Bello", phone: "08012345678", email: "fatima@example.com",
-    agentId: "AGT_001", agentName: "Adebayo Ogunlesi", agentPhone: "08033112233", agentLocation: "Bodija Market, Ibadan",
+    agentId: "AG-2000", agentName: "Adebayo Ogunlesi", agentPhone: "08033112233", agentLocation: "Bodija Market, Ibadan",
+    market: "Bodija Market, Ibadan",
     balance: 245800, totalSaved: 312500, interestEarned: 12450, streakDays: 42,
-    joinDate: "2026-01-15", lastActive: "2026-06-03", status: "active", pin: "1234",
+    joinDate: "2026-01-15", lastActive: "2026-06-03", status: "active", pin: hashPin("1234"),
+    kycStatus: "Verified",
     bankAccount: { bankName: "GTBank", accountNumber: "0123456789", accountName: "Fatima Bello" },
     smsAlerts: true, emailAlerts: false,
   },
   {
     id: "TRD_002", name: "Chinedu Okafor", phone: "08023456789",
-    agentId: "AGT_002", agentName: "Ngozi Eze", agentPhone: "08044112233", agentLocation: "Onitsha Main Market",
+    agentId: "AG-2001", agentName: "Ngozi Eze", agentPhone: "08044112233", agentLocation: "Onitsha Main Market",
+    market: "Onitsha Main Market",
     balance: 89400, totalSaved: 132000, interestEarned: 4210, streakDays: 21,
-    joinDate: "2026-02-08", lastActive: "2026-06-02", status: "active", pin: "1234",
+    joinDate: "2026-02-08", lastActive: "2026-06-02", status: "active", pin: hashPin("1234"),
+    kycStatus: "Tier 1",
     smsAlerts: true, emailAlerts: false,
   },
   {
     id: "TRD_003", name: "Aisha Mohammed", phone: "08034567890",
-    agentId: "AGT_001", agentName: "Adebayo Ogunlesi", agentPhone: "08033112233", agentLocation: "Bodija Market, Ibadan",
+    agentId: "AG-2000", agentName: "Adebayo Ogunlesi", agentPhone: "08033112233", agentLocation: "Bodija Market, Ibadan",
+    market: "Bodija Market, Ibadan",
     balance: 156200, totalSaved: 198000, interestEarned: 7800, streakDays: 65,
-    joinDate: "2026-01-20", lastActive: "2026-06-04", status: "active", pin: "1234",
+    joinDate: "2026-01-20", lastActive: "2026-06-04", status: "active", pin: hashPin("1234"),
+    kycStatus: "Verified",
     smsAlerts: true, emailAlerts: true,
   },
 ];
+
+// The 60 market traders from the platform catalogue become part of the same store,
+// so Agent search, Admin tables and the Trader dashboard all read one list.
+const catalogueTraders: Trader[] = baseTraders
+  .filter((t) => !demoTraders.some((d) => d.phone === t.phone))
+  .map((t, i) => ({
+    id: t.id,
+    name: t.name,
+    phone: t.phone,
+    agentId: `AG-${2000 + (i % 14)}`,
+    agentName: "Adebayo Ogunlesi",
+    agentPhone: "08033112233",
+    agentLocation: t.market,
+    market: t.market ?? markets[i % markets.length],
+    balance: t.balance,
+    totalSaved: t.totalSaved,
+    interestEarned: Math.round(t.totalSaved * 0.03),
+    streakDays: 5 + (i % 60),
+    joinDate: new Date(Date.now() - (30 + i) * 86400000).toISOString(),
+    lastActive: new Date(Date.now() - (i % 24) * 3600000).toISOString(),
+    status: t.status === "Suspended" ? "suspended" : "active",
+    pin: hashPin("1234"),
+    kycStatus: i % 7 === 0 ? "Pending review" : "Tier 1",
+    smsAlerts: true,
+    emailAlerts: false,
+  }));
+
+const seedTraders: Trader[] = [...demoTraders, ...catalogueTraders];
+
 
 function buildSeedTransactions(traderId: string, startingBalance: number): TraderTxn[] {
   const txns: TraderTxn[] = [];
