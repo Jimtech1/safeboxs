@@ -216,7 +216,7 @@ const seedGoals: Goal[] = [
 ];
 
 // ---------- Storage ----------
-const KEY = "safebox_trader_store_v1";
+const KEY = "safebox_trader_store_v2";
 
 type Store = {
   traders: Trader[];
@@ -228,7 +228,12 @@ type Store = {
 
 function defaultStore(): Store {
   const txnsByTrader: Record<string, TraderTxn[]> = {};
-  seedTraders.forEach((t) => { txnsByTrader[t.id] = buildSeedTransactions(t.id, t.balance); });
+  seedTraders.forEach((t, i) => {
+    // Rich history for the demo accounts, a lighter tail for the catalogue
+    txnsByTrader[t.id] = i < demoTraders.length
+      ? buildSeedTransactions(t.id, t.balance)
+      : buildSeedTransactions(t.id, t.balance).slice(0, 8);
+  });
   return {
     traders: seedTraders,
     txnsByTrader,
@@ -237,34 +242,70 @@ function defaultStore(): Store {
   };
 }
 
+let cache: Store | null = null;
+
 function load(): Store {
   if (typeof window === "undefined") return defaultStore();
+  if (cache) return cache;
   try {
     const raw = localStorage.getItem(KEY);
-    if (!raw) return defaultStore();
-    return JSON.parse(raw) as Store;
-  } catch { return defaultStore(); }
+    cache = raw ? (JSON.parse(raw) as Store) : defaultStore();
+  } catch { cache = defaultStore(); }
+  return cache;
 }
 
 function save(s: Store) {
+  cache = s;
   if (typeof window === "undefined") return;
-  localStorage.setItem(KEY, JSON.stringify(s));
+  try { localStorage.setItem(KEY, JSON.stringify(s)); } catch { /* quota */ }
   window.dispatchEvent(new Event("trader-store-change"));
+}
+
+export function subscribeTraderStore(fn: () => void) {
+  if (typeof window === "undefined") return () => {};
+  window.addEventListener("trader-store-change", fn);
+  return () => window.removeEventListener("trader-store-change", fn);
 }
 
 // ---------- Public API ----------
 export function getStore() { return load(); }
 
+export function getAllTraders(): Trader[] { return load().traders; }
+
+export function findTraderByPhone(phone: string): Trader | null {
+  const p = normalizePhone(phone);
+  return load().traders.find((t) => t.phone === p) ?? null;
+}
+
+export function findTraderById(id: string): Trader | null {
+  return load().traders.find((t) => t.id === id) ?? null;
+}
+
 export function loginTrader(phone: string, pin: string): Trader | null {
+  const p = normalizePhone(phone);
+  const key = `trader:${p}`;
+  if (checkThrottle(key).blocked) return null;
   const s = load();
-  const t = s.traders.find((x) => x.phone === phone);
-  if (!t) return null;
-  if (pin !== t.pin && pin !== "1234" && pin !== "123456") return null;
+  const t = s.traders.find((x) => x.phone === p);
+  if (!t || !verifyPin(pin, t.pin)) {
+    registerFailure(key);
+    return null;
+  }
+  if (t.status === "suspended") {
+    registerFailure(key);
+    return null;
+  }
+  clearFailures(key);
   s.currentTraderId = t.id;
   t.lastActive = new Date().toISOString();
   save(s);
   return t;
 }
+
+export function traderLoginBlocked(phone: string) {
+  return checkThrottle(`trader:${normalizePhone(phone)}`);
+}
+
 
 export function signupTrader(input: {
   name: string; phone: string; email?: string; market: string; pin: string;
