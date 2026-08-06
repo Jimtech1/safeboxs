@@ -1,4 +1,20 @@
-// Mock trader data + localStorage persistence (no backend)
+// SafeBox unified trader data store (mock, localStorage-backed — no backend).
+// This module is the single source of truth for traders across the
+// Trader dashboard, Agent dashboard and Admin dashboard.
+
+import { traders as baseTraders, markets } from "./mockData";
+import {
+  hashPin,
+  verifyPin,
+  isValidPin,
+  isValidPhone,
+  normalizePhone,
+  sanitizeText,
+  checkThrottle,
+  registerFailure,
+  clearFailures,
+} from "./security";
+
 
 export type TraderTxnType = "Deposit" | "Withdrawal" | "Interest";
 export type TraderTxn = {
