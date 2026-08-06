@@ -508,7 +508,7 @@ export const platformStore = {
     const next = clone();
     next.messages = [{
       id: newId("MSG"), name, email: input.email.trim(), phone: input.phone ? normalizePhone(input.phone) : undefined,
-      topic: sanitizeText(input.topic, 60), message, iso: new Date().toISOString(), status: "New",
+      topic: sanitizeText(input.topic, 60), message, iso: new Date().toISOString(), status: "New" as const,
     }, ...next.messages].slice(0, 100);
     commit(next);
     return { ok: true } as const;
@@ -540,9 +540,9 @@ export const platformStore = {
       depositFeeEarnedToday: st.depositFeeEarnedToday + DEPOSIT_FEE_AGENT_SHARE,
     };
     next.ledger = [{
-      id: newId("TX"), agentId: agent.id, agentName: agent.name, kind: "Deposit",
+      id: newId("TX"), agentId: agent.id, agentName: agent.name, kind: "Deposit" as const,
       traderId: record?.id, traderName: record?.name ?? trader?.name, traderPhone: record?.phone ?? trader?.phone,
-      amount, fee: DEPOSIT_FEE_AGENT_SHARE, status: "Successful", ...nowStamp(), floatAfter: agent.floatBalance,
+      amount, fee: DEPOSIT_FEE_AGENT_SHARE, status: "Successful" as const, ...nowStamp(), floatAfter: agent.floatBalance,
     }, ...next.ledger].slice(0, 500);
     logAudit(next, agent.name, `Deposit ${amount} for ${record?.name ?? trader?.name ?? "trader"}`);
     commit(next);
@@ -568,9 +568,9 @@ export const platformStore = {
       withdrawalFeeEarnedToday: st.withdrawalFeeEarnedToday + WITHDRAWAL_FEE_AGENT_SHARE,
     };
     next.ledger = [{
-      id: newId("TX"), agentId: agent.id, agentName: agent.name, kind: "Withdrawal",
+      id: newId("TX"), agentId: agent.id, agentName: agent.name, kind: "Withdrawal" as const,
       traderId: record?.id, traderName: record?.name ?? trader?.name, traderPhone: record?.phone ?? trader?.phone,
-      amount, fee: WITHDRAWAL_FEE_AGENT_SHARE, status: "Successful", ...nowStamp(), floatAfter: agent.floatBalance,
+      amount, fee: WITHDRAWAL_FEE_AGENT_SHARE, status: "Successful" as const, ...nowStamp(), floatAfter: agent.floatBalance,
     }, ...next.ledger].slice(0, 500);
     logAudit(next, agent.name, `Withdrawal ${amount} for ${record?.name ?? trader?.name ?? "trader"}`);
     commit(next);
@@ -585,8 +585,8 @@ export const platformStore = {
     agent.floatBalance += amount;
     agent.floatCapacity = Math.max(agent.floatCapacity, agent.floatBalance);
     next.ledger = [{
-      id: newId("FL"), agentId: agent.id, agentName: agent.name, kind: "FloatTopup",
-      amount, channel, reference: newId("NIBSS"), status: "Successful", ...nowStamp(), floatAfter: agent.floatBalance,
+      id: newId("FL"), agentId: agent.id, agentName: agent.name, kind: "FloatTopup" as const,
+      amount, channel, reference: newId("NIBSS"), status: "Successful" as const, ...nowStamp(), floatAfter: agent.floatBalance,
     }, ...next.ledger].slice(0, 500);
     logAudit(next, agent.name, `Float top-up ${amount} via ${channel}`);
     commit(next);
@@ -599,8 +599,8 @@ export const platformStore = {
     if (!agent || amount <= 0 || amount > agent.floatBalance) return false;
     agent.floatBalance -= amount;
     next.ledger = [{
-      id: newId("FL"), agentId: agent.id, agentName: agent.name, kind: "FloatWithdraw",
-      amount, channel, reference: newId("NIBSS"), status: "Successful", ...nowStamp(), floatAfter: agent.floatBalance,
+      id: newId("FL"), agentId: agent.id, agentName: agent.name, kind: "FloatWithdraw" as const,
+      amount, channel, reference: newId("NIBSS"), status: "Successful" as const, ...nowStamp(), floatAfter: agent.floatBalance,
     }, ...next.ledger].slice(0, 500);
     logAudit(next, agent.name, `Float payout ${amount} to ${channel}`);
     commit(next);
