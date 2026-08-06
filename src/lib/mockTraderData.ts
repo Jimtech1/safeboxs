@@ -309,26 +309,31 @@ export function traderLoginBlocked(phone: string) {
 
 export function signupTrader(input: {
   name: string; phone: string; email?: string; market: string; pin: string;
+  agentId?: string; agentName?: string; agentPhone?: string; autoLogin?: boolean;
 }): Trader | { error: string } {
   const s = load();
-  const normalizedPhone = input.phone.replace(/\s+/g, "");
-  if (!/^0\d{10}$/.test(normalizedPhone)) return { error: "Phone must be 11 digits starting with 0" };
-  if (input.pin.length < 4) return { error: "PIN must be at least 4 digits" };
+  const normalizedPhone = normalizePhone(input.phone);
+  const name = sanitizeText(input.name, 60);
+  if (name.length < 3) return { error: "Enter the trader's full name" };
+  if (!isValidPhone(normalizedPhone)) return { error: "Phone must be 11 digits starting with 0" };
+  if (!isValidPin(input.pin)) return { error: "PIN must be 4-6 digits" };
   if (s.traders.some((t) => t.phone === normalizedPhone)) return { error: "An account with this phone already exists" };
-  const id = `TRD_${String(s.traders.length + 1).padStart(3, "0")}`;
+  const id = `TRD_${Date.now().toString(36).toUpperCase()}`;
   const now = new Date().toISOString();
+  const market = sanitizeText(input.market, 80) || "Bodija Market, Ibadan";
   const trader: Trader = {
-    id, name: input.name, phone: normalizedPhone, email: input.email,
-    agentId: "AGT_001", agentName: "Adebayo Ogunlesi",
-    agentPhone: "08033112233", agentLocation: input.market,
+    id, name, phone: normalizedPhone, email: input.email ? sanitizeText(input.email, 120) : undefined,
+    agentId: input.agentId ?? "AG-2000", agentName: input.agentName ?? "Adebayo Ogunlesi",
+    agentPhone: input.agentPhone ?? "08033112233", agentLocation: market, market,
     balance: 0, totalSaved: 0, interestEarned: 0, streakDays: 0,
-    joinDate: now, lastActive: now, status: "active", pin: input.pin,
+    joinDate: now, lastActive: now, status: "active", pin: hashPin(input.pin),
+    kycStatus: "Tier 1",
     smsAlerts: true, emailAlerts: !!input.email,
   };
-  s.traders.push(trader);
+  s.traders.unshift(trader);
   s.txnsByTrader[id] = [];
   s.goalsByTrader[id] = [];
-  s.currentTraderId = id;
+  if (input.autoLogin !== false) s.currentTraderId = id;
   save(s);
   return trader;
 }
@@ -347,9 +352,113 @@ export function updateTrader(patch: Partial<Trader>) {
   const s = load();
   const idx = s.traders.findIndex((t) => t.id === s.currentTraderId);
   if (idx === -1) return;
-  s.traders[idx] = { ...s.traders[idx], ...patch };
+  const { pin, id, ...safe } = patch as Partial<Trader>;
+  s.traders[idx] = { ...s.traders[idx], ...safe };
   save(s);
 }
+
+export function updateTraderById(id: string, patch: Partial<Trader>) {
+  const s = load();
+  const idx = s.traders.findIndex((t) => t.id === id);
+  if (idx === -1) return;
+  const { pin: _pin, id: _id, ...safe } = patch as Partial<Trader>;
+  s.traders[idx] = { ...s.traders[idx], ...safe };
+  save(s);
+}
+
+export function changeTraderPin(currentPin: string, newPin: string): { ok: true } | { error: string } {
+  const s = load();
+  const t = s.traders.find((x) => x.id === s.currentTraderId);
+  if (!t) return { error: "Not signed in" };
+  if (!verifyPin(currentPin, t.pin)) return { error: "Current PIN is incorrect" };
+  if (!isValidPin(newPin)) return { error: "New PIN must be 4-6 digits" };
+  if (verifyPin(newPin, t.pin)) return { error: "New PIN must be different" };
+  t.pin = hashPin(newPin);
+  save(s);
+  return { ok: true };
+}
+
+// ---------- Agent-driven mutations (shared with the agent dashboard) ----------
+function pushTxn(s: Store, traderId: string, txn: TraderTxn) {
+  s.txnsByTrader[traderId] = [txn, ...(s.txnsByTrader[traderId] ?? [])].slice(0, 200);
+}
+
+export function applyAgentDeposit(input: { traderId: string; amount: number; agentName: string }) {
+  const s = load();
+  const t = s.traders.find((x) => x.id === input.traderId);
+  if (!t) return null;
+  t.balance += input.amount;
+  t.totalSaved += input.amount;
+  t.streakDays += 1;
+  t.lastActive = new Date().toISOString();
+  pushTxn(s, t.id, {
+    id: `TXN_${Date.now().toString(36).toUpperCase()}`,
+    date: new Date().toISOString(),
+    description: `Cash deposit via ${input.agentName}`,
+    amount: input.amount, balanceAfter: t.balance, type: "Deposit",
+    status: "Completed", agentName: input.agentName,
+  });
+  save(s);
+  return t;
+}
+
+export function applyAgentWithdrawal(input: { traderId: string; amount: number; fee?: number; agentName: string }) {
+  const s = load();
+  const t = s.traders.find((x) => x.id === input.traderId);
+  if (!t) return null;
+  const total = input.amount + (input.fee ?? 0);
+  t.balance = Math.max(0, t.balance - total);
+  t.lastActive = new Date().toISOString();
+  pushTxn(s, t.id, {
+    id: `TXN_${Date.now().toString(36).toUpperCase()}`,
+    date: new Date().toISOString(),
+    description: `Cash withdrawal via ${input.agentName}${input.fee ? ` (₦${input.fee} fee)` : ""}`,
+    amount: total, balanceAfter: t.balance, type: "Withdrawal",
+    status: "Completed", agentName: input.agentName,
+  });
+  // Close out any matching pending request
+  const pending = s.withdrawals.find((w) => w.traderId === t.id && w.status === "Pending");
+  if (pending) pending.status = "Completed";
+  save(s);
+  return t;
+}
+
+export function setWithdrawalStatus(id: string, status: WithdrawalRequest["status"]) {
+  const s = load();
+  const w = s.withdrawals.find((x) => x.id === id);
+  if (!w) return;
+  w.status = status;
+  if (status === "Completed") {
+    const t = s.traders.find((x) => x.id === w.traderId);
+    if (t) {
+      t.balance = Math.max(0, t.balance - w.amount);
+      pushTxn(s, t.id, {
+        id: `TXN_${Date.now().toString(36).toUpperCase()}`,
+        date: new Date().toISOString(),
+        description: `Withdrawal ${w.method.toLowerCase()}`,
+        amount: w.amount, balanceAfter: t.balance, type: "Withdrawal",
+        status: "Completed", agentName: t.agentName,
+      });
+    }
+  }
+  save(s);
+}
+
+export function allWithdrawals(): WithdrawalRequest[] { return load().withdrawals; }
+
+export function traderTotals() {
+  const s = load();
+  return {
+    count: s.traders.length,
+    active: s.traders.filter((t) => t.status === "active").length,
+    suspended: s.traders.filter((t) => t.status === "suspended").length,
+    balance: s.traders.reduce((a, t) => a + t.balance, 0),
+    saved: s.traders.reduce((a, t) => a + t.totalSaved, 0),
+    interest: s.traders.reduce((a, t) => a + t.interestEarned, 0),
+    pendingKyc: s.traders.filter((t) => t.kycStatus === "Pending review").length,
+  };
+}
+
 
 export function getTransactions(traderId: string): TraderTxn[] {
   return load().txnsByTrader[traderId] ?? [];
