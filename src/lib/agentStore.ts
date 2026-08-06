@@ -1,22 +1,11 @@
+// Compatibility bridge: the agent dashboard keeps this API, but all state now
+// lives in the unified platform store (single source of truth).
 import { useSyncExternalStore } from "react";
-import { currentAgent } from "./mockData";
 import type { Trader } from "./mockData";
-import { traders as seedTraders } from "./mockData";
+import { platformStore, usePlatform, DEPOSIT_FEE_AGENT_SHARE, WITHDRAWAL_FEE_AGENT_SHARE } from "./platformStore";
+import { getAllTraders, signupTrader, subscribeTraderStore } from "./mockTraderData";
 
-export interface LoggedTxn {
-  id: string;
-  kind: "Deposit" | "Withdrawal" | "FloatTopup" | "FloatWithdraw";
-  traderName?: string;
-  traderPhone?: string;
-  amount: number;
-  fee?: number;
-  channel?: string;
-  reference?: string;
-  status: "Successful";
-  timestamp: string;
-  iso: string;
-  floatAfter: number;
-}
+export type { LedgerTxn as LoggedTxn } from "./platformStore";
 
 export interface AgentState {
   floatBalance: number;
@@ -26,135 +15,68 @@ export interface AgentState {
   withdrawalsCountToday: number;
   depositFeeEarnedToday: number;
   withdrawalFeeEarnedToday: number;
-  txns: LoggedTxn[];
+  txns: ReturnType<typeof platformStore.get>["ledger"];
 }
 
-const DEPOSIT_FEE_AGENT_SHARE = 10;
-const WITHDRAWAL_FEE_AGENT_SHARE = 90;
-const LS_KEY = "safebox.agentState.v2";
-const LS_TRADERS = "safebox.traders.v2";
-
-const defaultState = (): AgentState => ({
-  floatBalance: currentAgent.floatBalance,
-  depositsCollectedToday: currentAgent.depositsCollectedToday,
-  depositsCountToday: currentAgent.tradersServedToday,
-  withdrawalsProcessedToday: currentAgent.withdrawalsToday,
-  withdrawalsCountToday: 4,
-  depositFeeEarnedToday: currentAgent.tradersServedToday * DEPOSIT_FEE_AGENT_SHARE,
-  withdrawalFeeEarnedToday: 4 * WITHDRAWAL_FEE_AGENT_SHARE,
-  txns: [],
-});
-
-const load = <T,>(key: string, fallback: T): T => {
-  if (typeof window === "undefined") return fallback;
-  try {
-    const v = localStorage.getItem(key);
-    return v ? (JSON.parse(v) as T) : fallback;
-  } catch {
-    return fallback;
-  }
-};
-const save = (key: string, v: unknown) => {
-  if (typeof window === "undefined") return;
-  try { localStorage.setItem(key, JSON.stringify(v)); } catch {}
-};
-
-let state: AgentState = load(LS_KEY, defaultState());
-
-const listeners = new Set<() => void>();
-const emit = () => { save(LS_KEY, state); listeners.forEach((l) => l()); };
-
-const nowStamp = () => {
-  const d = new Date();
-  return { timestamp: d.toLocaleString("en-NG", { hour: "2-digit", minute: "2-digit", day: "numeric", month: "short" }), iso: d.toISOString() };
-};
-const newId = (prefix: string) => `${prefix}-${Math.floor(Math.random() * 9_000_000 + 1_000_000)}`;
+export { DEPOSIT_FEE_AGENT_SHARE, WITHDRAWAL_FEE_AGENT_SHARE };
 
 export const agentStore = {
-  get: () => state,
-  subscribe: (fn: () => void) => { listeners.add(fn); return () => listeners.delete(fn); },
-  reset() { state = defaultState(); emit(); },
-  recordDeposit(amount: number, trader?: { name: string; phone: string }) {
-    const ts = nowStamp();
-    state = {
-      ...state,
-      floatBalance: state.floatBalance - amount,
-      depositsCollectedToday: state.depositsCollectedToday + amount,
-      depositsCountToday: state.depositsCountToday + 1,
-      depositFeeEarnedToday: state.depositFeeEarnedToday + DEPOSIT_FEE_AGENT_SHARE,
-      txns: [{
-        id: newId("TX"), kind: "Deposit", traderName: trader?.name, traderPhone: trader?.phone,
-        amount, fee: DEPOSIT_FEE_AGENT_SHARE, status: "Successful", ...ts, floatAfter: state.floatBalance - amount,
-      }, ...state.txns],
+  subscribe: platformStore.subscribe,
+  get(): AgentState {
+    const s = platformStore.get();
+    const agent = platformStore.currentAgent() ?? s.agents[0];
+    const st = s.stats[agent?.id ?? ""] ?? {
+      depositsCollectedToday: 0, depositsCountToday: 0, withdrawalsProcessedToday: 0,
+      withdrawalsCountToday: 0, depositFeeEarnedToday: 0, withdrawalFeeEarnedToday: 0,
     };
-    emit();
-  },
-  recordWithdrawal(amount: number, trader?: { name: string; phone: string }) {
-    const ts = nowStamp();
-    state = {
-      ...state,
-      floatBalance: state.floatBalance + amount,
-      withdrawalsProcessedToday: state.withdrawalsProcessedToday + amount,
-      withdrawalsCountToday: state.withdrawalsCountToday + 1,
-      withdrawalFeeEarnedToday: state.withdrawalFeeEarnedToday + WITHDRAWAL_FEE_AGENT_SHARE,
-      txns: [{
-        id: newId("TX"), kind: "Withdrawal", traderName: trader?.name, traderPhone: trader?.phone,
-        amount, fee: WITHDRAWAL_FEE_AGENT_SHARE, status: "Successful", ...ts, floatAfter: state.floatBalance + amount,
-      }, ...state.txns],
+    return {
+      floatBalance: agent?.floatBalance ?? 0,
+      ...st,
+      txns: s.ledger.filter((t) => t.agentId === agent?.id),
     };
-    emit();
   },
-  topupFloat(amount: number, channel = "Bank Transfer") {
-    const ts = nowStamp();
-    const ref = newId("NIBSS");
-    state = {
-      ...state,
-      floatBalance: state.floatBalance + amount,
-      txns: [{
-        id: newId("FL"), kind: "FloatTopup", amount, channel, reference: ref,
-        status: "Successful", ...ts, floatAfter: state.floatBalance + amount,
-      }, ...state.txns],
-    };
-    emit();
-  },
-  withdrawFloat(amount: number, channel = "Bank Transfer") {
-    if (amount > state.floatBalance) return false;
-    const ts = nowStamp();
-    const ref = newId("NIBSS");
-    state = {
-      ...state,
-      floatBalance: state.floatBalance - amount,
-      txns: [{
-        id: newId("FL"), kind: "FloatWithdraw", amount, channel, reference: ref,
-        status: "Successful", ...ts, floatAfter: state.floatBalance - amount,
-      }, ...state.txns],
-    };
-    emit();
-    return true;
-  },
+  recordDeposit: (amount: number, trader?: { name: string; phone: string; id?: string }) =>
+    platformStore.recordDeposit(amount, trader),
+  recordWithdrawal: (amount: number, trader?: { name: string; phone: string; id?: string }) =>
+    platformStore.recordWithdrawal(amount, trader),
+  topupFloat: (amount: number, channel?: string) => platformStore.topupFloat(amount, channel),
+  withdrawFloat: (amount: number, channel?: string) => platformStore.withdrawFloat(amount, channel),
+  reset: () => platformStore.reset(),
 };
 
 export function useAgentState(): AgentState {
-  return useSyncExternalStore(agentStore.subscribe, agentStore.get, agentStore.get);
+  usePlatform();
+  return agentStore.get();
 }
 
-// Traders store with persistence
-let tradersState: Trader[] = load<Trader[]>(LS_TRADERS, []);
-if (tradersState.length === 0) tradersState = [...seedTraders];
-const tradersListeners = new Set<() => void>();
-const emitTraders = () => { save(LS_TRADERS, tradersState); tradersListeners.forEach((l) => l()); };
+// ---- Traders (mapped from the unified trader store) ----
+const mapTrader = (t: ReturnType<typeof getAllTraders>[number]): Trader => ({
+  id: t.id,
+  name: t.name,
+  phone: t.phone,
+  market: t.market ?? t.agentLocation,
+  balance: t.balance,
+  totalSaved: t.totalSaved,
+  lastTxn: t.lastActive,
+  status: t.status === "suspended" ? "Suspended" : "Active",
+});
+
+let snapshot: Trader[] = [];
+let lastRef: unknown = null;
 
 export const tradersStore = {
-  get: () => tradersState,
-  subscribe: (fn: () => void) => { tradersListeners.add(fn); return () => tradersListeners.delete(fn); },
-  add(t: Omit<Trader, "id" | "balance" | "totalSaved" | "lastTxn" | "status">) {
-    const newT: Trader = {
-      id: `TR-${20000 + tradersState.length}`,
-      balance: 0, totalSaved: 0, lastTxn: "Just now", status: "Active",
-      ...t,
-    };
-    tradersState = [newT, ...tradersState];
-    emitTraders();
+  subscribe: (fn: () => void) => subscribeTraderStore(fn),
+  get(): Trader[] {
+    const raw = getAllTraders();
+    if (raw !== lastRef) { lastRef = raw; snapshot = raw.map(mapTrader); }
+    return snapshot;
+  },
+  add(t: { name: string; phone: string; market: string }) {
+    const agent = platformStore.currentAgent();
+    return signupTrader({
+      name: t.name, phone: t.phone, market: t.market, pin: "1234",
+      agentId: agent?.id, agentName: agent?.name, agentPhone: agent?.phone, autoLogin: false,
+    });
   },
 };
 
