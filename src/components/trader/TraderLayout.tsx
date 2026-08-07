@@ -94,7 +94,7 @@ export function TraderLayout() {
 
       {/* Mobile bottom nav */}
       <nav className="md:hidden fixed bottom-0 inset-x-0 bg-sidebar border-t border-white/10 z-40">
-        <div className="grid grid-cols-7">
+        <div className="grid grid-cols-5 overflow-x-auto">
           {nav.map((n) => {
             const active = isActive(n.to, n.exact);
             return (
