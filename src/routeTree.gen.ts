@@ -45,6 +45,7 @@ import { Route as AdminWithdrawalsRouteImport } from './routes/admin.withdrawals
 import { Route as AdminTransactionsRouteImport } from './routes/admin.transactions'
 import { Route as AdminTradersRouteImport } from './routes/admin.traders'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
+import { Route as AdminGroupsRouteImport } from './routes/admin.groups'
 import { Route as AdminFloatRouteImport } from './routes/admin.float'
 import { Route as AdminDepositsRouteImport } from './routes/admin.deposits'
 import { Route as AdminComplianceRouteImport } from './routes/admin.compliance'
@@ -230,6 +231,11 @@ const AdminSettingsRoute = AdminSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminGroupsRoute = AdminGroupsRouteImport.update({
+  id: '/groups',
+  path: '/groups',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminFloatRoute = AdminFloatRouteImport.update({
   id: '/float',
   path: '/float',
@@ -266,6 +272,7 @@ export interface FileRoutesByFullPath {
   '/admin/compliance': typeof AdminComplianceRoute
   '/admin/deposits': typeof AdminDepositsRoute
   '/admin/float': typeof AdminFloatRoute
+  '/admin/groups': typeof AdminGroupsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/traders': typeof AdminTradersRoute
   '/admin/transactions': typeof AdminTransactionsRoute
@@ -305,6 +312,7 @@ export interface FileRoutesByTo {
   '/admin/compliance': typeof AdminComplianceRoute
   '/admin/deposits': typeof AdminDepositsRoute
   '/admin/float': typeof AdminFloatRoute
+  '/admin/groups': typeof AdminGroupsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/traders': typeof AdminTradersRoute
   '/admin/transactions': typeof AdminTransactionsRoute
@@ -348,6 +356,7 @@ export interface FileRoutesById {
   '/admin/compliance': typeof AdminComplianceRoute
   '/admin/deposits': typeof AdminDepositsRoute
   '/admin/float': typeof AdminFloatRoute
+  '/admin/groups': typeof AdminGroupsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/traders': typeof AdminTradersRoute
   '/admin/transactions': typeof AdminTransactionsRoute
@@ -392,6 +401,7 @@ export interface FileRouteTypes {
     | '/admin/compliance'
     | '/admin/deposits'
     | '/admin/float'
+    | '/admin/groups'
     | '/admin/settings'
     | '/admin/traders'
     | '/admin/transactions'
@@ -431,6 +441,7 @@ export interface FileRouteTypes {
     | '/admin/compliance'
     | '/admin/deposits'
     | '/admin/float'
+    | '/admin/groups'
     | '/admin/settings'
     | '/admin/traders'
     | '/admin/transactions'
@@ -473,6 +484,7 @@ export interface FileRouteTypes {
     | '/admin/compliance'
     | '/admin/deposits'
     | '/admin/float'
+    | '/admin/groups'
     | '/admin/settings'
     | '/admin/traders'
     | '/admin/transactions'
@@ -768,6 +780,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSettingsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/groups': {
+      id: '/admin/groups'
+      path: '/groups'
+      fullPath: '/admin/groups'
+      preLoaderRoute: typeof AdminGroupsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/float': {
       id: '/admin/float'
       path: '/float'
@@ -804,6 +823,7 @@ interface AdminRouteChildren {
   AdminComplianceRoute: typeof AdminComplianceRoute
   AdminDepositsRoute: typeof AdminDepositsRoute
   AdminFloatRoute: typeof AdminFloatRoute
+  AdminGroupsRoute: typeof AdminGroupsRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminTradersRoute: typeof AdminTradersRoute
   AdminTransactionsRoute: typeof AdminTransactionsRoute
@@ -817,6 +837,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminComplianceRoute: AdminComplianceRoute,
   AdminDepositsRoute: AdminDepositsRoute,
   AdminFloatRoute: AdminFloatRoute,
+  AdminGroupsRoute: AdminGroupsRoute,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminTradersRoute: AdminTradersRoute,
   AdminTransactionsRoute: AdminTransactionsRoute,
