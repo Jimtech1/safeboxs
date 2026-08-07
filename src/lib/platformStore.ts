@@ -60,7 +60,13 @@ export interface AgentStats {
   withdrawalFeeEarnedToday: number;
 }
 
-export type LedgerKind = "Deposit" | "Withdrawal" | "FloatTopup" | "FloatWithdraw";
+export type LedgerKind =
+  | "Deposit"
+  | "Withdrawal"
+  | "FloatTopup"
+  | "FloatWithdraw"
+  | "GroupContribution"
+  | "GroupPayout";
 
 export interface LedgerTxn {
   id: string;
@@ -606,6 +612,68 @@ export const platformStore = {
     commit(next);
     return true;
   },
+
+  // ---------- Group savings (Ajo/Esusu) ----------
+  /**
+   * Agent-led group contribution: agent collects cash, float is debited and the
+   * pooled amount moves into the group ledger (handled by groupStore).
+   */
+  recordGroupContribution(input: {
+    amount: number; groupName: string; traderId?: string; traderName?: string; fee?: number;
+  }) {
+    const next = clone();
+    const agent = next.agents.find((a) => a.id === (next.sessionAgentId ?? next.agents[0]?.id));
+    if (!agent) return { error: "No agent session" } as const;
+    if (input.amount <= 0) return { error: "Enter a valid amount" } as const;
+    if (input.amount > agent.floatBalance) return { error: "Insufficient float. Top up your float first." } as const;
+    const fee = input.fee ?? DEPOSIT_FEE_AGENT_SHARE;
+    agent.floatBalance -= input.amount;
+    agent.floatUsedToday += input.amount;
+    agent.commissionMTD += fee;
+    const st = next.stats[agent.id] ?? emptyStats();
+    next.stats[agent.id] = {
+      ...st,
+      depositsCollectedToday: st.depositsCollectedToday + input.amount,
+      depositsCountToday: st.depositsCountToday + 1,
+      depositFeeEarnedToday: st.depositFeeEarnedToday + fee,
+    };
+    next.ledger = [{
+      id: newId("GC"), agentId: agent.id, agentName: agent.name, kind: "GroupContribution" as const,
+      traderId: input.traderId, traderName: input.traderName, amount: input.amount, fee,
+      channel: input.groupName, status: "Successful" as const, ...nowStamp(), floatAfter: agent.floatBalance,
+    }, ...next.ledger].slice(0, 500);
+    logAudit(next, agent.name, `Group contribution ${input.amount} — ${input.groupName}`);
+    commit(next);
+    return { ok: true, floatBalance: agent.floatBalance } as const;
+  },
+
+  /** Agent-led group payout: agent disburses cash, float is refunded. */
+  recordGroupPayout(input: { amount: number; groupName: string; traderId?: string; traderName?: string }) {
+    const next = clone();
+    const agent = next.agents.find((a) => a.id === (next.sessionAgentId ?? next.agents[0]?.id));
+    if (!agent) return { error: "No agent session" } as const;
+    if (input.amount <= 0) return { error: "Enter a valid amount" } as const;
+    agent.floatBalance += input.amount;
+    agent.commissionMTD += WITHDRAWAL_FEE_AGENT_SHARE;
+    const st = next.stats[agent.id] ?? emptyStats();
+    next.stats[agent.id] = {
+      ...st,
+      withdrawalsProcessedToday: st.withdrawalsProcessedToday + input.amount,
+      withdrawalsCountToday: st.withdrawalsCountToday + 1,
+      withdrawalFeeEarnedToday: st.withdrawalFeeEarnedToday + WITHDRAWAL_FEE_AGENT_SHARE,
+    };
+    next.ledger = [{
+      id: newId("GP"), agentId: agent.id, agentName: agent.name, kind: "GroupPayout" as const,
+      traderId: input.traderId, traderName: input.traderName, amount: input.amount,
+      fee: WITHDRAWAL_FEE_AGENT_SHARE, channel: input.groupName,
+      status: "Successful" as const, ...nowStamp(), floatAfter: agent.floatBalance,
+    }, ...next.ledger].slice(0, 500);
+    logAudit(next, agent.name, `Group payout ${input.amount} — ${input.groupName}`);
+    commit(next);
+    return { ok: true, floatBalance: agent.floatBalance } as const;
+  },
+
+  audit: (limit = 50) => state.audit.slice(0, limit),
 };
 
 // ---------------------------------------------------------------------------

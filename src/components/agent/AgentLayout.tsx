@@ -1,13 +1,13 @@
 import { Link, Outlet, useRouterState } from "@tanstack/react-router";
-import { Home, ArrowLeftRight, Users, BarChart3, Settings as SettingsIcon } from "lucide-react";
+import { Home, ArrowLeftRight, Users, Users2, Settings as SettingsIcon } from "lucide-react";
 import { SafeBoxLogo } from "@/components/SafeBoxLogo";
 import { currentAgent } from "@/lib/mockData";
 
 const tabs = [
   { to: "/agent", label: "Home", icon: Home, exact: true },
   { to: "/agent/transactions", label: "Txns", icon: ArrowLeftRight },
+  { to: "/agent/groups", label: "Groups", icon: Users2 },
   { to: "/agent/traders", label: "Traders", icon: Users },
-  { to: "/agent/performance", label: "Stats", icon: BarChart3 },
   { to: "/agent/settings", label: "Settings", icon: SettingsIcon },
 ];
 

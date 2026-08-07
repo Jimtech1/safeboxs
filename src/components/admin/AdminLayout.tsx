@@ -1,5 +1,5 @@
 import { Link, Outlet, useRouterState } from "@tanstack/react-router";
-import { LayoutDashboard, Users, UserCog, ArrowLeftRight, Wallet, ShieldCheck, Settings, Bell, Search, ArrowDownToLine, ArrowUpFromLine, Percent } from "lucide-react";
+import { LayoutDashboard, Users, UserCog, ArrowLeftRight, Wallet, ShieldCheck, Settings, Users2, Bell, Search, ArrowDownToLine, ArrowUpFromLine, Percent } from "lucide-react";
 import { SafeBoxLogo } from "@/components/SafeBoxLogo";
 import { Input } from "@/components/ui/input";
 
@@ -9,6 +9,7 @@ const nav = [
   { to: "/admin/agents", label: "Agents", icon: UserCog },
   { to: "/admin/deposits", label: "Deposits", icon: ArrowDownToLine },
   { to: "/admin/withdrawals", label: "Withdrawals", icon: ArrowUpFromLine },
+  { to: "/admin/groups", label: "Groups", icon: Users2 },
   { to: "/admin/float", label: "Float", icon: Wallet },
   { to: "/admin/yield", label: "Yield", icon: Percent },
   { to: "/admin/transactions", label: "Txns", icon: ArrowLeftRight },

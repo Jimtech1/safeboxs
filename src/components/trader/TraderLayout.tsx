@@ -1,6 +1,6 @@
 import { Link, Outlet, useRouterState, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Home, Receipt, ArrowUpFromLine, Target, User, LogOut, Bell, Percent } from "lucide-react";
+import { Home, Receipt, ArrowUpFromLine, Target, User, LogOut, Bell, Percent, Users2, ShieldCheck } from "lucide-react";
 import { SafeBoxLogo } from "@/components/SafeBoxLogo";
 import { getCurrentTrader, logoutTrader, type Trader } from "@/lib/mockTraderData";
 import { toast } from "sonner";
@@ -8,6 +8,8 @@ import { toast } from "sonner";
 const nav = [
   { to: "/trader", label: "Dashboard", icon: Home, exact: true },
   { to: "/trader/transactions", label: "Transactions", icon: Receipt },
+  { to: "/trader/groups", label: "Groups", icon: Users2 },
+  { to: "/trader/trust", label: "Trust", icon: ShieldCheck },
   { to: "/trader/interest", label: "Interest", icon: Percent },
   { to: "/trader/withdraw", label: "Withdraw", icon: ArrowUpFromLine },
   { to: "/trader/goals", label: "Goals", icon: Target },
@@ -92,7 +94,7 @@ export function TraderLayout() {
 
       {/* Mobile bottom nav */}
       <nav className="md:hidden fixed bottom-0 inset-x-0 bg-sidebar border-t border-white/10 z-40">
-        <div className="grid grid-cols-7">
+        <div className="grid grid-cols-5 overflow-x-auto">
           {nav.map((n) => {
             const active = isActive(n.to, n.exact);
             return (

@@ -520,3 +520,42 @@ export function addToGoal(traderId: string, goalId: string, amount: number) {
 export function lookupByPhone(phone: string): Trader | null {
   return load().traders.find((t) => t.phone === phone) ?? null;
 }
+
+// ---------- Group savings mutations (Ajo/Esusu) ----------
+/** Debit a trader's savings wallet for a group contribution paid from balance. */
+export function applyGroupContribution(input: { traderId: string; amount: number; groupName: string; agentName?: string }) {
+  const s = load();
+  const t = s.traders.find((x) => x.id === input.traderId);
+  if (!t) return null;
+  if (t.balance < input.amount) return null;
+  t.balance -= input.amount;
+  t.lastActive = new Date().toISOString();
+  pushTxn(s, t.id, {
+    id: `TXN_${Date.now().toString(36).toUpperCase()}`,
+    date: new Date().toISOString(),
+    description: `Group contribution — ${input.groupName}`,
+    amount: input.amount, balanceAfter: t.balance, type: "Withdrawal",
+    status: "Completed", agentName: input.agentName ?? "SafeBox Groups",
+  });
+  save(s);
+  return t;
+}
+
+/** Credit a trader's savings wallet with a group payout / refund. */
+export function applyGroupPayout(input: { traderId: string; amount: number; groupName: string; agentName?: string; label?: string }) {
+  const s = load();
+  const t = s.traders.find((x) => x.id === input.traderId);
+  if (!t) return null;
+  t.balance += input.amount;
+  t.totalSaved += input.amount;
+  t.lastActive = new Date().toISOString();
+  pushTxn(s, t.id, {
+    id: `TXN_${Date.now().toString(36).toUpperCase()}`,
+    date: new Date().toISOString(),
+    description: `${input.label ?? "Group payout"} — ${input.groupName}`,
+    amount: input.amount, balanceAfter: t.balance, type: "Deposit",
+    status: "Completed", agentName: input.agentName ?? "SafeBox Groups",
+  });
+  save(s);
+  return t;
+}
