@@ -23,6 +23,7 @@ import { Route as TraderIndexRouteImport } from './routes/trader.index'
 import { Route as AgentIndexRouteImport } from './routes/agent.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as TraderWithdrawRouteImport } from './routes/trader.withdraw'
+import { Route as TraderTrustRouteImport } from './routes/trader.trust'
 import { Route as TraderTransactionsRouteImport } from './routes/trader.transactions'
 import { Route as TraderProfileRouteImport } from './routes/trader.profile'
 import { Route as TraderLoginRouteImport } from './routes/trader.login'
@@ -117,6 +118,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
 const TraderWithdrawRoute = TraderWithdrawRouteImport.update({
   id: '/withdraw',
   path: '/withdraw',
+  getParentRoute: () => TraderRoute,
+} as any)
+const TraderTrustRoute = TraderTrustRouteImport.update({
+  id: '/trust',
+  path: '/trust',
   getParentRoute: () => TraderRoute,
 } as any)
 const TraderTransactionsRoute = TraderTransactionsRouteImport.update({
@@ -281,6 +287,7 @@ export interface FileRoutesByFullPath {
   '/trader/login': typeof TraderLoginRoute
   '/trader/profile': typeof TraderProfileRoute
   '/trader/transactions': typeof TraderTransactionsRoute
+  '/trader/trust': typeof TraderTrustRoute
   '/trader/withdraw': typeof TraderWithdrawRoute
   '/admin/': typeof AdminIndexRoute
   '/agent/': typeof AgentIndexRoute
@@ -319,6 +326,7 @@ export interface FileRoutesByTo {
   '/trader/login': typeof TraderLoginRoute
   '/trader/profile': typeof TraderProfileRoute
   '/trader/transactions': typeof TraderTransactionsRoute
+  '/trader/trust': typeof TraderTrustRoute
   '/trader/withdraw': typeof TraderWithdrawRoute
   '/admin': typeof AdminIndexRoute
   '/agent': typeof AgentIndexRoute
@@ -361,6 +369,7 @@ export interface FileRoutesById {
   '/trader/login': typeof TraderLoginRoute
   '/trader/profile': typeof TraderProfileRoute
   '/trader/transactions': typeof TraderTransactionsRoute
+  '/trader/trust': typeof TraderTrustRoute
   '/trader/withdraw': typeof TraderWithdrawRoute
   '/admin/': typeof AdminIndexRoute
   '/agent/': typeof AgentIndexRoute
@@ -404,6 +413,7 @@ export interface FileRouteTypes {
     | '/trader/login'
     | '/trader/profile'
     | '/trader/transactions'
+    | '/trader/trust'
     | '/trader/withdraw'
     | '/admin/'
     | '/agent/'
@@ -442,6 +452,7 @@ export interface FileRouteTypes {
     | '/trader/login'
     | '/trader/profile'
     | '/trader/transactions'
+    | '/trader/trust'
     | '/trader/withdraw'
     | '/admin'
     | '/agent'
@@ -483,6 +494,7 @@ export interface FileRouteTypes {
     | '/trader/login'
     | '/trader/profile'
     | '/trader/transactions'
+    | '/trader/trust'
     | '/trader/withdraw'
     | '/admin/'
     | '/agent/'
@@ -600,6 +612,13 @@ declare module '@tanstack/react-router' {
       path: '/withdraw'
       fullPath: '/trader/withdraw'
       preLoaderRoute: typeof TraderWithdrawRouteImport
+      parentRoute: typeof TraderRoute
+    }
+    '/trader/trust': {
+      id: '/trader/trust'
+      path: '/trust'
+      fullPath: '/trader/trust'
+      preLoaderRoute: typeof TraderTrustRouteImport
       parentRoute: typeof TraderRoute
     }
     '/trader/transactions': {
@@ -845,6 +864,7 @@ interface TraderRouteChildren {
   TraderLoginRoute: typeof TraderLoginRoute
   TraderProfileRoute: typeof TraderProfileRoute
   TraderTransactionsRoute: typeof TraderTransactionsRoute
+  TraderTrustRoute: typeof TraderTrustRoute
   TraderWithdrawRoute: typeof TraderWithdrawRoute
   TraderIndexRoute: typeof TraderIndexRoute
 }
@@ -856,6 +876,7 @@ const TraderRouteChildren: TraderRouteChildren = {
   TraderLoginRoute: TraderLoginRoute,
   TraderProfileRoute: TraderProfileRoute,
   TraderTransactionsRoute: TraderTransactionsRoute,
+  TraderTrustRoute: TraderTrustRoute,
   TraderWithdrawRoute: TraderWithdrawRoute,
   TraderIndexRoute: TraderIndexRoute,
 }
