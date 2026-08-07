@@ -409,7 +409,7 @@ export const groupStore = {
       const res = platformStore.recordGroupContribution({
         amount, groupName: g.name, traderId: m.traderId, traderName: m.name, fee: AGENT_GROUP_FEE,
       });
-      if ("error" in res) return { error: res.error };
+      if ("error" in res) return { error: String((res as { error?: string }).error ?? "Could not complete") };
       agentName = platformStore.currentAgent()?.name;
     } else {
       const applied = applyGroupContribution({ traderId: m.traderId, amount, groupName: g.name });
@@ -455,7 +455,7 @@ export const groupStore = {
     let agentName: string | undefined;
     if (input.method === "Agent cash") {
       const res = platformStore.recordGroupPayout({ amount, groupName: g.name, traderId: m.traderId, traderName: m.name });
-      if ("error" in res) return { error: res.error };
+      if ("error" in res) return { error: String((res as { error?: string }).error ?? "Could not complete") };
       agentName = platformStore.currentAgent()?.name;
     } else {
       applyGroupPayout({ traderId: m.traderId, amount, groupName: g.name, label: "Group payout" });
