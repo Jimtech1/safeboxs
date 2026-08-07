@@ -60,7 +60,13 @@ export interface AgentStats {
   withdrawalFeeEarnedToday: number;
 }
 
-export type LedgerKind = "Deposit" | "Withdrawal" | "FloatTopup" | "FloatWithdraw";
+export type LedgerKind =
+  | "Deposit"
+  | "Withdrawal"
+  | "FloatTopup"
+  | "FloatWithdraw"
+  | "GroupContribution"
+  | "GroupPayout";
 
 export interface LedgerTxn {
   id: string;
