@@ -34,6 +34,7 @@ import { Route as AgentTradersRouteImport } from './routes/agent.traders'
 import { Route as AgentTopupRouteImport } from './routes/agent.topup'
 import { Route as AgentSettingsRouteImport } from './routes/agent.settings'
 import { Route as AgentPerformanceRouteImport } from './routes/agent.performance'
+import { Route as AgentGroupsRouteImport } from './routes/agent.groups'
 import { Route as AgentFloatWithdrawRouteImport } from './routes/agent.float-withdraw'
 import { Route as AgentDepositRouteImport } from './routes/agent.deposit'
 import { Route as AgentBalanceRouteImport } from './routes/agent.balance'
@@ -172,6 +173,11 @@ const AgentPerformanceRoute = AgentPerformanceRouteImport.update({
   path: '/performance',
   getParentRoute: () => AgentRoute,
 } as any)
+const AgentGroupsRoute = AgentGroupsRouteImport.update({
+  id: '/groups',
+  path: '/groups',
+  getParentRoute: () => AgentRoute,
+} as any)
 const AgentFloatWithdrawRoute = AgentFloatWithdrawRouteImport.update({
   id: '/float-withdraw',
   path: '/float-withdraw',
@@ -256,6 +262,7 @@ export interface FileRoutesByFullPath {
   '/agent/balance': typeof AgentBalanceRoute
   '/agent/deposit': typeof AgentDepositRoute
   '/agent/float-withdraw': typeof AgentFloatWithdrawRoute
+  '/agent/groups': typeof AgentGroupsRoute
   '/agent/performance': typeof AgentPerformanceRoute
   '/agent/settings': typeof AgentSettingsRoute
   '/agent/topup': typeof AgentTopupRoute
@@ -292,6 +299,7 @@ export interface FileRoutesByTo {
   '/agent/balance': typeof AgentBalanceRoute
   '/agent/deposit': typeof AgentDepositRoute
   '/agent/float-withdraw': typeof AgentFloatWithdrawRoute
+  '/agent/groups': typeof AgentGroupsRoute
   '/agent/performance': typeof AgentPerformanceRoute
   '/agent/settings': typeof AgentSettingsRoute
   '/agent/topup': typeof AgentTopupRoute
@@ -332,6 +340,7 @@ export interface FileRoutesById {
   '/agent/balance': typeof AgentBalanceRoute
   '/agent/deposit': typeof AgentDepositRoute
   '/agent/float-withdraw': typeof AgentFloatWithdrawRoute
+  '/agent/groups': typeof AgentGroupsRoute
   '/agent/performance': typeof AgentPerformanceRoute
   '/agent/settings': typeof AgentSettingsRoute
   '/agent/topup': typeof AgentTopupRoute
@@ -373,6 +382,7 @@ export interface FileRouteTypes {
     | '/agent/balance'
     | '/agent/deposit'
     | '/agent/float-withdraw'
+    | '/agent/groups'
     | '/agent/performance'
     | '/agent/settings'
     | '/agent/topup'
@@ -409,6 +419,7 @@ export interface FileRouteTypes {
     | '/agent/balance'
     | '/agent/deposit'
     | '/agent/float-withdraw'
+    | '/agent/groups'
     | '/agent/performance'
     | '/agent/settings'
     | '/agent/topup'
@@ -448,6 +459,7 @@ export interface FileRouteTypes {
     | '/agent/balance'
     | '/agent/deposit'
     | '/agent/float-withdraw'
+    | '/agent/groups'
     | '/agent/performance'
     | '/agent/settings'
     | '/agent/topup'
@@ -655,6 +667,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AgentPerformanceRouteImport
       parentRoute: typeof AgentRoute
     }
+    '/agent/groups': {
+      id: '/agent/groups'
+      path: '/groups'
+      fullPath: '/agent/groups'
+      preLoaderRoute: typeof AgentGroupsRouteImport
+      parentRoute: typeof AgentRoute
+    }
     '/agent/float-withdraw': {
       id: '/agent/float-withdraw'
       path: '/float-withdraw'
@@ -774,6 +793,7 @@ interface AgentRouteChildren {
   AgentBalanceRoute: typeof AgentBalanceRoute
   AgentDepositRoute: typeof AgentDepositRoute
   AgentFloatWithdrawRoute: typeof AgentFloatWithdrawRoute
+  AgentGroupsRoute: typeof AgentGroupsRoute
   AgentPerformanceRoute: typeof AgentPerformanceRoute
   AgentSettingsRoute: typeof AgentSettingsRoute
   AgentTopupRoute: typeof AgentTopupRoute
@@ -787,6 +807,7 @@ const AgentRouteChildren: AgentRouteChildren = {
   AgentBalanceRoute: AgentBalanceRoute,
   AgentDepositRoute: AgentDepositRoute,
   AgentFloatWithdrawRoute: AgentFloatWithdrawRoute,
+  AgentGroupsRoute: AgentGroupsRoute,
   AgentPerformanceRoute: AgentPerformanceRoute,
   AgentSettingsRoute: AgentSettingsRoute,
   AgentTopupRoute: AgentTopupRoute,
@@ -836,13 +857,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
