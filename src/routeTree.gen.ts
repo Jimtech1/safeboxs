@@ -27,6 +27,7 @@ import { Route as TraderTransactionsRouteImport } from './routes/trader.transact
 import { Route as TraderProfileRouteImport } from './routes/trader.profile'
 import { Route as TraderLoginRouteImport } from './routes/trader.login'
 import { Route as TraderInterestRouteImport } from './routes/trader.interest'
+import { Route as TraderGroupsRouteImport } from './routes/trader.groups'
 import { Route as TraderGoalsRouteImport } from './routes/trader.goals'
 import { Route as AgentWithdrawRouteImport } from './routes/agent.withdraw'
 import { Route as AgentTransactionsRouteImport } from './routes/agent.transactions'
@@ -136,6 +137,11 @@ const TraderLoginRoute = TraderLoginRouteImport.update({
 const TraderInterestRoute = TraderInterestRouteImport.update({
   id: '/interest',
   path: '/interest',
+  getParentRoute: () => TraderRoute,
+} as any)
+const TraderGroupsRoute = TraderGroupsRouteImport.update({
+  id: '/groups',
+  path: '/groups',
   getParentRoute: () => TraderRoute,
 } as any)
 const TraderGoalsRoute = TraderGoalsRouteImport.update({
@@ -270,6 +276,7 @@ export interface FileRoutesByFullPath {
   '/agent/transactions': typeof AgentTransactionsRoute
   '/agent/withdraw': typeof AgentWithdrawRoute
   '/trader/goals': typeof TraderGoalsRoute
+  '/trader/groups': typeof TraderGroupsRoute
   '/trader/interest': typeof TraderInterestRoute
   '/trader/login': typeof TraderLoginRoute
   '/trader/profile': typeof TraderProfileRoute
@@ -307,6 +314,7 @@ export interface FileRoutesByTo {
   '/agent/transactions': typeof AgentTransactionsRoute
   '/agent/withdraw': typeof AgentWithdrawRoute
   '/trader/goals': typeof TraderGoalsRoute
+  '/trader/groups': typeof TraderGroupsRoute
   '/trader/interest': typeof TraderInterestRoute
   '/trader/login': typeof TraderLoginRoute
   '/trader/profile': typeof TraderProfileRoute
@@ -348,6 +356,7 @@ export interface FileRoutesById {
   '/agent/transactions': typeof AgentTransactionsRoute
   '/agent/withdraw': typeof AgentWithdrawRoute
   '/trader/goals': typeof TraderGoalsRoute
+  '/trader/groups': typeof TraderGroupsRoute
   '/trader/interest': typeof TraderInterestRoute
   '/trader/login': typeof TraderLoginRoute
   '/trader/profile': typeof TraderProfileRoute
@@ -390,6 +399,7 @@ export interface FileRouteTypes {
     | '/agent/transactions'
     | '/agent/withdraw'
     | '/trader/goals'
+    | '/trader/groups'
     | '/trader/interest'
     | '/trader/login'
     | '/trader/profile'
@@ -427,6 +437,7 @@ export interface FileRouteTypes {
     | '/agent/transactions'
     | '/agent/withdraw'
     | '/trader/goals'
+    | '/trader/groups'
     | '/trader/interest'
     | '/trader/login'
     | '/trader/profile'
@@ -467,6 +478,7 @@ export interface FileRouteTypes {
     | '/agent/transactions'
     | '/agent/withdraw'
     | '/trader/goals'
+    | '/trader/groups'
     | '/trader/interest'
     | '/trader/login'
     | '/trader/profile'
@@ -616,6 +628,13 @@ declare module '@tanstack/react-router' {
       path: '/interest'
       fullPath: '/trader/interest'
       preLoaderRoute: typeof TraderInterestRouteImport
+      parentRoute: typeof TraderRoute
+    }
+    '/trader/groups': {
+      id: '/trader/groups'
+      path: '/groups'
+      fullPath: '/trader/groups'
+      preLoaderRoute: typeof TraderGroupsRouteImport
       parentRoute: typeof TraderRoute
     }
     '/trader/goals': {
@@ -821,6 +840,7 @@ const AgentRouteWithChildren = AgentRoute._addFileChildren(AgentRouteChildren)
 
 interface TraderRouteChildren {
   TraderGoalsRoute: typeof TraderGoalsRoute
+  TraderGroupsRoute: typeof TraderGroupsRoute
   TraderInterestRoute: typeof TraderInterestRoute
   TraderLoginRoute: typeof TraderLoginRoute
   TraderProfileRoute: typeof TraderProfileRoute
@@ -831,6 +851,7 @@ interface TraderRouteChildren {
 
 const TraderRouteChildren: TraderRouteChildren = {
   TraderGoalsRoute: TraderGoalsRoute,
+  TraderGroupsRoute: TraderGroupsRoute,
   TraderInterestRoute: TraderInterestRoute,
   TraderLoginRoute: TraderLoginRoute,
   TraderProfileRoute: TraderProfileRoute,
