@@ -39,13 +39,53 @@ export type WithdrawalRequest = {
   estimatedAt: string;
 };
 
+export type SavingsProductId = "safevault" | "safegrowth" | "safelock";
+
+export type SavingsProduct = {
+  id: SavingsProductId;
+  name: string;
+  tagline: string;
+  rateLabel: string;
+  rate: number;
+  lockIn: string;
+  liquidity: string;
+  ndicInsured: boolean;
+  earlyExit: string;
+  badge?: string;
+};
+
+export const SAVINGS_PRODUCTS: SavingsProduct[] = [
+  {
+    id: "safevault", name: "SafeVault", tagline: "Flexible Savings",
+    rateLabel: "7% per annum", rate: 0.07,
+    lockIn: "None", liquidity: "Instant access", ndicInsured: true, earlyExit: "N/A",
+  },
+  {
+    id: "safegrowth", name: "SafeGrowth", tagline: "Popular Choice",
+    rateLabel: "Up to 18% per annum", rate: 0.18,
+    lockIn: "Until maturity", liquidity: "At maturity", ndicInsured: true, earlyExit: "Not allowed",
+    badge: "Most Popular",
+  },
+  {
+    id: "safelock", name: "SafeLock", tagline: "Fixed Savings",
+    rateLabel: "Up to 15% per annum", rate: 0.15,
+    lockIn: "Fixed term", liquidity: "At maturity", ndicInsured: true, earlyExit: "2% penalty",
+  },
+];
+
+export const getSavingsProduct = (id?: SavingsProductId): SavingsProduct =>
+  SAVINGS_PRODUCTS.find((p) => p.id === id) ?? SAVINGS_PRODUCTS[0];
+
 export type Goal = {
   id: string;
   name: string;
   target: number;
   current: number;
   deadline?: string;
+  /** Savings product the goal is held in. Legacy goals default to SafeVault. */
+  product?: SavingsProductId;
 };
+
 
 export type Trader = {
   id: string;
