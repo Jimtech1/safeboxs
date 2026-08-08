@@ -533,8 +533,10 @@ export function cancelWithdrawal(id: string) {
 }
 
 export function getGoals(traderId: string): Goal[] {
-  return load().goalsByTrader[traderId] ?? [];
+  // Legacy goals (created before savings products) default to SafeVault
+  return (load().goalsByTrader[traderId] ?? []).map((g) => ({ ...g, product: g.product ?? "safevault" }));
 }
+
 
 export function upsertGoal(traderId: string, goal: Goal) {
   const s = load();
