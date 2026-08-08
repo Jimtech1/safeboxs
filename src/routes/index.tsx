@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import {
   MapPin, Banknote, Wallet, MessageSquare, TrendingUp, Clock,
   ShieldCheck, Phone, Users, Star, FileCheck, Lock, Building2,
-  ArrowRight, CheckCircle2, Trophy, Gift, CalendarDays, Sparkles,
+  ArrowRight, CheckCircle2, Trophy, Gift, CalendarDays, Sparkles, Target,
 } from "lucide-react";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
@@ -26,6 +26,7 @@ const heroSlides = [
   { eyebrow: "Float Management", title: ["For agents.", "Top up.", "Withdraw.", "Earn."], desc: "Fund your float from any bank, settle to your account any time. Earn commission on every transaction.", chips: ["USSD Top-up", "Bank Settlement", "Daily Commission"], cta: { to: "/register" as const, label: "Become an Agent" } },
   { eyebrow: "Security of Funds", title: ["CBN Compliant.", "Insured.", "Verified.", "Trusted."], desc: "SafeBox operates under CBN Agent Banking Guidelines. Your money is protected at every step.", chips: ["CBN Compliant", "NDIC Coverage", "Encrypted"], cta: { to: "/register" as const, label: "Start Saving Today" } },
   { eyebrow: "Monthly Jackpot", title: ["Save more.", "Win.", "₦300,000.", "Monthly."], desc: "One active trader wins ₦300,000 every month. No fees. The more you save, the higher your chances.", chips: ["₦300k Prize", "1 Winner / Month", "Zero Entry Fee"], cta: { to: "/register" as const, label: "Start Saving Today" } },
+  { eyebrow: "Group Contribution", title: ["Save together.", "Ajo.", "Esusu.", "Digital."], desc: "Join a market contribution group. Every member, every rotation and every payout tracked by SafeBox.", chips: ["Rotational Payouts", "Target Groups", "Trust Score"], cta: { to: "/register" as const, label: "Join a Group" } },
   { eyebrow: "Trader Dashboard", title: ["Track Your Savings.", "Anytime.", "Anywhere.", "Yours."], desc: "Log in to your personal dashboard. See your balance, view your full transaction history, and request withdrawals with one click.", chips: ["Real-Time Balance", "Transaction History", "Easy Withdrawals"], cta: { to: "/trader/login" as const, label: "Trader Login" } },
 ];
 
