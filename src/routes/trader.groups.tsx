@@ -81,23 +81,23 @@ function TraderGroups() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold">Group Savings</h1>
+          <h1 className="text-2xl md:text-3xl font-bold">Contribution</h1>
           <p className="text-sm text-muted-foreground">Save with your market community — Ajo rotations and Esusu targets.</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto">
           {trust && (
             <Badge variant="outline" className={`${trustLevelClasses(trust.level)} px-3 py-1.5`}>
               Trust {trust.score} • {trust.level}
             </Badge>
           )}
-          <Button onClick={() => setOpenCreate(true)} className="bg-primary hover:bg-primary/90">
+          <Button onClick={() => setOpenCreate(true)} className="min-h-11 flex-1 sm:flex-none bg-primary hover:bg-primary/90">
             <Plus className="h-4 w-4 mr-2" /> New group
           </Button>
         </div>
       </div>
 
       <Tabs defaultValue="mine">
-        <TabsList className="grid w-full max-w-md grid-cols-2">
+        <TabsList className="grid w-full max-w-md grid-cols-2 gap-1">
           <TabsTrigger value="mine">My groups ({mine.length})</TabsTrigger>
           <TabsTrigger value="discover">Discover</TabsTrigger>
         </TabsList>
@@ -146,7 +146,7 @@ function TraderGroups() {
       <CreateGroupDialog open={openCreate} onOpenChange={setOpenCreate} trader={trader} />
 
       <Dialog open={!!live} onOpenChange={(o) => !o && setDetail(null)}>
-        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+        <DialogContent className="max-h-[85vh] overflow-y-auto max-w-2xl max-h-[85vh] overflow-y-auto">
           {live && <GroupDetail group={live} trader={trader} />}
         </DialogContent>
       </Dialog>
