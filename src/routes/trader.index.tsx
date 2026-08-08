@@ -125,12 +125,12 @@ function TraderDashboard() {
               <ProgressCircle value={primaryGoal.current} max={primaryGoal.target} />
               <p className="mt-3 text-center text-sm font-medium">{primaryGoal.name}</p>
               <p className="text-center text-xs text-muted-foreground">{formatNGN(primaryGoal.current)} of {formatNGN(primaryGoal.target)}</p>
-              <Link to="/trader/goals"><Button variant="outline" className="w-full mt-4">Manage goals</Button></Link>
+              <Link to="/trader/savings"><Button variant="outline" className="w-full mt-4">Manage goals</Button></Link>
             </>
           ) : (
             <div className="mt-4 text-center text-sm text-muted-foreground">
               No goals yet.
-              <Link to="/trader/goals"><Button className="w-full mt-4 bg-primary hover:bg-primary/90">Create your first goal</Button></Link>
+              <Link to="/trader/savings"><Button className="w-full mt-4 bg-primary hover:bg-primary/90">Create your first goal</Button></Link>
             </div>
           )}
         </Card>

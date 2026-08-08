@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
-import { getCurrentTrader, updateTrader, type Trader } from "@/lib/mockTraderData";
+import { getCurrentTrader, updateTrader, changeTraderPin, type Trader } from "@/lib/mockTraderData";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/trader/profile")({
@@ -15,6 +15,8 @@ export const Route = createFileRoute("/trader/profile")({
 
 function TraderProfile() {
   const [trader, setTrader] = useState<Trader | null>(null);
+  const [currentPin, setCurrentPin] = useState("");
+  const [newPin, setNewPin] = useState("");
   useEffect(() => {
     const t = getCurrentTrader();
     setTrader(t);
@@ -29,14 +31,14 @@ function TraderProfile() {
   };
 
   return (
-    <div className="space-y-6 max-w-3xl">
+    <div className="space-y-6 max-w-3xl mt-4">
       <div>
         <h1 className="text-2xl md:text-3xl font-bold">Profile</h1>
         <p className="text-sm text-muted-foreground">Manage your personal info, bank account, security, and agent.</p>
       </div>
 
       <Tabs defaultValue="personal">
-        <TabsList className="w-full grid grid-cols-2 md:grid-cols-4">
+        <TabsList className="w-full grid grid-cols-2 gap-1 md:grid-cols-4">
           <TabsTrigger value="personal">Personal</TabsTrigger>
           <TabsTrigger value="bank">Bank</TabsTrigger>
           <TabsTrigger value="security">Security</TabsTrigger>
@@ -44,7 +46,7 @@ function TraderProfile() {
         </TabsList>
 
         <TabsContent value="personal">
-          <Card className="p-6 space-y-4">
+          <Card className="p-4 sm:p-6 space-y-4">
             <div className="flex items-center gap-4">
               <div className="grid h-16 w-16 place-items-center rounded-full bg-primary text-primary-foreground font-bold text-xl">
                 {trader.name.split(" ").map((p) => p[0]).join("").slice(0, 2)}
@@ -67,7 +69,7 @@ function TraderProfile() {
         </TabsContent>
 
         <TabsContent value="bank">
-          <Card className="p-6 space-y-4">
+          <Card className="p-4 sm:p-6 space-y-4">
             <p className="text-sm text-muted-foreground">Add a bank account to receive withdrawals via transfer.</p>
             <div>
               <Label>Bank name</Label>
@@ -88,24 +90,32 @@ function TraderProfile() {
         </TabsContent>
 
         <TabsContent value="security">
-          <Card className="p-6 space-y-4">
-            <div>
-              <Label>Change PIN (4–6 digits)</Label>
-              <div className="mt-1 flex gap-2">
-                <Input type="password" inputMode="numeric" maxLength={6} placeholder="New PIN" id="newpin" />
-                <Button onClick={() => {
-                  const v = (document.getElementById("newpin") as HTMLInputElement).value;
-                  if (v.length < 4 || v.length > 6) return toast.error("PIN must be 4–6 digits");
-                  save({ pin: v });
-                  (document.getElementById("newpin") as HTMLInputElement).value = "";
-                }}>Update PIN</Button>
+          <Card className="p-4 sm:p-6 space-y-4">
+            <div className="space-y-3">
+              <div>
+                <Label htmlFor="currentpin">Current PIN</Label>
+                <Input id="currentpin" className="mt-1" type="password" inputMode="numeric" maxLength={6}
+                  autoComplete="current-password" placeholder="Current PIN"
+                  value={currentPin} onChange={(e) => setCurrentPin(e.target.value.replace(/\D/g, ""))} />
               </div>
+              <div>
+                <Label htmlFor="newpin">New PIN (4-6 digits)</Label>
+                <Input id="newpin" className="mt-1" type="password" inputMode="numeric" maxLength={6}
+                  autoComplete="new-password" placeholder="New PIN"
+                  value={newPin} onChange={(e) => setNewPin(e.target.value.replace(/\D/g, ""))} />
+              </div>
+              <Button className="w-full min-h-11 sm:w-auto" onClick={() => {
+                const res = changeTraderPin(currentPin, newPin);
+                if ("error" in res) return toast.error(res.error);
+                setCurrentPin(""); setNewPin("");
+                toast.success("PIN updated");
+              }}>Update PIN</Button>
             </div>
-            <div className="flex items-center justify-between border-t pt-4">
+            <div className="flex items-center justify-between gap-4 border-t pt-4">
               <div><p className="font-medium">SMS alerts</p><p className="text-xs text-muted-foreground">Get an SMS for every transaction.</p></div>
               <Switch checked={trader.smsAlerts} onCheckedChange={(v) => save({ smsAlerts: v })} />
             </div>
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between gap-4">
               <div><p className="font-medium">Email alerts</p><p className="text-xs text-muted-foreground">Get an email summary daily.</p></div>
               <Switch checked={trader.emailAlerts} onCheckedChange={(v) => save({ emailAlerts: v })} />
             </div>
@@ -113,7 +123,7 @@ function TraderProfile() {
         </TabsContent>
 
         <TabsContent value="agent">
-          <Card className="p-6 space-y-3">
+          <Card className="p-4 sm:p-6 space-y-3">
             <p className="text-sm text-muted-foreground">Your assigned SafeBox agent</p>
             <Row label="Name" value={trader.agentName} />
             <Row label="Phone" value={trader.agentPhone} />

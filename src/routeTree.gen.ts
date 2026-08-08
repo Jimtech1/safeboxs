@@ -25,6 +25,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as TraderWithdrawRouteImport } from './routes/trader.withdraw'
 import { Route as TraderTrustRouteImport } from './routes/trader.trust'
 import { Route as TraderTransactionsRouteImport } from './routes/trader.transactions'
+import { Route as TraderSavingsRouteImport } from './routes/trader.savings'
 import { Route as TraderProfileRouteImport } from './routes/trader.profile'
 import { Route as TraderLoginRouteImport } from './routes/trader.login'
 import { Route as TraderInterestRouteImport } from './routes/trader.interest'
@@ -129,6 +130,11 @@ const TraderTrustRoute = TraderTrustRouteImport.update({
 const TraderTransactionsRoute = TraderTransactionsRouteImport.update({
   id: '/transactions',
   path: '/transactions',
+  getParentRoute: () => TraderRoute,
+} as any)
+const TraderSavingsRoute = TraderSavingsRouteImport.update({
+  id: '/savings',
+  path: '/savings',
   getParentRoute: () => TraderRoute,
 } as any)
 const TraderProfileRoute = TraderProfileRouteImport.update({
@@ -293,6 +299,7 @@ export interface FileRoutesByFullPath {
   '/trader/interest': typeof TraderInterestRoute
   '/trader/login': typeof TraderLoginRoute
   '/trader/profile': typeof TraderProfileRoute
+  '/trader/savings': typeof TraderSavingsRoute
   '/trader/transactions': typeof TraderTransactionsRoute
   '/trader/trust': typeof TraderTrustRoute
   '/trader/withdraw': typeof TraderWithdrawRoute
@@ -333,6 +340,7 @@ export interface FileRoutesByTo {
   '/trader/interest': typeof TraderInterestRoute
   '/trader/login': typeof TraderLoginRoute
   '/trader/profile': typeof TraderProfileRoute
+  '/trader/savings': typeof TraderSavingsRoute
   '/trader/transactions': typeof TraderTransactionsRoute
   '/trader/trust': typeof TraderTrustRoute
   '/trader/withdraw': typeof TraderWithdrawRoute
@@ -377,6 +385,7 @@ export interface FileRoutesById {
   '/trader/interest': typeof TraderInterestRoute
   '/trader/login': typeof TraderLoginRoute
   '/trader/profile': typeof TraderProfileRoute
+  '/trader/savings': typeof TraderSavingsRoute
   '/trader/transactions': typeof TraderTransactionsRoute
   '/trader/trust': typeof TraderTrustRoute
   '/trader/withdraw': typeof TraderWithdrawRoute
@@ -422,6 +431,7 @@ export interface FileRouteTypes {
     | '/trader/interest'
     | '/trader/login'
     | '/trader/profile'
+    | '/trader/savings'
     | '/trader/transactions'
     | '/trader/trust'
     | '/trader/withdraw'
@@ -462,6 +472,7 @@ export interface FileRouteTypes {
     | '/trader/interest'
     | '/trader/login'
     | '/trader/profile'
+    | '/trader/savings'
     | '/trader/transactions'
     | '/trader/trust'
     | '/trader/withdraw'
@@ -505,6 +516,7 @@ export interface FileRouteTypes {
     | '/trader/interest'
     | '/trader/login'
     | '/trader/profile'
+    | '/trader/savings'
     | '/trader/transactions'
     | '/trader/trust'
     | '/trader/withdraw'
@@ -638,6 +650,13 @@ declare module '@tanstack/react-router' {
       path: '/transactions'
       fullPath: '/trader/transactions'
       preLoaderRoute: typeof TraderTransactionsRouteImport
+      parentRoute: typeof TraderRoute
+    }
+    '/trader/savings': {
+      id: '/trader/savings'
+      path: '/savings'
+      fullPath: '/trader/savings'
+      preLoaderRoute: typeof TraderSavingsRouteImport
       parentRoute: typeof TraderRoute
     }
     '/trader/profile': {
@@ -884,6 +903,7 @@ interface TraderRouteChildren {
   TraderInterestRoute: typeof TraderInterestRoute
   TraderLoginRoute: typeof TraderLoginRoute
   TraderProfileRoute: typeof TraderProfileRoute
+  TraderSavingsRoute: typeof TraderSavingsRoute
   TraderTransactionsRoute: typeof TraderTransactionsRoute
   TraderTrustRoute: typeof TraderTrustRoute
   TraderWithdrawRoute: typeof TraderWithdrawRoute
@@ -896,6 +916,7 @@ const TraderRouteChildren: TraderRouteChildren = {
   TraderInterestRoute: TraderInterestRoute,
   TraderLoginRoute: TraderLoginRoute,
   TraderProfileRoute: TraderProfileRoute,
+  TraderSavingsRoute: TraderSavingsRoute,
   TraderTransactionsRoute: TraderTransactionsRoute,
   TraderTrustRoute: TraderTrustRoute,
   TraderWithdrawRoute: TraderWithdrawRoute,

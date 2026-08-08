@@ -39,13 +39,53 @@ export type WithdrawalRequest = {
   estimatedAt: string;
 };
 
+export type SavingsProductId = "safevault" | "safegrowth" | "safelock";
+
+export type SavingsProduct = {
+  id: SavingsProductId;
+  name: string;
+  tagline: string;
+  rateLabel: string;
+  rate: number;
+  lockIn: string;
+  liquidity: string;
+  ndicInsured: boolean;
+  earlyExit: string;
+  badge?: string;
+};
+
+export const SAVINGS_PRODUCTS: SavingsProduct[] = [
+  {
+    id: "safevault", name: "SafeVault", tagline: "Flexible Savings",
+    rateLabel: "7% per annum", rate: 0.07,
+    lockIn: "None", liquidity: "Instant access", ndicInsured: true, earlyExit: "N/A",
+  },
+  {
+    id: "safegrowth", name: "SafeGrowth", tagline: "Popular Choice",
+    rateLabel: "Up to 18% per annum", rate: 0.18,
+    lockIn: "Until maturity", liquidity: "At maturity", ndicInsured: true, earlyExit: "Not allowed",
+    badge: "Most Popular",
+  },
+  {
+    id: "safelock", name: "SafeLock", tagline: "Fixed Savings",
+    rateLabel: "Up to 15% per annum", rate: 0.15,
+    lockIn: "Fixed term", liquidity: "At maturity", ndicInsured: true, earlyExit: "2% penalty",
+  },
+];
+
+export const getSavingsProduct = (id?: SavingsProductId): SavingsProduct =>
+  SAVINGS_PRODUCTS.find((p) => p.id === id) ?? SAVINGS_PRODUCTS[0];
+
 export type Goal = {
   id: string;
   name: string;
   target: number;
   current: number;
   deadline?: string;
+  /** Savings product the goal is held in. Legacy goals default to SafeVault. */
+  product?: SavingsProductId;
 };
+
 
 export type Trader = {
   id: string;
@@ -211,9 +251,10 @@ const seedWithdrawals: WithdrawalRequest[] = [
 ];
 
 const seedGoals: Goal[] = [
-  { id: "G_1", name: "Children's School Fees", target: 200000, current: 150000, deadline: "2026-09-01" },
-  { id: "G_2", name: "Shop Inventory Restock", target: 100000, current: 38000 },
+  { id: "G_1", name: "Children's School Fees", target: 200000, current: 150000, deadline: "2026-09-01", product: "safegrowth" },
+  { id: "G_2", name: "Shop Inventory Restock", target: 100000, current: 38000, product: "safevault" },
 ];
+
 
 // ---------- Storage ----------
 const KEY = "safebox_trader_store_v2";
@@ -492,8 +533,10 @@ export function cancelWithdrawal(id: string) {
 }
 
 export function getGoals(traderId: string): Goal[] {
-  return load().goalsByTrader[traderId] ?? [];
+  // Legacy goals (created before savings products) default to SafeVault
+  return (load().goalsByTrader[traderId] ?? []).map((g) => ({ ...g, product: g.product ?? "safevault" }));
 }
+
 
 export function upsertGoal(traderId: string, goal: Goal) {
   const s = load();
