@@ -316,6 +316,53 @@ function Landing() {
         </div>
       </section>
 
+      {/* GROUP CONTRIBUTION (AJO / ESUSU) */}
+      <section id="contribution" className="mx-auto max-w-7xl px-4 py-20 md:px-8">
+        <div className="max-w-2xl">
+          <div className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-xs font-medium text-accent">
+            <Users className="h-3.5 w-3.5" /> Group Contribution
+          </div>
+          <h2 className="mt-4 text-3xl font-bold md:text-4xl">Ajo &amp; Esusu, now digital</h2>
+          <p className="mt-4 text-muted-foreground">
+            Save together with your market association. SafeBox tracks every contribution, every rotation and every
+            payout — so nobody argues about whose turn it is, and no money goes missing.
+          </p>
+        </div>
+
+        <div className="mt-10 grid gap-4 md:grid-cols-3">
+          {[
+            { icon: Users, title: "Rotational Groups (Ajo)", desc: "Members contribute daily or weekly. Each cycle, one member collects the pool in a fixed, transparent order." },
+            { icon: Target, title: "Target Groups (Esusu)", desc: "The group saves toward one shared target — restocking, rent or equipment — and everyone sees the progress live." },
+            { icon: ShieldCheck, title: "Trust Score", desc: "Consistent contributions build your SafeBox trust score, unlocking better positions and future credit." },
+          ].map((c) => (
+            <Card key={c.title} className="p-6">
+              <div className="grid h-11 w-11 place-items-center rounded-xl bg-primary/10 text-primary"><c.icon className="h-5 w-5" /></div>
+              <p className="mt-4 font-semibold">{c.title}</p>
+              <p className="mt-2 text-sm text-muted-foreground">{c.desc}</p>
+            </Card>
+          ))}
+        </div>
+
+        <div className="mt-8 grid gap-4 rounded-2xl bg-cream p-6 sm:grid-cols-3">
+          {[
+            { k: "Your agent collects", v: "Cash contributions, receipted by SMS" },
+            { k: "SafeBox records", v: "Every member, position and cycle" },
+            { k: "Payout day", v: "Pool paid out in full, no deductions" },
+          ].map((s) => (
+            <div key={s.k}>
+              <p className="text-xs uppercase tracking-wide text-muted-foreground">{s.k}</p>
+              <p className="mt-1 font-medium">{s.v}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-8 flex flex-wrap gap-3">
+          <Link to="/register"><Button size="lg" className="min-h-11 bg-primary hover:bg-primary/90">Join a Contribution Group <ArrowRight className="ml-2 h-4 w-4" /></Button></Link>
+          <Link to="/for-traders"><Button size="lg" variant="outline" className="min-h-11">How it works</Button></Link>
+        </div>
+      </section>
+
+
       {/* MONTHLY JACKPOT */}
       <section id="jackpot" className="relative overflow-hidden bg-gradient-to-br from-primary via-primary to-[#063b22] py-20 text-white">
         <div className="absolute inset-0 opacity-20 pointer-events-none" aria-hidden>
