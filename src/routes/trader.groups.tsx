@@ -146,7 +146,7 @@ function TraderGroups() {
       <CreateGroupDialog open={openCreate} onOpenChange={setOpenCreate} trader={trader} />
 
       <Dialog open={!!live} onOpenChange={(o) => !o && setDetail(null)}>
-        <DialogContent className="max-h-[85vh] overflow-y-auto max-w-2xl max-h-[85vh] overflow-y-auto">
+        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
           {live && <GroupDetail group={live} trader={trader} />}
         </DialogContent>
       </Dialog>
