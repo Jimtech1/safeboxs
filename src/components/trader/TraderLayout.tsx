@@ -50,9 +50,10 @@ export function TraderLayout() {
       {/* Desktop sidebar */}
       <aside className="hidden md:flex fixed inset-y-0 left-0 w-64 flex-col bg-sidebar text-sidebar-foreground">
         <div className="px-5 py-5 border-b border-white/10">
-          <SafeBoxLogo inverted />
+          <Link to="/" aria-label="SafeBox home"><SafeBoxLogo inverted /></Link>
           <p className="mt-1 text-xs text-sidebar-foreground/60">Trader Dashboard</p>
         </div>
+
         <nav className="flex-1 px-3 py-4 space-y-1">
           {nav.map((n) => {
             const active = isActive(n.to, n.exact);
