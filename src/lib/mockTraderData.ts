@@ -251,9 +251,10 @@ const seedWithdrawals: WithdrawalRequest[] = [
 ];
 
 const seedGoals: Goal[] = [
-  { id: "G_1", name: "Children's School Fees", target: 200000, current: 150000, deadline: "2026-09-01" },
-  { id: "G_2", name: "Shop Inventory Restock", target: 100000, current: 38000 },
+  { id: "G_1", name: "Children's School Fees", target: 200000, current: 150000, deadline: "2026-09-01", product: "safegrowth" },
+  { id: "G_2", name: "Shop Inventory Restock", target: 100000, current: 38000, product: "safevault" },
 ];
+
 
 // ---------- Storage ----------
 const KEY = "safebox_trader_store_v2";
