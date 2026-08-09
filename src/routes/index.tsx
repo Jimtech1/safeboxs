@@ -31,12 +31,12 @@ const heroSlides = [
 ];
 
 const features = [
-  { icon: MessageSquare, title: "Instant SMS Receipts', desc: 'Every deposit and withdrawal sends an instant SMS to your phone. You always have proof." },
-  { icon: TrendingUp, title: "Earn Yield on Savings', desc: 'Your savings don't just sit. They grow. Earn up to 10% annually on your balance." },
-  { icon: Clock, title: "Withdraw Anytime', desc: 'No fixed terms. No penalties. Get your money when you need it." },
-  { icon: ShieldCheck, title: "Funds Held By Nombank MFB', desc: 'Banking partner: Nomba MFB (NDIC Insured). Your savings sit with the bank, not with SafeBox or the agent." },
-  { icon: Phone, title: "No Smartphone Required', desc: 'Any phone works. Agents handle the technology. You just save." },
-  { icon: Users, title: "5,000+ Agents Nationwide', desc: 'Find a SafeBox agent in every major market. We're growing daily." },
+  { icon: MessageSquare, title: "Instant SMS Receipts", desc: "Every deposit and withdrawal sends an instant SMS to your phone. You always have proof." },
+  { icon: TrendingUp, title: "Earn Yield on Savings", desc: "Your savings don't just sit. They grow. Earn up to 10% annually on your balance." },
+  { icon: Clock, title: "Withdraw Anytime", desc: "No fixed terms. No penalties. Get your money when you need it." },
+  { icon: ShieldCheck, title: "Funds Held By Nombank MFB", desc: "Banking partner: Nomba MFB (NDIC Insured). Your savings sit with the bank, not with SafeBox or the agent." },
+  { icon: Phone, title: "No Smartphone Required", desc: "Any phone works. Agents handle the technology. You just save." },
+  { icon: Users, title: "5,000+ Agents Nationwide", desc: "Find a SafeBox agent in every major market. We're growing daily." },
 ];
 
 const testimonials = [
@@ -195,9 +195,9 @@ function Landing() {
         </div>
         <div className="mt-12 grid gap-6 md:grid-cols-3">
           {[
-            { n: "01", icon: MapPin, title: "Find a SafeBox Agent', desc: 'Visit any SafeBox agent in your market. They are trained, verified, and ready to help." },
-            { n: "02", icon: Banknote, title: "Save Daily', desc: 'Give your daily savings to the agent. Receive an instant SMS receipt. Watch your balance grow." },
-            { n: "03", icon: Wallet, title: "Withdraw Anytime', desc: 'Need cash? Visit any SafeBox agent. Withdraw instantly. No paperwork. No delays." },
+            { n: "01", icon: MapPin, title: "Find a SafeBox Agent", desc: "Visit any SafeBox agent in your market. They are trained, verified, and ready to help." },
+            { n: "02", icon: Banknote, title: "Save Daily", desc: "Give your daily savings to the agent. Receive an instant SMS receipt. Watch your balance grow." },
+            { n: "03", icon: Wallet, title: "Withdraw Anytime", desc: "Need cash? Visit any SafeBox agent. Withdraw instantly. No paperwork. No delays." },
           ].map((s, i) => (
             <motion.div key={s.n} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}>
               <Card className="relative h-full p-6 border-2 hover:border-primary/40 transition-colors">
@@ -332,9 +332,9 @@ function Landing() {
 
         <div className="mt-10 grid gap-4 md:grid-cols-3">
           {[
-            { icon: Users, title: "Rotational Groups (Ajo)', desc: 'Members contribute daily or weekly. Each cycle, one member collects the pool in a fixed, transparent order." },
-            { icon: Target, title: "Target Groups (Esusu)', desc: 'The group saves toward one shared target — restocking, rent or equipment — and everyone sees the progress live." },
-            { icon: ShieldCheck, title: "Trust Score', desc: 'Consistent contributions build your SafeBox trust score, unlocking better positions and future credit." },
+            { icon: Users, title: "Rotational Groups (Ajo)", desc: "Members contribute daily or weekly. Each cycle, one member collects the pool in a fixed, transparent order." },
+            { icon: Target, title: "Target Groups (Esusu)", desc: "The group saves toward one shared target — restocking, rent or equipment — and everyone sees the progress live." },
+            { icon: ShieldCheck, title: "Trust Score", desc: "Consistent contributions build your SafeBox trust score, unlocking better positions and future credit." },
           ].map((c) => (
             <Card key={c.title} className="p-6">
               <div className="grid h-11 w-11 place-items-center rounded-xl bg-primary/10 text-primary"><c.icon className="h-5 w-5" /></div>
