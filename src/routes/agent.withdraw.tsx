@@ -129,7 +129,7 @@ function WithdrawFlow() {
               {(exceedsBalance || exceedsLimit) && (
                 <div className="flex items-center gap-2 rounded-lg bg-destructive/10 text-destructive p-3 text-sm">
                   <AlertTriangle className="h-4 w-4" />
-                  {exceedsBalance ? "Amount exceeds trader balance." : `Exceeds CBN daily limit of ${formatNaira(DAILY_LIMIT)}.`}
+                  {exceedsBalance ? "Amount exceeds trader balance." : `Exceeds daily withdrawal limit of ${formatNaira(DAILY_LIMIT)}.`}
                 </div>
               )}
               <NumPad onPress={(k) => setAmount(amount + k)} onBack={() => setAmount(amount.slice(0, -1))} />

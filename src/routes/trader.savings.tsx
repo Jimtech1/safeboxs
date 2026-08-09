@@ -112,10 +112,10 @@ function TraderSavings() {
                   <Spec label="Lock-in Period" value={p.lockIn} />
                   <Spec label="Liquidity" value={p.liquidity} />
                   <Spec
-                    label="NDIC Insured"
+                    label="Funds Held By"
                     value={
                       <span className="inline-flex items-center gap-1 font-medium text-success">
-                        <ShieldCheck className="h-3.5 w-3.5" /> Yes
+                        <ShieldCheck className="h-3.5 w-3.5" /> Nomba MFB (NDIC Insured)
                       </span>
                     }
                   />
