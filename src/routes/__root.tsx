@@ -12,23 +12,39 @@ import { Toaster } from "sonner";
 
 import appCss from "../styles.css?url";
 
+function BrandMark() {
+  return (
+    <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-primary text-primary-foreground">
+      <span className="font-display text-xl font-extrabold">SB</span>
+    </div>
+  );
+}
+
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
+    <div className="flex min-h-screen items-center justify-center bg-hero-gradient px-4">
+      <div className="w-full max-w-md rounded-3xl border bg-card p-8 text-center shadow-sm">
+        <BrandMark />
+        <p className="mt-6 font-display text-6xl font-extrabold text-primary">404</p>
+        <h1 className="mt-2 font-display text-xl font-bold text-foreground">This page isn't in the ledger</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
+          The page you're looking for doesn't exist or has been moved. Your savings are safe.
         </p>
-        <div className="mt-6">
+        <div className="mt-6 flex flex-wrap justify-center gap-2">
           <Link
             to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="inline-flex min-h-11 items-center justify-center rounded-xl bg-primary px-5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Go home
+            Back to home
+          </Link>
+          <Link
+            to="/login"
+            className="inline-flex min-h-11 items-center justify-center rounded-xl border border-input bg-background px-5 text-sm font-semibold text-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+          >
+            Log in
           </Link>
         </div>
+        <p className="mt-6 text-xs text-muted-foreground">Funds held by Nomba MFB (NDIC Insured)</p>
       </div>
     </div>
   );
@@ -39,13 +55,12 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   const router = useRouter();
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          This page didn't load
-        </h1>
+    <div className="flex min-h-screen items-center justify-center bg-hero-gradient px-4">
+      <div className="w-full max-w-md rounded-3xl border bg-card p-8 text-center shadow-sm">
+        <BrandMark />
+        <h1 className="mt-6 font-display text-xl font-bold text-foreground">Something went wrong</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Something went wrong on our end. You can try refreshing or head back home.
+          We couldn't load this page. No transaction was affected — try again or head back home.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
@@ -53,13 +68,13 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
               router.invalidate();
               reset();
             }}
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="inline-flex min-h-11 items-center justify-center rounded-xl bg-primary px-5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
           >
             Try again
           </button>
           <a
             href="/"
-            className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+            className="inline-flex min-h-11 items-center justify-center rounded-xl border border-input bg-background px-5 text-sm font-semibold text-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
           >
             Go home
           </a>
