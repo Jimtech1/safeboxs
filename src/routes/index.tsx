@@ -24,7 +24,7 @@ const heroSlides = [
   { eyebrow: "Withdraw Anytime", title: ["Need cash?", "Withdraw.", "Anywhere.", "Instantly."], desc: "Visit any SafeBox agent. Verify with OTP, paper card, or fingerprint. Walk out with your money.", chips: ["OTP Verified", "No Penalties", "Same Day Cash"], cta: { to: "/register" as const, label: "Start Saving Today" } },
   { eyebrow: "Transaction History", title: ["Every kobo.", "Tracked.", "Receipted.", "Yours."], desc: "Every deposit and withdrawal is logged and timestamped. Check your full history any time, any phone.", chips: ["SMS Receipts", "Live Ledger", "Audit Ready"], cta: { to: "/register" as const, label: "Start Saving Today" } },
   { eyebrow: "Float Management", title: ["For agents.", "Top up.", "Withdraw.", "Earn."], desc: "Fund your float from any bank, settle to your account any time. Earn commission on every transaction.", chips: ["USSD Top-up", "Bank Settlement", "Daily Commission"], cta: { to: "/register" as const, label: "Become an Agent" } },
-  { eyebrow: "Security of Funds", title: ["Funds Held By", "Nombank MFB.", "Verified.", "Trusted."], desc: "Your savings are held by our banking partner, Nomba MFB (NDIC Insured) \u2014 never by the agent, never by SafeBox.", chips: ["Banking Partner", "Nomba MFB", "Encrypted"], cta: { to: "/register" as const, label: "Start Saving Today" } },
+  { eyebrow: "Security of Funds", title: ["Funds Held By", "Nombank MFB.", "Verified.", "Trusted."], desc: "Your savings are held by our banking partner, Nomba MFB (NDIC Insured) — never by the agent, never by SafeBox.", chips: ["Banking Partner", "Nomba MFB", "Encrypted"], cta: { to: "/register" as const, label: "Start Saving Today" } },
   { eyebrow: "Monthly Jackpot", title: ["Save more.", "Win.", "₦300,000.", "Monthly."], desc: "One active trader wins ₦300,000 every month. No fees. The more you save, the higher your chances.", chips: ["₦300k Prize", "1 Winner / Month", "Zero Entry Fee"], cta: { to: "/register" as const, label: "Start Saving Today" } },
   { eyebrow: "Group Contribution", title: ["Save together.", "Ajo.", "Esusu.", "Digital."], desc: "Join a market contribution group. Every member, every rotation and every payout tracked by SafeBox.", chips: ["Rotational Payouts", "Target Groups", "Trust Score"], cta: { to: "/register" as const, label: "Join a Group" } },
   { eyebrow: "Trader Dashboard", title: ["Track Your Savings.", "Anytime.", "Anywhere.", "Yours."], desc: "Log in to your personal dashboard. See your balance, view your full transaction history, and request withdrawals with one click.", chips: ["Real-Time Balance", "Transaction History", "Easy Withdrawals"], cta: { to: "/trader/login" as const, label: "Trader Login" } },
@@ -494,7 +494,7 @@ function Landing() {
             <div className="text-sm md:text-base">
               <p className="text-xs uppercase tracking-wide text-primary-foreground/70">Funds Held By</p>
               <p className="font-display text-xl font-bold">Nomba MFB (NDIC Insured)</p>
-              <p className="mt-1 text-primary-foreground/80">Every naira you save is custodied by our banking partner, Nombank MFB \u2014 not by SafeBox and not by your agent.</p>
+              <p className="mt-1 text-primary-foreground/80">Every naira you save is custodied by our banking partner, Nombank MFB — not by SafeBox and not by your agent.</p>
             </div>
           </div>
         </div>
