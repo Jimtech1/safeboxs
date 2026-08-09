@@ -10,6 +10,12 @@ import { getCurrentTrader, updateTrader, changeTraderPin, type Trader } from "@/
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/trader/profile")({
+  head: () => ({ meta: [
+    { title: "My Profile | SafeBox" },
+    { name: "description", content: "Manage your details, bank account, PIN and agent." },
+    { property: "og:title", content: "My Profile | SafeBox" },
+    { property: "og:description", content: "Manage your details, bank account, PIN and agent." },
+  ]}),
   component: TraderProfile,
 });
 

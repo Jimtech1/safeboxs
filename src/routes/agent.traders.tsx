@@ -12,6 +12,12 @@ import { tradersStore, useTraders } from "@/lib/agentStore";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/agent/traders")({
+  head: () => ({ meta: [
+    { title: "My Traders | SafeBox Agent" },
+    { name: "description", content: "Register and manage the traders on your route." },
+    { property: "og:title", content: "My Traders | SafeBox Agent" },
+    { property: "og:description", content: "Register and manage the traders on your route." },
+  ]}),
   component: AgentTraders,
 });
 

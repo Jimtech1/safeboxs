@@ -9,6 +9,12 @@ import { AlertTriangle, Search, Wallet, TrendingUp, ArrowDownToLine } from "luci
 import { agents, floatTransactions, formatNaira, overviewMetrics } from "@/lib/mockData";
 
 export const Route = createFileRoute("/admin/float")({
+  head: () => ({ meta: [
+    { title: "Float Management | SafeBox Admin" },
+    { name: "description", content: "Agent float balances, top-ups, utilisation and low-float alerts." },
+    { property: "og:title", content: "Float Management | SafeBox Admin" },
+    { property: "og:description", content: "Agent float balances, top-ups, utilisation and low-float alerts." },
+  ]}),
   component: FloatPage,
 });
 
@@ -89,7 +95,7 @@ function FloatPage() {
           </div>
         </div>
         <div className="mt-4 overflow-x-auto">
-          <table className="w-full text-sm">
+          <table className="w-full min-w-[620px] text-sm">
             <thead>
               <tr className="text-left text-xs uppercase tracking-wide text-muted-foreground border-b">
                 <th className="py-3 pr-4">Agent</th>
@@ -136,7 +142,7 @@ function FloatPage() {
           </div>
         </div>
         <div className="mt-4 overflow-x-auto">
-          <table className="w-full text-sm">
+          <table className="w-full min-w-[620px] text-sm">
             <thead>
               <tr className="text-left text-xs uppercase tracking-wide text-muted-foreground border-b">
                 <th className="py-3 pr-4">Reference</th>

@@ -7,6 +7,12 @@ import { AlertTriangle, ShieldCheck, FileText } from "lucide-react";
 import { agents, transactions } from "@/lib/mockData";
 
 export const Route = createFileRoute("/admin/compliance")({
+  head: () => ({ meta: [
+    { title: "Compliance | SafeBox Admin" },
+    { name: "description", content: "KYC review, monitoring and audit trails. Funds held by Nombank MFB." },
+    { property: "og:title", content: "Compliance | SafeBox Admin" },
+    { property: "og:description", content: "KYC review, monitoring and audit trails. Funds held by Nombank MFB." },
+  ]}),
   component: Compliance,
 });
 

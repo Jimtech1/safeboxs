@@ -8,6 +8,12 @@ import { currentAgent } from "@/lib/mockData";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/agent/settings")({
+  head: () => ({ meta: [
+    { title: "Agent Settings | SafeBox" },
+    { name: "description", content: "Profile, PIN, device registration, training and support." },
+    { property: "og:title", content: "Agent Settings | SafeBox" },
+    { property: "og:description", content: "Profile, PIN, device registration, training and support." },
+  ]}),
   component: AgentSettings,
 });
 

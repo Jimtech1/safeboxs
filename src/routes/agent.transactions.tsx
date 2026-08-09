@@ -8,6 +8,12 @@ import { transactions, formatNaira } from "@/lib/mockData";
 import { useAgentState } from "@/lib/agentStore";
 
 export const Route = createFileRoute("/agent/transactions")({
+  head: () => ({ meta: [
+    { title: "Agent Transactions | SafeBox" },
+    { name: "description", content: "Every deposit, withdrawal and float movement you processed." },
+    { property: "og:title", content: "Agent Transactions | SafeBox" },
+    { property: "og:description", content: "Every deposit, withdrawal and float movement you processed." },
+  ]}),
   component: TxList,
 });
 

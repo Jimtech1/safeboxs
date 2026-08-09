@@ -10,6 +10,12 @@ import { toast } from "sonner";
 
 
 export const Route = createFileRoute("/trader/")({
+  head: () => ({ meta: [
+    { title: "Trader Dashboard | SafeBox" },
+    { name: "description", content: "See your savings balance, streak and recent transactions." },
+    { property: "og:title", content: "Trader Dashboard | SafeBox" },
+    { property: "og:description", content: "See your savings balance, streak and recent transactions." },
+  ]}),
   component: TraderDashboard,
 });
 

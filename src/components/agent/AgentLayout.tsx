@@ -1,6 +1,7 @@
 import { Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { Home, ArrowLeftRight, Users, Users2, Settings as SettingsIcon } from "lucide-react";
 import { SafeBoxLogo } from "@/components/SafeBoxLogo";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { currentAgent } from "@/lib/mockData";
 
 const tabs = [
@@ -19,10 +20,13 @@ export function AgentLayout() {
     <div className="min-h-screen bg-cream">
       <header className="sticky top-0 z-30 bg-primary text-primary-foreground">
         <div className="mx-auto max-w-2xl px-4 py-3 flex items-center justify-between">
-          <SafeBoxLogo inverted />
+          <Link to="/" aria-label="SafeBox home"><SafeBoxLogo inverted /></Link>
+          <div className="flex items-center gap-2">
+          <ThemeToggle inverted />
           <div className="text-right">
             <p className="text-xs text-primary-foreground/70">Agent</p>
             <p className="text-sm font-semibold">{currentAgent.name.split(" ")[0]}</p>
+          </div>
           </div>
         </div>
       </header>
@@ -31,7 +35,7 @@ export function AgentLayout() {
         <Outlet />
       </main>
 
-      <nav className="fixed bottom-0 inset-x-0 z-40 bg-white border-t shadow-lg">
+      <nav aria-label="Agent navigation" className="fixed bottom-0 inset-x-0 z-40 bg-card border-t shadow-lg">
         <div className="mx-auto max-w-2xl grid grid-cols-5">
           {tabs.map((t) => {
             const active = isActive(t.to, t.exact);
@@ -39,14 +43,14 @@ export function AgentLayout() {
               <Link
                 key={t.to}
                 to={t.to}
-                className={`flex flex-col items-center gap-1 py-3 text-[11px] font-medium transition-colors ${
+                className={`flex min-w-0 flex-col items-center gap-0.5 px-0.5 py-2.5 text-[10px] leading-tight font-medium transition-colors sm:text-[11px] ${
                   active ? "text-primary" : "text-muted-foreground"
                 }`}
               >
-                <div className={`grid h-9 w-9 place-items-center rounded-full transition-colors ${active ? "bg-primary/10" : ""}`}>
+                <div className={`grid h-8 w-8 place-items-center rounded-full transition-colors sm:h-9 sm:w-9 ${active ? "bg-primary/10" : ""}`}>
                   <t.icon className="h-5 w-5" />
                 </div>
-                {t.label}
+                <span className="w-full truncate text-center">{t.label}</span>
               </Link>
             );
           })}

@@ -10,6 +10,12 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGri
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/deposits")({
+  head: () => ({ meta: [
+    { title: "Deposit Analytics | SafeBox Admin" },
+    { name: "description", content: "Deposit volume, fees and float impact across all agents." },
+    { property: "og:title", content: "Deposit Analytics | SafeBox Admin" },
+    { property: "og:description", content: "Deposit volume, fees and float impact across all agents." },
+  ]}),
   component: DepositsAnalytics,
 });
 
@@ -120,7 +126,7 @@ function DepositsAnalytics() {
         <Card className="p-0 overflow-hidden">
           <div className="p-4 border-b"><h3 className="font-semibold">Recent deposit transactions</h3></div>
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+            <table className="w-full min-w-[620px] text-sm">
               <thead className="bg-cream text-xs uppercase text-muted-foreground">
                 <tr>
                   <th className="text-left p-3">Timestamp</th>
@@ -191,7 +197,7 @@ function DepositsAnalytics() {
 
       <Card className="p-0 overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+          <table className="w-full min-w-[620px] text-sm">
             <thead className="bg-cream text-xs uppercase text-muted-foreground">
               <tr>
                 <th className="text-left p-3">Agent</th>

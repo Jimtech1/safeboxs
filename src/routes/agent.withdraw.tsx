@@ -1,32 +1,27 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ArrowUpFromLine, CheckCircle2, MessageSquare, Delete, AlertTriangle, ShieldCheck, RefreshCw } from "lucide-react";
+import { ArrowLeft, ArrowUpFromLine, CheckCircle2, MessageSquare, AlertTriangle, ShieldCheck, RefreshCw } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { traders, formatNaira } from "@/lib/mockData";
 import { agentStore } from "@/lib/agentStore";
 import { toast } from "sonner";
+import { NumPad } from "@/components/agent/NumPad";
 
 export const Route = createFileRoute("/agent/withdraw")({
+  head: () => ({ meta: [
+    { title: "Process Withdrawal | SafeBox Agent" },
+    { name: "description", content: "Verify with OTP and pay out a trader's withdrawal." },
+    { property: "og:title", content: "Process Withdrawal | SafeBox Agent" },
+    { property: "og:description", content: "Verify with OTP and pay out a trader's withdrawal." },
+  ]}),
   component: WithdrawFlow,
 });
 
 const DAILY_LIMIT = 100000;
 
-function NumPad({ onPress, onBack }: { onPress: (s: string) => void; onBack: () => void }) {
-  const keys = ["1","2","3","4","5","6","7","8","9","00","0","del"];
-  return (
-    <div className="grid grid-cols-3 gap-2">
-      {keys.map((k) => (
-        <button key={k} onClick={() => k === "del" ? onBack() : onPress(k)} className="rounded-xl bg-white border-2 border-border py-4 text-xl font-semibold hover:bg-cream active:scale-95 transition">
-          {k === "del" ? <Delete className="h-5 w-5 mx-auto" /> : k}
-        </button>
-      ))}
-    </div>
-  );
-}
 
 function genOTP() {
   return String(Math.floor(100000 + Math.random() * 900000));

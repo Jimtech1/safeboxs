@@ -11,6 +11,12 @@ import { agentStore, useAgentState } from "@/lib/agentStore";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/agent/topup")({
+  head: () => ({ meta: [
+    { title: "Add Money to Float | SafeBox Agent" },
+    { name: "description", content: "Fund your float account from your bank to credit traders." },
+    { property: "og:title", content: "Add Money to Float | SafeBox Agent" },
+    { property: "og:description", content: "Fund your float account from your bank to credit traders." },
+  ]}),
   component: TopUp,
 });
 

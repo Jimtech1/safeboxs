@@ -11,6 +11,12 @@ import { getCurrentTrader, getWithdrawals, requestWithdrawal, cancelWithdrawal, 
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/trader/withdraw")({
+  head: () => ({ meta: [
+    { title: "Request Withdrawal | SafeBox" },
+    { name: "description", content: "Request cash from your agent or a transfer to your bank." },
+    { property: "og:title", content: "Request Withdrawal | SafeBox" },
+    { property: "og:description", content: "Request cash from your agent or a transfer to your bank." },
+  ]}),
   component: TraderWithdraw,
 });
 

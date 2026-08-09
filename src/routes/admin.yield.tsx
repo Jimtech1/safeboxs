@@ -109,7 +109,7 @@ function YieldTreasury() {
           <Badge variant="outline" className="text-xs">{traders.length} provisioned</Badge>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+          <table className="w-full min-w-[620px] text-sm">
             <thead className="bg-cream text-xs uppercase text-muted-foreground">
               <tr>
                 <th className="text-left p-3">Trader</th>
@@ -145,7 +145,7 @@ function YieldTreasury() {
           <p className="text-xs text-muted-foreground">Idle float earns {(NOMBA.agentFloatRate * 100).toFixed(1)}% p.a. via Nomba Treasury</p>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+          <table className="w-full min-w-[620px] text-sm">
             <thead className="bg-cream text-xs uppercase text-muted-foreground">
               <tr>
                 <th className="text-left p-3">Agent</th>
