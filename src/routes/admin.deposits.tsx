@@ -120,7 +120,7 @@ function DepositsAnalytics() {
         <Card className="p-0 overflow-hidden">
           <div className="p-4 border-b"><h3 className="font-semibold">Recent deposit transactions</h3></div>
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+            <table className="w-full min-w-[620px] text-sm">
               <thead className="bg-cream text-xs uppercase text-muted-foreground">
                 <tr>
                   <th className="text-left p-3">Timestamp</th>
@@ -191,7 +191,7 @@ function DepositsAnalytics() {
 
       <Card className="p-0 overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+          <table className="w-full min-w-[620px] text-sm">
             <thead className="bg-cream text-xs uppercase text-muted-foreground">
               <tr>
                 <th className="text-left p-3">Agent</th>

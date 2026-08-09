@@ -48,7 +48,7 @@ function TxPage() {
         </div>
 
         <div className="mt-4 overflow-x-auto">
-          <table className="w-full text-sm">
+          <table className="w-full min-w-[620px] text-sm">
             <thead>
               <tr className="text-left text-xs uppercase tracking-wide text-muted-foreground border-b">
                 <th className="py-3 pr-4">Tx ID</th>
