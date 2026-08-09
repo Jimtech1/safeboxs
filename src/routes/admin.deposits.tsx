@@ -10,6 +10,12 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGri
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/deposits")({
+  head: () => ({ meta: [
+    { title: "Deposit Analytics | SafeBox Admin" },
+    { name: "description", content: "Deposit volume, fees and float impact across all agents." },
+    { property: "og:title", content: "Deposit Analytics | SafeBox Admin" },
+    { property: "og:description", content: "Deposit volume, fees and float impact across all agents." },
+  ]}),
   component: DepositsAnalytics,
 });
 

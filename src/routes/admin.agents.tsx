@@ -8,6 +8,12 @@ import { Search, UserPlus } from "lucide-react";
 import { agents, formatNaira, principals } from "@/lib/mockData";
 
 export const Route = createFileRoute("/admin/agents")({
+  head: () => ({ meta: [
+    { title: "Agent Management | SafeBox Admin" },
+    { name: "description", content: "Manage SafeBox field agents, status and float balances." },
+    { property: "og:title", content: "Agent Management | SafeBox Admin" },
+    { property: "og:description", content: "Manage SafeBox field agents, status and float balances." },
+  ]}),
   component: AgentsPage,
 });
 

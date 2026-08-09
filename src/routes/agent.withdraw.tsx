@@ -11,6 +11,12 @@ import { toast } from "sonner";
 import { NumPad } from "@/components/agent/NumPad";
 
 export const Route = createFileRoute("/agent/withdraw")({
+  head: () => ({ meta: [
+    { title: "Process Withdrawal | SafeBox Agent" },
+    { name: "description", content: "Verify with OTP and pay out a trader"s withdrawal." },
+    { property: "og:title", content: "Process Withdrawal | SafeBox Agent" },
+    { property: "og:description", content: "Verify with OTP and pay out a trader"s withdrawal." },
+  ]}),
   component: WithdrawFlow,
 });
 

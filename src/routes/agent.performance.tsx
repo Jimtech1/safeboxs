@@ -4,6 +4,12 @@ import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, CartesianGri
 import { currentAgent, dailyCommission, formatNaira } from "@/lib/mockData";
 
 export const Route = createFileRoute("/agent/performance")({
+  head: () => ({ meta: [
+    { title: "My Performance | SafeBox Agent" },
+    { name: "description", content: "Collections, commissions and streaks for your route." },
+    { property: "og:title", content: "My Performance | SafeBox Agent" },
+    { property: "og:description", content: "Collections, commissions and streaks for your route." },
+  ]}),
   component: Performance,
 });
 

@@ -7,6 +7,12 @@ import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, 
 import { overviewMetrics, savingsByRegion, txTypeSplit, formatNaira, agents, transactions } from "@/lib/mockData";
 
 export const Route = createFileRoute("/admin/")({
+  head: () => ({ meta: [
+    { title: "Admin Overview | SafeBox" },
+    { name: "description", content: "Platform-wide savings, float and agent performance at a glance." },
+    { property: "og:title", content: "Admin Overview | SafeBox" },
+    { property: "og:description", content: "Platform-wide savings, float and agent performance at a glance." },
+  ]}),
   component: Overview,
 });
 

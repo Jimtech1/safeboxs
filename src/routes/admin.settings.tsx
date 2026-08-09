@@ -6,6 +6,12 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 
 export const Route = createFileRoute("/admin/settings")({
+  head: () => ({ meta: [
+    { title: "Settings | SafeBox Admin" },
+    { name: "description", content: "Configure fees, transaction limits, SMS and team access." },
+    { property: "og:title", content: "Settings | SafeBox Admin" },
+    { property: "og:description", content: "Configure fees, transaction limits, SMS and team access." },
+  ]}),
   component: SettingsPage,
 });
 

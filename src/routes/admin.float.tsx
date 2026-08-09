@@ -9,6 +9,12 @@ import { AlertTriangle, Search, Wallet, TrendingUp, ArrowDownToLine } from "luci
 import { agents, floatTransactions, formatNaira, overviewMetrics } from "@/lib/mockData";
 
 export const Route = createFileRoute("/admin/float")({
+  head: () => ({ meta: [
+    { title: "Float Management | SafeBox Admin" },
+    { name: "description", content: "Agent float balances, top-ups, utilisation and low-float alerts." },
+    { property: "og:title", content: "Float Management | SafeBox Admin" },
+    { property: "og:description", content: "Agent float balances, top-ups, utilisation and low-float alerts." },
+  ]}),
   component: FloatPage,
 });
 

@@ -11,6 +11,12 @@ import { agentStore, useAgentState } from "@/lib/agentStore";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/agent/float-withdraw")({
+  head: () => ({ meta: [
+    { title: "Withdraw Float | SafeBox Agent" },
+    { name: "description", content: "Transfer your float balance to your linked bank account." },
+    { property: "og:title", content: "Withdraw Float | SafeBox Agent" },
+    { property: "og:description", content: "Transfer your float balance to your linked bank account." },
+  ]}),
   component: FloatWithdraw,
 });
 

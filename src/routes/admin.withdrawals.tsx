@@ -10,6 +10,12 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGri
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/withdrawals")({
+  head: () => ({ meta: [
+    { title: "Withdrawal Analytics | SafeBox Admin" },
+    { name: "description", content: "Withdrawal volume, float refunds and fees across all agents." },
+    { property: "og:title", content: "Withdrawal Analytics | SafeBox Admin" },
+    { property: "og:description", content: "Withdrawal volume, float refunds and fees across all agents." },
+  ]}),
   component: WithdrawalsAnalytics,
 });
 

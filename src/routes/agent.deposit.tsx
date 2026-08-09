@@ -11,6 +11,12 @@ import { toast } from "sonner";
 import { NumPad } from "@/components/agent/NumPad";
 
 export const Route = createFileRoute("/agent/deposit")({
+  head: () => ({ meta: [
+    { title: "Record Deposit | SafeBox Agent" },
+    { name: "description", content: "Collect a trader"s daily savings and credit their account instantly." },
+    { property: "og:title", content: "Record Deposit | SafeBox Agent" },
+    { property: "og:description", content: "Collect a trader"s daily savings and credit their account instantly." },
+  ]}),
   component: DepositFlow,
 });
 

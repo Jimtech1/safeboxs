@@ -9,6 +9,12 @@ import { getCurrentTrader, getTransactions, formatNGN, type TraderTxn } from "@/
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/trader/transactions")({
+  head: () => ({ meta: [
+    { title: "My Transactions | SafeBox" },
+    { name: "description", content: "Every deposit and withdrawal on your savings account." },
+    { property: "og:title", content: "My Transactions | SafeBox" },
+    { property: "og:description", content: "Every deposit and withdrawal on your savings account." },
+  ]}),
   component: TraderTransactions,
 });
 

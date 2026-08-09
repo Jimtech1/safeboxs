@@ -8,6 +8,12 @@ import { Search, Download } from "lucide-react";
 import { traders, formatNaira, markets } from "@/lib/mockData";
 
 export const Route = createFileRoute("/admin/traders")({
+  head: () => ({ meta: [
+    { title: "Trader Management | SafeBox Admin" },
+    { name: "description", content: "Search, review and manage trader savings accounts." },
+    { property: "og:title", content: "Trader Management | SafeBox Admin" },
+    { property: "og:description", content: "Search, review and manage trader savings accounts." },
+  ]}),
   component: TradersPage,
 });
 

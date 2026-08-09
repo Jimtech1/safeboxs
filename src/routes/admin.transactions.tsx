@@ -8,6 +8,12 @@ import { Search, Download, Check, X } from "lucide-react";
 import { transactions, formatNaira } from "@/lib/mockData";
 
 export const Route = createFileRoute("/admin/transactions")({
+  head: () => ({ meta: [
+    { title: "Transactions | SafeBox Admin" },
+    { name: "description", content: "Full ledger of deposits, withdrawals and group contributions." },
+    { property: "og:title", content: "Transactions | SafeBox Admin" },
+    { property: "og:description", content: "Full ledger of deposits, withdrawals and group contributions." },
+  ]}),
   component: TxPage,
 });
 

@@ -7,6 +7,12 @@ import { Input } from "@/components/ui/input";
 import { traders, formatNaira, transactions } from "@/lib/mockData";
 
 export const Route = createFileRoute("/agent/balance")({
+  head: () => ({ meta: [
+    { title: "Float Balance | SafeBox Agent" },
+    { name: "description", content: "Track your float capital, usage and refunds." },
+    { property: "og:title", content: "Float Balance | SafeBox Agent" },
+    { property: "og:description", content: "Track your float capital, usage and refunds." },
+  ]}),
   component: BalanceFlow,
 });
 
