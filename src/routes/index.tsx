@@ -24,7 +24,7 @@ const heroSlides = [
   { eyebrow: "Withdraw Anytime", title: ["Need cash?", "Withdraw.", "Anywhere.", "Instantly."], desc: "Visit any SafeBox agent. Verify with OTP, paper card, or fingerprint. Walk out with your money.", chips: ["OTP Verified", "No Penalties", "Same Day Cash"], cta: { to: "/register" as const, label: "Start Saving Today" } },
   { eyebrow: "Transaction History", title: ["Every kobo.", "Tracked.", "Receipted.", "Yours."], desc: "Every deposit and withdrawal is logged and timestamped. Check your full history any time, any phone.", chips: ["SMS Receipts", "Live Ledger", "Audit Ready"], cta: { to: "/register" as const, label: "Start Saving Today" } },
   { eyebrow: "Float Management", title: ["For agents.", "Top up.", "Withdraw.", "Earn."], desc: "Fund your float from any bank, settle to your account any time. Earn commission on every transaction.", chips: ["USSD Top-up", "Bank Settlement", "Daily Commission"], cta: { to: "/register" as const, label: "Become an Agent" } },
-  { eyebrow: "Security of Funds", title: ["CBN Compliant.", "Insured.", "Verified.", "Trusted."], desc: "SafeBox operates under CBN Agent Banking Guidelines. Your money is protected at every step.", chips: ["CBN Compliant", "NDIC Coverage", "Encrypted"], cta: { to: "/register" as const, label: "Start Saving Today" } },
+  { eyebrow: "Security of Funds", title: ["Funds Held By", "Nombank MFB.", "Verified.", "Trusted."], desc: "Your savings are held by our banking partner, Nomba MFB (NDIC Insured) \u2014 never by the agent, never by SafeBox.", chips: ["Banking Partner", "Nomba MFB", "Encrypted"], cta: { to: "/register" as const, label: "Start Saving Today" } },
   { eyebrow: "Monthly Jackpot", title: ["Save more.", "Win.", "₦300,000.", "Monthly."], desc: "One active trader wins ₦300,000 every month. No fees. The more you save, the higher your chances.", chips: ["₦300k Prize", "1 Winner / Month", "Zero Entry Fee"], cta: { to: "/register" as const, label: "Start Saving Today" } },
   { eyebrow: "Group Contribution", title: ["Save together.", "Ajo.", "Esusu.", "Digital."], desc: "Join a market contribution group. Every member, every rotation and every payout tracked by SafeBox.", chips: ["Rotational Payouts", "Target Groups", "Trust Score"], cta: { to: "/register" as const, label: "Join a Group" } },
   { eyebrow: "Trader Dashboard", title: ["Track Your Savings.", "Anytime.", "Anywhere.", "Yours."], desc: "Log in to your personal dashboard. See your balance, view your full transaction history, and request withdrawals with one click.", chips: ["Real-Time Balance", "Transaction History", "Easy Withdrawals"], cta: { to: "/trader/login" as const, label: "Trader Login" } },
@@ -34,7 +34,7 @@ const features = [
   { icon: MessageSquare, title: "Instant SMS Receipts", desc: "Every deposit and withdrawal sends an instant SMS to your phone. You always have proof." },
   { icon: TrendingUp, title: "Earn Yield on Savings", desc: "Your savings don't just sit. They grow. Earn up to 10% annually on your balance." },
   { icon: Clock, title: "Withdraw Anytime", desc: "No fixed terms. No penalties. Get your money when you need it." },
-  { icon: ShieldCheck, title: "CBN Compliant", desc: "SafeBox operates under CBN Agent Banking Guidelines. Your savings are protected." },
+  { icon: ShieldCheck, title: "Funds Held By Nombank MFB", desc: "Banking partner: Nomba MFB (NDIC Insured). Your savings sit with the bank, not with SafeBox or the agent." },
   { icon: Phone, title: "No Smartphone Required", desc: "Any phone works. Agents handle the technology. You just save." },
   { icon: Users, title: "5,000+ Agents Nationwide", desc: "Find a SafeBox agent in every major market. We're growing daily." },
 ];
@@ -482,7 +482,7 @@ function Landing() {
         </div>
       </section>
 
-      {/* CBN COMPLIANCE BANNER */}
+      {/* BANKING PARTNER BANNER */}
       <section className="bg-primary text-primary-foreground">
         <div className="mx-auto max-w-7xl px-4 py-10 md:px-8">
           <div className="flex flex-col items-center gap-6 text-center md:flex-row md:text-left">
@@ -491,9 +491,11 @@ function Landing() {
               <div className="grid h-12 w-12 place-items-center rounded-full bg-white/10"><Lock className="h-5 w-5" /></div>
               <div className="grid h-12 w-12 place-items-center rounded-full bg-white/10"><Building2 className="h-5 w-5" /></div>
             </div>
-            <p className="text-sm md:text-base">
-              <span className="font-semibold">SafeBox operates in full compliance</span> with the Central Bank of Nigeria Guidelines for the Operations of Agent Banking (October 2025).
-            </p>
+            <div className="text-sm md:text-base">
+              <p className="text-xs uppercase tracking-wide text-primary-foreground/70">Funds Held By</p>
+              <p className="font-display text-xl font-bold">Nomba MFB (NDIC Insured)</p>
+              <p className="mt-1 text-primary-foreground/80">Every naira you save is custodied by our banking partner, Nombank MFB \u2014 not by SafeBox and not by your agent.</p>
+            </div>
           </div>
         </div>
       </section>

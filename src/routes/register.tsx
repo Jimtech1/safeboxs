@@ -124,7 +124,7 @@ function AgentSignup() {
         <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); setStep(3); toast.success("Application received. We'll call within 24h."); }}>
           <div><Label>Create 4-digit PIN</Label><Input type="password" className="mt-1" maxLength={4} placeholder="••••" required /></div>
           <div><Label>Confirm PIN</Label><Input type="password" className="mt-1" maxLength={4} placeholder="••••" required /></div>
-          <label className="flex items-start gap-2 text-xs"><input type="checkbox" required className="mt-0.5" /> I agree to the SafeBox Terms and CBN agent banking guidelines.</label>
+          <label className="flex items-start gap-2 text-xs"><input type="checkbox" required className="mt-0.5" /> I agree to the SafeBox Terms and our banking partner\u2019s (Nombank MFB) agent banking terms.</label>
           <Button className="w-full h-11 bg-primary hover:bg-primary/90">Submit Application</Button>
         </form>
       )}

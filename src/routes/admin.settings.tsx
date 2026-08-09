@@ -32,7 +32,7 @@ function SettingsPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl md:text-3xl font-bold">Settings</h1>
-        <p className="text-sm text-muted-foreground mt-1">Configure platform fees, CBN limits, SMS, and team access.</p>
+        <p className="text-sm text-muted-foreground mt-1">Configure platform fees, transaction limits, SMS, and team access.</p>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
@@ -43,7 +43,7 @@ function SettingsPage() {
           <Field label="Yield calculation"><select className="border rounded-md px-3 py-2 text-sm w-full"><option>Daily</option><option>Weekly</option><option>Monthly</option></select></Field>
         </Section>
 
-        <Section title="CBN Limits">
+        <Section title="Transaction Limits">
           <Field label="Daily deposit limit (₦)"><Input defaultValue="100,000" /></Field>
           <Field label="Daily withdrawal limit (₦)"><Input defaultValue="100,000" /></Field>
           <Field label="Weekly withdrawal limit (₦)"><Input defaultValue="500,000" /></Field>

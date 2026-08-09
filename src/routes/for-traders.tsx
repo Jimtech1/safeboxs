@@ -16,7 +16,7 @@ export const Route = createFileRoute("/for-traders")({
 });
 
 const benefits = [
-  { icon: ShieldCheck, title: "Your money is protected", desc: "Funds are held by CBN-licensed Microfinance Banks. Never with the agent." },
+  { icon: ShieldCheck, title: "Funds Held By Nombank MFB", desc: "Banking partner: Nomba MFB (NDIC Insured). Your money is never held by the agent." },
   { icon: MessageSquare, title: "Instant SMS receipts", desc: "Every deposit and withdrawal sends an SMS to your phone. Proof always." },
   { icon: TrendingUp, title: "Earn up to 10% yield", desc: "Your savings grow with interest, paid monthly. Even on small balances." },
   { icon: Wallet, title: "Withdraw anytime", desc: "No fixed terms, no penalties. Cash out at any SafeBox agent." },

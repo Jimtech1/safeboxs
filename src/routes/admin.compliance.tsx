@@ -31,7 +31,7 @@ function Compliance() {
         <h1 className="text-2xl md:text-3xl font-bold flex items-center gap-2">
           <ShieldCheck className="h-7 w-7 text-primary" /> Compliance
         </h1>
-        <p className="text-sm text-muted-foreground mt-1">CBN-aligned monitoring, KYC and audit trails.</p>
+        <p className="text-sm text-muted-foreground mt-1">Monitoring, KYC and audit trails. Funds held by Nombank MFB.</p>
       </div>
 
       <Tabs defaultValue="agent-kyc">

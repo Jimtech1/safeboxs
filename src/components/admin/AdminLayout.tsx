@@ -48,7 +48,7 @@ export function AdminLayout() {
           })}
         </nav>
         <div className="px-4 py-4 border-t border-white/10 text-xs text-sidebar-foreground/60">
-          v1.0 • CBN Compliant
+          v1.0 • Funds held by Nombank MFB
         </div>
       </aside>
 

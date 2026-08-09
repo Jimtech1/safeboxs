@@ -10,7 +10,7 @@ export const Route = createFileRoute("/about")({
   component: About,
   head: () => ({ meta: [
     { title: "About SafeBox — Financial Inclusion for Market Traders" },
-    { name: "description", content: "SafeBox is a CBN-compliant digital reconciliation platform helping market traders save daily through trusted agent banking." },
+    { name: "description", content: "SafeBox is a digital reconciliation platform helping market traders save daily through trusted agent banking. Funds held by Nombank MFB." },
   ]}),
 });
 
@@ -23,7 +23,7 @@ function About() {
         <div className="mx-auto max-w-4xl px-4 py-20 text-center md:px-8">
           <p className="text-xs font-semibold uppercase tracking-widest text-accent">About SafeBox</p>
           <h1 className="mt-2 text-4xl md:text-6xl font-bold leading-tight">Banking that meets traders <span className="text-primary">where they are.</span></h1>
-          <p className="mt-5 text-lg text-muted-foreground max-w-2xl mx-auto">SafeBox was built to replace unsafe daily savings collectors with a CBN-compliant, technology-driven agent network. Trusted by traders, partnered with licensed banks.</p>
+          <p className="mt-5 text-lg text-muted-foreground max-w-2xl mx-auto">SafeBox was built to replace unsafe daily savings collectors with a technology-driven agent network. Funds held by our banking partner, Nomba MFB (NDIC Insured).</p>
         </div>
       </section>
 
@@ -40,7 +40,7 @@ function About() {
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             {[
-              { icon: ShieldCheck, t: "Safety first", d: "Funds held by CBN-licensed MFBs." },
+              { icon: ShieldCheck, t: "Funds Held By", d: "Nomba MFB (NDIC Insured) \u2014 our banking partner." },
               { icon: Target, t: "Daily savings", d: "Designed for ₦100 to ₦100,000 daily." },
               { icon: Users, t: "Agent network", d: "5,000+ trained agents in major markets." },
               { icon: Heart, t: "Community-led", d: "Built with traders, not just for them." },
