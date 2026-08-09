@@ -39,14 +39,23 @@ export function Footer() {
             </div>
           ))}
         </div>
-        <div className="mt-12 flex flex-col gap-4 border-t border-white/10 pt-6 md:flex-row md:items-center md:justify-between">
-          <p className="text-xs text-sidebar-foreground/60">© {new Date().getFullYear()} SafeBox. All rights reserved.</p>
-          <div className="flex gap-3">
-            {[MessageCircle, Facebook, Instagram, Linkedin].map((Icon, i) => (
-              <a key={i} href="#" className="grid h-9 w-9 place-items-center rounded-full bg-white/10 hover:bg-gold hover:text-gold-foreground transition">
-                <Icon className="h-4 w-4" />
-              </a>
-            ))}
+        <div className="mt-12 border-t border-white/10 pt-6">
+          <div className="rounded-xl bg-white/5 p-4">
+            <p className="text-xs uppercase tracking-wide text-sidebar-foreground/60">Funds Held By</p>
+            <p className="mt-1 font-display text-base font-semibold">Nomba MFB (NDIC Insured)</p>
+            <p className="mt-2 text-xs leading-relaxed text-sidebar-foreground/60">
+              Savings infrastructure and custodial services are provided by Nombank Microfinance Bank, which is fully licensed by the CBN and insured by the NDIC.
+            </p>
+          </div>
+          <div className="mt-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <p className="text-xs text-sidebar-foreground/60">© {new Date().getFullYear()} SafeBox. All rights reserved.</p>
+            <div className="flex gap-3">
+              {[MessageCircle, Facebook, Instagram, Linkedin].map((Icon, i) => (
+                <a key={i} href="#" aria-label="SafeBox social link" className="grid h-9 w-9 place-items-center rounded-full bg-white/10 hover:bg-gold hover:text-gold-foreground transition">
+                  <Icon className="h-4 w-4" />
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       </div>
