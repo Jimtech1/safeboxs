@@ -40,7 +40,7 @@ function About() {
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             {[
-              { icon: ShieldCheck, t: "Funds Held By", d: "Nomba MFB (NDIC Insured) \u2014 our banking partner." },
+              { icon: ShieldCheck, t: "Funds Held By", d: "Nomba MFB (NDIC Insured) — our banking partner." },
               { icon: Target, t: "Daily savings", d: "Designed for ₦100 to ₦100,000 daily." },
               { icon: Users, t: "Agent network", d: "5,000+ trained agents in major markets." },
               { icon: Heart, t: "Community-led", d: "Built with traders, not just for them." },
