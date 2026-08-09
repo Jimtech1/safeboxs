@@ -12,9 +12,9 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/agent/")({
   head: () => ({ meta: [
     { title: "Agent Home | SafeBox" },
-    { name: "description", content: "Today"s collections, withdrawals and live float balance." },
+    { name: "description", content: "Today's collections, withdrawals and live float balance." },
     { property: "og:title", content: "Agent Home | SafeBox" },
-    { property: "og:description", content: "Today"s collections, withdrawals and live float balance." },
+    { property: "og:description", content: "Today's collections, withdrawals and live float balance." },
   ]}),
   component: AgentHome,
 });

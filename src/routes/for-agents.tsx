@@ -15,10 +15,10 @@ export const Route = createFileRoute("/for-agents")({
 });
 
 const steps = [
-  { n: "01", title: "Top up your float", desc: "Load capital into your dedicated float account from any bank, card, or USSD." },
-  { n: "02", title: "Collect cash from traders", desc: "Take their daily savings. System credits the trader, deducts the same amount from your float." },
-  { n: "03", title: "Keep the cash you collected", desc: "The physical naira in your hand reimburses the float you spent. No end-of-day deposit." },
-  { n: "04", title: "Earn commissions instantly", desc: "₦10 per deposit and ₦15 per withdrawal credited to your wallet in real time." },
+  { n: "01", title: "Top up your float', desc: 'Load capital into your dedicated float account from any bank, card, or USSD." },
+  { n: "02", title: "Collect cash from traders', desc: 'Take their daily savings. System credits the trader, deducts the same amount from your float." },
+  { n: "03", title: "Keep the cash you collected', desc: 'The physical naira in your hand reimburses the float you spent. No end-of-day deposit." },
+  { n: "04", title: "Earn commissions instantly', desc: '₦10 per deposit and ₦15 per withdrawal credited to your wallet in real time." },
 ];
 
 function ForAgents() {
