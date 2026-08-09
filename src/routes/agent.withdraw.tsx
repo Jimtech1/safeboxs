@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ArrowUpFromLine, CheckCircle2, MessageSquare, Delete, AlertTriangle, ShieldCheck, RefreshCw } from "lucide-react";
+import { ArrowLeft, ArrowUpFromLine, CheckCircle2, MessageSquare, AlertTriangle, ShieldCheck, RefreshCw } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
