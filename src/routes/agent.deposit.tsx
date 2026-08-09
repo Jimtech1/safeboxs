@@ -8,27 +8,12 @@ import { Input } from "@/components/ui/input";
 import { traders, formatNaira } from "@/lib/mockData";
 import { agentStore } from "@/lib/agentStore";
 import { toast } from "sonner";
+import { NumPad } from "@/components/agent/NumPad";
 
 export const Route = createFileRoute("/agent/deposit")({
   component: DepositFlow,
 });
 
-function NumPad({ onPress, onBack }: { onPress: (s: string) => void; onBack: () => void }) {
-  const keys = ["1","2","3","4","5","6","7","8","9","00","0","del"];
-  return (
-    <div className="grid grid-cols-3 gap-2">
-      {keys.map((k) => (
-        <button
-          key={k}
-          onClick={() => k === "del" ? onBack() : onPress(k)}
-          className="rounded-xl bg-white border-2 border-border py-4 text-xl font-semibold hover:bg-cream active:scale-95 transition"
-        >
-          {k === "del" ? <Delete className="h-5 w-5 mx-auto" /> : k}
-        </button>
-      ))}
-    </div>
-  );
-}
 
 function DepositFlow() {
   const [step, setStep] = useState<1|2|3|4>(1);
