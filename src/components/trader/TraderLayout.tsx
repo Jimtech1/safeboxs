@@ -2,6 +2,7 @@ import { Link, Outlet, useRouterState, useNavigate } from "@tanstack/react-route
 import { useEffect, useState } from "react";
 import { Home, Receipt, ArrowUpFromLine, PiggyBank, User, LogOut, Bell, Percent, Users2, ShieldCheck } from "lucide-react";
 import { SafeBoxLogo } from "@/components/SafeBoxLogo";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { getCurrentTrader, logoutTrader, type Trader } from "@/lib/mockTraderData";
 import { toast } from "sonner";
 
@@ -73,13 +74,14 @@ export function TraderLayout() {
       </aside>
 
       <div className="md:pl-64">
-        <header className="sticky top-0 z-30 flex items-center justify-between gap-4 border-b bg-white px-4 py-3 md:px-8">
+        <header className="sticky top-0 z-30 flex items-center justify-between gap-4 border-b bg-card px-4 py-3 md:px-8">
           <div>
             <p className="text-sm font-semibold leading-tight">Welcome back, {trader.name.split(" ")[0]}</p>
             <p className="text-xs text-muted-foreground">Last active: {new Date(trader.lastActive).toLocaleString("en-NG", { dateStyle: "medium", timeStyle: "short" })}</p>
           </div>
-          <div className="flex items-center gap-3">
-            <button className="relative grid h-9 w-9 place-items-center rounded-full bg-cream hover:bg-secondary">
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <button aria-label="Notifications" className="relative grid h-11 w-11 place-items-center rounded-full bg-cream hover:bg-secondary">
               <Bell className="h-4 w-4" />
               <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-destructive" />
             </button>

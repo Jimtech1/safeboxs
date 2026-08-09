@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
 import { SafeBoxLogo } from "@/components/SafeBoxLogo";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
 
 export function Navbar() {
@@ -34,16 +35,20 @@ export function Navbar() {
           ))}
         </nav>
         <div className="hidden items-center gap-3 md:flex">
+          <ThemeToggle />
           <Link to="/login"><Button variant="ghost">Trader Login</Button></Link>
           <Link to="/login"><Button variant="outline">Agent Login</Button></Link>
           <Link to="/register"><Button className="bg-gold text-gold-foreground hover:bg-gold/90">Open Account</Button></Link>
         </div>
-        <button className="md:hidden p-2" onClick={() => setOpen(!open)} aria-label="Menu">
-          {open ? <X /> : <Menu />}
-        </button>
+        <div className="flex items-center gap-1 md:hidden">
+          <ThemeToggle />
+          <button className="grid h-11 w-11 place-items-center rounded-full" onClick={() => setOpen(!open)} aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open}>
+            {open ? <X /> : <Menu />}
+          </button>
+        </div>
       </div>
       {open && (
-        <div className="md:hidden border-t bg-white px-4 py-4 space-y-3">
+        <div className="md:hidden border-t bg-card px-4 py-4 space-y-3">
           {links.map((l) => (
             <Link key={l.to} to={l.to} onClick={() => setOpen(false)} className="block py-2 text-foreground/80">{l.label}</Link>
           ))}

@@ -1,6 +1,7 @@
 import { Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { LayoutDashboard, Users, UserCog, ArrowLeftRight, Wallet, ShieldCheck, Settings, Users2, Bell, Search, ArrowDownToLine, ArrowUpFromLine, Percent } from "lucide-react";
 import { SafeBoxLogo } from "@/components/SafeBoxLogo";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { Input } from "@/components/ui/input";
 
 const nav = [
@@ -54,15 +55,16 @@ export function AdminLayout() {
 
       {/* Top header */}
       <div className="md:pl-64">
-        <header className="sticky top-0 z-30 flex items-center justify-between gap-4 border-b bg-white px-4 py-3 md:px-8">
+        <header className="sticky top-0 z-30 flex items-center justify-between gap-4 border-b bg-card px-4 py-3 md:px-8">
           <div className="flex-1 max-w-md hidden sm:block">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input className="pl-9 bg-cream border-0" placeholder="Search traders, agents, transactions…" />
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            <button className="relative grid h-9 w-9 place-items-center rounded-full bg-cream hover:bg-secondary transition">
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <button aria-label="Notifications" className="relative grid h-11 w-11 place-items-center rounded-full bg-cream hover:bg-secondary transition">
               <Bell className="h-4 w-4" />
               <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-destructive" />
             </button>
