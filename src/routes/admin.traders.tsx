@@ -1,11 +1,14 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useMemo, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Search, Download } from "lucide-react";
-import { traders, formatNaira, markets } from "@/lib/mockData";
+import { Search, Download, FileText } from "lucide-react";
+import { markets } from "@/lib/mockData";
+import { useAllTraders } from "@/lib/platformStore";
+import { usePageData, TablePagination, EmptyState, TableSkeleton, useBriefLoading } from "@/components/admin/DataTableShell";
+import { exportCsv, exportPdf } from "@/components/admin/exportData";
 
 export const Route = createFileRoute("/admin/traders")({
   head: () => ({ meta: [
@@ -17,14 +20,25 @@ export const Route = createFileRoute("/admin/traders")({
   component: TradersPage,
 });
 
+const formatNaira = (n: number) => `₦${Math.round(n).toLocaleString("en-NG")}`;
+
 function TradersPage() {
+  const traders = useAllTraders();
+  const loading = useBriefLoading();
   const [q, setQ] = useState("");
   const [market, setMarket] = useState("All");
-  const filtered = traders.filter(
+  const filtered = useMemo(() => traders.filter(
     (t) =>
       (market === "All" || t.market === market) &&
       (q === "" || t.name.toLowerCase().includes(q.toLowerCase()) || t.phone.includes(q) || t.id.toLowerCase().includes(q.toLowerCase())),
-  );
+  ), [traders, market, q]);
+
+  const { page, setPage, pageCount, pageRows } = usePageData(filtered, 15);
+
+  const doExportCsv = () => exportCsv("traders", ["ID", "Name", "Phone", "Market", "Balance", "Total Saved", "Status", "KYC"],
+    filtered.map((t) => [t.id, t.name, t.phone, t.market ?? "", t.balance, t.totalSaved, t.status, t.kycStatus ?? ""]));
+  const doExportPdf = () => exportPdf("Traders", ["ID", "Name", "Phone", "Market", "Balance", "Status"],
+    filtered.map((t) => [t.id, t.name, t.phone, t.market ?? "", formatNaira(t.balance), t.status]));
 
   return (
     <div className="space-y-6">
@@ -33,7 +47,10 @@ function TradersPage() {
           <h1 className="text-2xl md:text-3xl font-bold">Traders</h1>
           <p className="text-sm text-muted-foreground mt-1">{traders.length.toLocaleString()} registered traders across all markets.</p>
         </div>
-        <Button variant="outline"><Download className="h-4 w-4 mr-2" />Export CSV</Button>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={doExportCsv}><Download className="h-4 w-4 mr-2" />Export CSV</Button>
+          <Button variant="outline" onClick={doExportPdf}><FileText className="h-4 w-4 mr-2" />Export PDF</Button>
+        </div>
       </div>
 
       <Card className="p-4">
@@ -48,41 +65,44 @@ function TradersPage() {
           </select>
         </div>
 
-        <div className="mt-4 overflow-x-auto">
-          <table className="w-full min-w-[620px] text-sm">
-            <thead>
-              <tr className="text-left text-xs uppercase tracking-wide text-muted-foreground border-b">
-                <th className="py-3 pr-4">Trader ID</th>
-                <th className="py-3 pr-4">Name</th>
-                <th className="py-3 pr-4">Phone</th>
-                <th className="py-3 pr-4">Market</th>
-                <th className="py-3 pr-4 text-right">Balance</th>
-                <th className="py-3 pr-4 text-right">Total Saved</th>
-                <th className="py-3 pr-4">Last Txn</th>
-                <th className="py-3">Status</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y">
-              {filtered.slice(0, 30).map((t) => (
-                <tr key={t.id} className="hover:bg-cream cursor-pointer">
-                  <td className="py-3 pr-4 font-mono text-xs">{t.id}</td>
-                  <td className="py-3 pr-4 font-medium">{t.name}</td>
-                  <td className="py-3 pr-4">{t.phone}</td>
-                  <td className="py-3 pr-4 text-muted-foreground">{t.market}</td>
-                  <td className="py-3 pr-4 text-right font-semibold">{formatNaira(t.balance)}</td>
-                  <td className="py-3 pr-4 text-right">{formatNaira(t.totalSaved)}</td>
-                  <td className="py-3 pr-4 text-muted-foreground">{t.lastTxn}</td>
-                  <td className="py-3">
-                    <Badge variant={t.status === "Active" ? "default" : "destructive"} className={t.status === "Active" ? "bg-success" : ""}>
-                      {t.status}
-                    </Badge>
-                  </td>
+        {loading ? <TableSkeleton cols={7} /> : (
+          <div className="mt-4 overflow-x-auto">
+            <table className="w-full min-w-[680px] text-sm">
+              <thead>
+                <tr className="text-left text-xs uppercase tracking-wide text-muted-foreground border-b">
+                  <th className="py-3 pr-4">Trader ID</th>
+                  <th className="py-3 pr-4">Name</th>
+                  <th className="py-3 pr-4">Phone</th>
+                  <th className="py-3 pr-4">Market</th>
+                  <th className="py-3 pr-4 text-right">Balance</th>
+                  <th className="py-3 pr-4 text-right">Total Saved</th>
+                  <th className="py-3">Status</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <p className="mt-3 text-xs text-muted-foreground">Showing {Math.min(30, filtered.length)} of {filtered.length}</p>
+              </thead>
+              <tbody className="divide-y">
+                {pageRows.map((t) => (
+                  <tr key={t.id} className="hover:bg-cream cursor-pointer">
+                    <td className="py-3 pr-4 font-mono text-xs">{t.id}</td>
+                    <td className="py-3 pr-4 font-medium">
+                      <Link to="/admin/traders/$id" params={{ id: t.id }} className="text-primary hover:underline">{t.name}</Link>
+                    </td>
+                    <td className="py-3 pr-4">{t.phone}</td>
+                    <td className="py-3 pr-4 text-muted-foreground">{t.market ?? "—"}</td>
+                    <td className="py-3 pr-4 text-right font-semibold">{formatNaira(t.balance)}</td>
+                    <td className="py-3 pr-4 text-right">{formatNaira(t.totalSaved)}</td>
+                    <td className="py-3">
+                      <Badge variant={t.status === "active" ? "default" : "destructive"} className={t.status === "active" ? "bg-success" : ""}>
+                        {t.status}
+                      </Badge>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {filtered.length === 0 && <EmptyState label="No traders match your filters" />}
+          </div>
+        )}
+        <TablePagination page={page} pageCount={pageCount} onChange={setPage} total={filtered.length} />
       </Card>
     </div>
   );

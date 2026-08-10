@@ -1,9 +1,14 @@
 import { Link, Outlet, useRouterState, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Home, Receipt, ArrowUpFromLine, PiggyBank, User, LogOut, Bell, Percent, Users2, ShieldCheck } from "lucide-react";
+import { Home, Receipt, ArrowUpFromLine, PiggyBank, User, LogOut, Bell, Percent, Users2, ShieldCheck, CheckCheck, Inbox } from "lucide-react";
 import { SafeBoxLogo } from "@/components/SafeBoxLogo";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { getCurrentTrader, logoutTrader, type Trader } from "@/lib/mockTraderData";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import {
+  getCurrentTrader, logoutTrader, getNotifications, unreadNotificationCount,
+  markNotificationRead, markAllNotificationsRead, relativeTime, type Trader, type TraderNotification,
+} from "@/lib/mockTraderData";
 import { toast } from "sonner";
 
 const nav = [
@@ -23,6 +28,8 @@ export function TraderLayout() {
   const path = useRouterState({ select: (s) => s.location.pathname });
   const navigate = useNavigate();
   const [trader, setTrader] = useState<Trader | null>(null);
+  const [notifications, setNotifications] = useState<TraderNotification[]>([]);
+  const [unread, setUnread] = useState(0);
 
   useEffect(() => {
     const t = getCurrentTrader();
@@ -31,7 +38,15 @@ export function TraderLayout() {
       return;
     }
     setTrader(t);
-    const onChange = () => setTrader(getCurrentTrader());
+    const onChange = () => {
+      const cur = getCurrentTrader();
+      setTrader(cur);
+      if (cur) {
+        setNotifications(getNotifications(cur.id));
+        setUnread(unreadNotificationCount(cur.id));
+      }
+    };
+    onChange();
     window.addEventListener("trader-store-change", onChange);
     return () => window.removeEventListener("trader-store-change", onChange);
   }, [navigate]);
@@ -81,12 +96,53 @@ export function TraderLayout() {
           </div>
           <div className="flex items-center gap-2">
             <ThemeToggle />
-            <button aria-label="Notifications" className="relative grid h-11 w-11 place-items-center rounded-full bg-cream hover:bg-secondary">
-              <Bell className="h-4 w-4" />
-              <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-destructive" />
-            </button>
-            <div className="grid h-9 w-9 place-items-center rounded-full bg-primary text-primary-foreground font-semibold text-sm">
-              {trader.name.split(" ").map((p) => p[0]).join("").slice(0, 2)}
+            <Popover>
+              <PopoverTrigger asChild>
+                <button aria-label="Notifications" className="relative grid h-11 w-11 place-items-center rounded-full bg-cream hover:bg-secondary">
+                  <Bell className="h-4 w-4" />
+                  {unread > 0 && <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-destructive" />}
+                </button>
+              </PopoverTrigger>
+              <PopoverContent align="end" className="w-80 p-0 max-h-[70vh] overflow-hidden flex flex-col">
+                <div className="flex items-center justify-between px-4 py-3 border-b">
+                  <p className="font-semibold text-sm">Notifications</p>
+                  {unread > 0 && (
+                    <Button variant="ghost" size="sm" className="h-7 px-2 text-xs" onClick={() => trader && markAllNotificationsRead(trader.id)}>
+                      <CheckCheck className="h-3.5 w-3.5 mr-1" /> Mark all read
+                    </Button>
+                  )}
+                </div>
+                <div className="overflow-y-auto">
+                  {notifications.length === 0 ? (
+                    <div className="p-8 text-center text-sm text-muted-foreground">
+                      <Inbox className="h-8 w-8 mx-auto mb-2" />
+                      No notifications yet.
+                    </div>
+                  ) : (
+                    notifications.map((n) => (
+                      <button
+                        key={n.id}
+                        onClick={() => trader && markNotificationRead(trader.id, n.id)}
+                        className={`w-full text-left px-4 py-3 border-b last:border-0 hover:bg-secondary/50 transition ${!n.read ? "bg-primary/5" : ""}`}
+                      >
+                        <div className="flex items-start gap-2">
+                          {!n.read && <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />}
+                          <div className="min-w-0">
+                            <p className={`text-sm ${!n.read ? "font-semibold" : "font-medium"}`}>{n.title}</p>
+                            <p className="text-xs text-muted-foreground mt-0.5">{n.body}</p>
+                            <p className="text-[11px] text-muted-foreground mt-1">{relativeTime(n.iso)}</p>
+                          </div>
+                        </div>
+                      </button>
+                    ))
+                  )}
+                </div>
+              </PopoverContent>
+            </Popover>
+            <div className="grid h-9 w-9 place-items-center rounded-full bg-primary text-primary-foreground font-semibold text-sm overflow-hidden">
+              {trader.photo
+                ? <img src={trader.photo} alt={trader.name} className="h-full w-full object-cover" />
+                : trader.name.split(" ").map((p) => p[0]).join("").slice(0, 2)}
             </div>
           </div>
         </header>

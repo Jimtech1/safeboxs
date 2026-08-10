@@ -10,7 +10,8 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Plus, Users, HandCoins, Search, ShieldAlert } from "lucide-react";
+import { Plus, Users, HandCoins, Search, ShieldAlert, AlertTriangle } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { GroupCard, GroupStatusBadge } from "@/components/groups/GroupCard";
 import {
   groupStore, useGroupState, formatNGN, computeTrustScore, trustLevelClasses,
@@ -199,6 +200,7 @@ function CreateGroupDialog({ open, onOpenChange, agent }: {
 }
 
 function GroupManage({ group, traders }: { group: SavingsGroup; traders: { id: string; name: string; phone: string }[] }) {
+  const agentForFloat = useCurrentAgentRecord();
   const [memberId, setMemberId] = useState("");
   const [amount, setAmount] = useState(String(group.contributionAmount));
   const [addTraderId, setAddTraderId] = useState("");
@@ -266,7 +268,20 @@ function GroupManage({ group, traders }: { group: SavingsGroup; traders: { id: s
             <Label>Amount (₦)</Label>
             <Input className="mt-1" type="number" value={amount} onChange={(e) => setAmount(e.target.value)} />
           </div>
-          <Button className="w-full bg-primary hover:bg-primary/90" onClick={collect} disabled={!memberId}>
+          {agentForFloat && Number(amount) > agentForFloat.floatBalance && Number(amount) > 0 && (
+            <div className="flex items-start gap-2 rounded-lg bg-destructive/10 text-destructive p-3 text-sm">
+              <AlertTriangle className="h-4 w-4 mt-0.5 shrink-0" />
+              <div>
+                <p>Insufficient float — you need {formatNGN(Number(amount) - agentForFloat.floatBalance)} more.</p>
+                <Link to="/agent/topup" className="underline font-medium">Top up float</Link>
+              </div>
+            </div>
+          )}
+          <Button
+            className="w-full bg-primary hover:bg-primary/90"
+            onClick={collect}
+            disabled={!memberId || (!!agentForFloat && Number(amount) > agentForFloat.floatBalance)}
+          >
             <HandCoins className="h-4 w-4 mr-2" /> Record cash contribution
           </Button>
           <p className="text-xs text-muted-foreground">

@@ -9,6 +9,7 @@ import { traders, formatNaira } from "@/lib/mockData";
 import { agentStore } from "@/lib/agentStore";
 import { toast } from "sonner";
 import { NumPad } from "@/components/agent/NumPad";
+import { TxnReceipt, type TxnReceiptData } from "@/components/agent/TxnReceipt";
 
 export const Route = createFileRoute("/agent/withdraw")({
   head: () => ({ meta: [
@@ -35,13 +36,14 @@ function WithdrawFlow() {
   const [generatedOtp, setGeneratedOtp] = useState("");
   const [otpInput, setOtpInput] = useState("");
   const [otpError, setOtpError] = useState("");
+  const [receipt, setReceipt] = useState<TxnReceiptData | null>(null);
   const navigate = useNavigate();
   const trader = traders.find((t) => t.phone === phone) ?? traders[0];
   const amt = Number(amount || 0);
   const exceedsBalance = amt > trader.balance;
   const exceedsLimit = amt > DAILY_LIMIT;
   const newBalance = trader.balance - amt;
-  const reset = () => { setStep(1); setPhone(""); setAmount(""); setOtp(""); setGeneratedOtp(""); setOtpInput(""); setOtpError(""); };
+  const reset = () => { setStep(1); setPhone(""); setAmount(""); setOtp(""); setGeneratedOtp(""); setOtpInput(""); setOtpError(""); setReceipt(null); };
 
   // Generate OTP when entering step 3
   useEffect(() => {
@@ -179,31 +181,44 @@ function WithdrawFlow() {
                 <div className="flex justify-between"><span className="text-muted-foreground">New balance</span><span className="font-bold">{formatNaira(newBalance)}</span></div>
               </div>
               <p className="text-xs text-muted-foreground text-center">Disburse cash to trader before confirming. Your float will be refunded by the same amount.</p>
-              <Button className="w-full h-12 bg-destructive hover:bg-destructive/90" onClick={() => { agentStore.recordWithdrawal(amt, { name: trader.name, phone: trader.phone }); setStep(5); toast.success(`SafeBox SMS: ${trader.name.split(" ")[0]}, ${formatNaira(amt)} withdrawn. New balance: ${formatNaira(newBalance)}.`, { duration: 7000 }); }}>
+              <Button className="w-full h-12 bg-destructive hover:bg-destructive/90" onClick={() => {
+                const res = agentStore.recordWithdrawal(amt, { name: trader.name, phone: trader.phone });
+                if ("error" in res) { toast.error(res.error); return; }
+                setReceipt({
+                  txnId: `TX-${Date.now().toString().slice(-7)}`,
+                  kind: "Withdrawal",
+                  traderName: trader.name,
+                  traderPhone: trader.phone,
+                  amount: amt,
+                  fee: 90,
+                  floatAfter: res.floatBalance,
+                  timestamp: new Date().toLocaleString("en-NG", { dateStyle: "medium", timeStyle: "short" }),
+                });
+                setStep(5);
+                toast.success(`SafeBox SMS: ${trader.name.split(" ")[0]}, ${formatNaira(amt)} withdrawn. New balance: ${formatNaira(newBalance)}.`, { duration: 7000 });
+              }}>
                 Process Withdrawal
               </Button>
             </Card>
           )}
 
-          {step === 5 && (
-            <Card className="p-6 text-center space-y-4">
-              <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="mx-auto grid h-20 w-20 place-items-center rounded-full bg-success/15 text-success">
-                <CheckCircle2 className="h-10 w-10" />
-              </motion.div>
-              <div>
-                <h3 className="font-display text-2xl font-bold">Withdrawal Successful</h3>
-                <p className="text-sm text-muted-foreground mt-1">{formatNaira(amt)} disbursed to {trader.name}</p>
-              </div>
-              <div className="flex items-center justify-center gap-2 text-xs text-success"><MessageSquare className="h-4 w-4" /> SMS receipt sent</div>
-              <div className="rounded-lg bg-cream p-3">
-                <p className="text-xs text-muted-foreground">Trader's new balance</p>
-                <p className="font-display text-xl font-bold text-primary">{formatNaira(newBalance)}</p>
-              </div>
-              <div className="grid grid-cols-2 gap-2">
+          {step === 5 && receipt && (
+            <div className="space-y-4">
+              <Card className="p-6 text-center space-y-4 print:hidden">
+                <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="mx-auto grid h-20 w-20 place-items-center rounded-full bg-success/15 text-success">
+                  <CheckCircle2 className="h-10 w-10" />
+                </motion.div>
+                <div>
+                  <h3 className="font-display text-2xl font-bold">Withdrawal Successful</h3>
+                  <p className="text-sm text-muted-foreground mt-1">{formatNaira(amt)} disbursed to {trader.name}</p>
+                </div>
+              </Card>
+              <TxnReceipt data={receipt} />
+              <div className="grid grid-cols-2 gap-2 print:hidden">
                 <Button variant="outline" onClick={reset}>New Withdrawal</Button>
                 <Button className="bg-primary hover:bg-primary/90" onClick={() => navigate({ to: "/agent" })}>Home</Button>
               </div>
-            </Card>
+            </div>
           )}
         </motion.div>
       </AnimatePresence>

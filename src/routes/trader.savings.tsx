@@ -5,12 +5,19 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
+import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, Trash2, Pencil, Target, ShieldCheck, ArrowRight, PiggyBank } from "lucide-react";
 import {
-  getCurrentTrader, getGoals, upsertGoal, deleteGoal, addToGoal, formatNGN,
-  SAVINGS_PRODUCTS, getSavingsProduct, type Goal, type SavingsProductId,
+  AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription,
+  AlertDialogFooter, AlertDialogCancel, AlertDialogAction,
+} from "@/components/ui/alert-dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Plus, Trash2, Pencil, Target, ShieldCheck, ArrowRight, PiggyBank, Wallet, Clock, Minus } from "lucide-react";
+import {
+  getCurrentTrader, getGoals, upsertGoal, deleteGoal, addToGoal, formatNGN, withdrawFromGoal,
+  SAVINGS_PRODUCTS, getSavingsProduct, getPlacements, createPlacement, closePlacement,
+  earlyExitPreview, projectedReturn, PRODUCT_TERMS,
+  type Goal, type SavingsProductId, type Placement,
 } from "@/lib/mockTraderData";
 import { toast } from "sonner";
 
@@ -47,16 +54,42 @@ const productStyles: Record<SavingsProductId, { card: string; chip: string; acce
   },
 };
 
+function daysRemaining(iso: string) {
+  return Math.max(0, Math.ceil((new Date(iso).getTime() - Date.now()) / 86_400_000));
+}
+
 function TraderSavings() {
   const [goals, setGoals] = useState<Goal[]>([]);
+  const [placements, setPlacements] = useState<Placement[]>([]);
   const [traderId, setTraderId] = useState<string>("");
+  const [balance, setBalance] = useState(0);
   const [editing, setEditing] = useState<Goal | null>(null);
   const [isNew, setIsNew] = useState(true);
   const [open, setOpen] = useState(false);
 
+  // Purchase flow state
+  const [purchaseProduct, setPurchaseProduct] = useState<SavingsProductId | null>(null);
+  const [purchaseAmount, setPurchaseAmount] = useState("");
+  const [purchaseTerm, setPurchaseTerm] = useState<number>(0);
+
+  // Early exit state
+  const [exitTarget, setExitTarget] = useState<Placement | null>(null);
+
+  // Goal withdraw state
+  const [withdrawGoal, setWithdrawGoal] = useState<Goal | null>(null);
+  const [withdrawAmount, setWithdrawAmount] = useState("");
+
+  // Goal delete state
+  const [deleteTarget, setDeleteTarget] = useState<Goal | null>(null);
+
   const refresh = () => {
     const t = getCurrentTrader();
-    if (t) { setTraderId(t.id); setGoals(getGoals(t.id)); }
+    if (t) {
+      setTraderId(t.id);
+      setGoals(getGoals(t.id));
+      setPlacements(getPlacements(t.id));
+      setBalance(t.balance);
+    }
   };
   useEffect(() => {
     refresh();
@@ -79,6 +112,52 @@ function TraderSavings() {
     toast.success(`Goal saved in ${getSavingsProduct(editing.product).name}`);
     setOpen(false); setEditing(null); refresh();
   };
+
+  const openPurchase = (productId: SavingsProductId) => {
+    const terms = PRODUCT_TERMS[productId].termDays;
+    setPurchaseProduct(productId);
+    setPurchaseAmount("");
+    setPurchaseTerm(terms[0]);
+  };
+
+  const submitPurchase = () => {
+    if (!purchaseProduct) return;
+    const amount = Number(purchaseAmount);
+    if (!amount || amount <= 0) return toast.error("Enter a valid amount");
+    const res = createPlacement({ productId: purchaseProduct, amount, termDays: purchaseTerm });
+    if ("error" in res) return toast.error(res.error);
+    toast.success(`${formatNGN(amount)} placed in ${res.placement.productName}`);
+    setPurchaseProduct(null);
+    refresh();
+  };
+
+  const submitExit = () => {
+    if (!exitTarget) return;
+    const res = closePlacement(exitTarget.id);
+    if ("error" in res) { toast.error(res.error); setExitTarget(null); return; }
+    toast.success(`Payout of ${formatNGN(res.payout)} credited to your balance`);
+    setExitTarget(null);
+    refresh();
+  };
+
+  const submitGoalWithdraw = () => {
+    if (!withdrawGoal) return;
+    const amount = Number(withdrawAmount);
+    if (!amount || amount <= 0) return toast.error("Enter a valid amount");
+    const res = withdrawFromGoal(traderId, withdrawGoal.id, amount);
+    if ("error" in res) return toast.error(res.error);
+    toast.success(`${formatNGN(amount)} moved back to your balance`);
+    setWithdrawGoal(null); setWithdrawAmount("");
+    refresh();
+  };
+
+  const purchaseProductDef = purchaseProduct ? getSavingsProduct(purchaseProduct) : null;
+  const purchaseAmountNum = Number(purchaseAmount) || 0;
+  const purchaseProjected = purchaseProductDef ? projectedReturn(purchaseAmountNum, purchaseProductDef.rate, purchaseTerm) : 0;
+  const purchasePenaltyPct = purchaseProduct ? PRODUCT_TERMS[purchaseProduct].penaltyPct : 0;
+
+  const exitPreview = exitTarget ? earlyExitPreview(exitTarget) : null;
+  const exitMatured = exitTarget ? new Date(exitTarget.maturesAt).getTime() <= Date.now() : false;
 
   return (
     <div className="space-y-8">
@@ -122,13 +201,53 @@ function TraderSavings() {
                   <Spec label="Early Exit" value={p.earlyExit} />
                 </div>
 
-                <Button onClick={() => startNew(p.id)} className={`mt-4 w-full min-h-11 ${s.btn}`}>
-                  Get Started <ArrowRight className="ml-2 h-4 w-4" />
+                <Button onClick={() => openPurchase(p.id)} className={`mt-4 w-full min-h-11 ${s.btn}`}>
+                  Start saving <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Card>
             );
           })}
         </div>
+      </section>
+
+      {/* Active placements */}
+      <section className="space-y-4">
+        <div className="flex items-center gap-2">
+          <Wallet className="h-4 w-4 text-primary" />
+          <h2 className="font-semibold">Active Placements</h2>
+        </div>
+        {placements.filter((p) => p.status === "Active").length === 0 ? (
+          <Card className="p-6 text-center text-sm text-muted-foreground">
+            You have no active placements yet. Start saving in a product above.
+          </Card>
+        ) : (
+          <div className="grid gap-4 md:grid-cols-2">
+            {placements.filter((p) => p.status === "Active").map((p) => {
+              const preview = earlyExitPreview(p);
+              const remaining = daysRemaining(p.maturesAt);
+              const matured = remaining <= 0;
+              return (
+                <Card key={p.id} className="p-5">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="font-semibold">{p.productName}</p>
+                      <p className="text-xs text-muted-foreground">Placed {formatNGN(p.amount)} · {p.termDays ? `${p.termDays} days` : "Flexible"}</p>
+                    </div>
+                    <Badge variant={matured ? "default" : "secondary"}>{matured ? "Matured" : "Active"}</Badge>
+                  </div>
+                  <div className="mt-3 space-y-1.5 text-sm">
+                    <Spec label="Matures" value={new Date(p.maturesAt).toLocaleDateString("en-NG")} />
+                    <Spec label="Days remaining" value={<span className="inline-flex items-center gap-1"><Clock className="h-3.5 w-3.5" />{remaining}d</span>} />
+                    <Spec label="Accrued value" value={formatNGN(p.amount + preview.accrued)} />
+                  </div>
+                  <Button variant="outline" className="mt-4 w-full min-h-11" onClick={() => setExitTarget(p)}>
+                    {matured ? "Withdraw" : "Withdraw / early exit"}
+                  </Button>
+                </Card>
+              );
+            })}
+          </div>
+        )}
       </section>
 
       {/* Goals */}
@@ -169,7 +288,7 @@ function TraderSavings() {
                     </div>
                     <div className="flex shrink-0 gap-1">
                       <Button size="icon" variant="ghost" aria-label="Edit goal" onClick={() => startEdit(g)}><Pencil className="h-4 w-4" /></Button>
-                      <Button size="icon" variant="ghost" aria-label="Delete goal" onClick={() => { deleteGoal(traderId, g.id); toast.success("Goal deleted"); refresh(); }}>
+                      <Button size="icon" variant="ghost" aria-label="Delete goal" onClick={() => setDeleteTarget(g)}>
                         <Trash2 className="h-4 w-4 text-destructive" />
                       </Button>
                     </div>
@@ -184,6 +303,10 @@ function TraderSavings() {
                       </Button>
                     ))}
                   </div>
+                  <Button variant="ghost" className="mt-2 w-full min-h-11" disabled={g.current <= 0}
+                    onClick={() => { setWithdrawGoal(g); setWithdrawAmount(""); }}>
+                    <Minus className="h-4 w-4 mr-2" />Withdraw from goal
+                  </Button>
                 </Card>
               );
             })}
@@ -191,6 +314,7 @@ function TraderSavings() {
         )}
       </section>
 
+      {/* Create/edit goal dialog */}
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader><DialogTitle>{isNew ? "Create new goal" : "Edit goal"}</DialogTitle></DialogHeader>
@@ -232,6 +356,119 @@ function TraderSavings() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Purchase / start saving dialog */}
+      <Dialog open={!!purchaseProduct} onOpenChange={(v) => !v && setPurchaseProduct(null)}>
+        <DialogContent className="max-w-md">
+          <DialogHeader><DialogTitle>Start saving in {purchaseProductDef?.name}</DialogTitle></DialogHeader>
+          {purchaseProductDef && purchaseProduct && (
+            <div className="space-y-3">
+              <p className="text-xs text-muted-foreground">Available balance: {formatNGN(balance)}</p>
+              <div>
+                <Label>Amount (₦)</Label>
+                <Input className="mt-1" type="number" inputMode="numeric" min={1000} value={purchaseAmount}
+                  onChange={(e) => setPurchaseAmount(e.target.value)} placeholder="e.g. 20000" />
+              </div>
+              {PRODUCT_TERMS[purchaseProduct].termDays.length > 1 || PRODUCT_TERMS[purchaseProduct].termDays[0] > 0 ? (
+                <div>
+                  <Label>Term</Label>
+                  <Select value={String(purchaseTerm)} onValueChange={(v) => setPurchaseTerm(Number(v))}>
+                    <SelectTrigger className="mt-1"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      {PRODUCT_TERMS[purchaseProduct].termDays.map((d) => (
+                        <SelectItem key={d} value={String(d)}>{d} days</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              ) : null}
+              <div className="rounded-xl bg-cream p-3 text-sm space-y-1.5">
+                <Spec label="Lock-in" value={purchaseProductDef.lockIn} />
+                <Spec label="Early-exit penalty" value={purchasePenaltyPct > 0 ? `${purchasePenaltyPct}%` : purchaseProductDef.earlyExit} />
+                <Spec label="Projected return" value={<span className="font-semibold text-success">+{formatNGN(purchaseProjected)}</span>} />
+                <Spec label="Value at maturity" value={<span className="font-semibold">{formatNGN(purchaseAmountNum + purchaseProjected)}</span>} />
+              </div>
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" className="min-h-11" onClick={() => setPurchaseProduct(null)}>Cancel</Button>
+            <Button onClick={submitPurchase} className="min-h-11 bg-primary hover:bg-primary/90">Confirm</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Early exit / withdraw placement alert */}
+      <AlertDialog open={!!exitTarget} onOpenChange={(v) => !v && setExitTarget(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{exitMatured ? "Withdraw matured placement" : "Withdraw before maturity?"}</AlertDialogTitle>
+            <AlertDialogDescription asChild>
+              <div className="space-y-2 text-sm text-foreground">
+                {exitTarget && exitPreview && (
+                  <>
+                    {!exitMatured && (
+                      <p className="text-destructive">
+                        Exiting now applies a {exitTarget.earlyExitPenaltyPct}% penalty ({formatNGN(exitPreview.penalty)}).
+                      </p>
+                    )}
+                    <Spec label="Principal" value={formatNGN(exitTarget.amount)} />
+                    <Spec label="Accrued interest" value={formatNGN(exitPreview.accrued)} />
+                    {!exitMatured && <Spec label="Penalty" value={<span className="text-destructive">-{formatNGN(exitPreview.penalty)}</span>} />}
+                    <Spec label="Net payout" value={<span className="font-semibold text-success">{formatNGN(exitMatured ? exitTarget.amount + exitPreview.accrued : exitPreview.payout)}</span>} />
+                  </>
+                )}
+              </div>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={submitExit}>Confirm withdrawal</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Withdraw from goal dialog */}
+      <Dialog open={!!withdrawGoal} onOpenChange={(v) => !v && setWithdrawGoal(null)}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader><DialogTitle>Withdraw from "{withdrawGoal?.name}"</DialogTitle></DialogHeader>
+          {withdrawGoal && (
+            <div className="space-y-3">
+              <p className="text-xs text-muted-foreground">Available in this goal: {formatNGN(withdrawGoal.current)}</p>
+              <div>
+                <Label>Amount (₦)</Label>
+                <Input className="mt-1" type="number" inputMode="numeric" max={withdrawGoal.current}
+                  value={withdrawAmount} onChange={(e) => setWithdrawAmount(e.target.value)} />
+              </div>
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" className="min-h-11" onClick={() => setWithdrawGoal(null)}>Cancel</Button>
+            <Button onClick={submitGoalWithdraw} className="min-h-11 bg-primary hover:bg-primary/90">Withdraw</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete goal confirm */}
+      <AlertDialog open={!!deleteTarget} onOpenChange={(v) => !v && setDeleteTarget(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete "{deleteTarget?.name}"?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This removes the goal. Any saved funds remain in your available balance and are not lost.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={() => {
+              if (!deleteTarget) return;
+              deleteGoal(traderId, deleteTarget.id);
+              toast.success("Goal deleted");
+              setDeleteTarget(null);
+              refresh();
+            }}>Delete</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
