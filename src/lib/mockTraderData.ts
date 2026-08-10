@@ -668,3 +668,197 @@ export function applyGroupPayout(input: { traderId: string; amount: number; grou
   save(s);
   return t;
 }
+
+// ---------------------------------------------------------------------------
+// Notifications
+// ---------------------------------------------------------------------------
+function ensureNotifications(s: Store, traderId: string) {
+  s.notificationsByTrader = s.notificationsByTrader ?? {};
+  if (!s.notificationsByTrader[traderId]) {
+    const t = s.traders.find((x) => x.id === traderId);
+    s.notificationsByTrader[traderId] = [
+      {
+        id: `NTF_SEED1_${traderId}`, kind: "System", read: false,
+        iso: new Date(Date.now() - 3600_000).toISOString(),
+        title: "Monthly jackpot entries updated",
+        body: "Your consistent saving earned you extra entries into this month's ₦300,000 jackpot draw.",
+      },
+      {
+        id: `NTF_SEED2_${traderId}`, kind: "Interest", read: false,
+        iso: new Date(Date.now() - 86_400_000).toISOString(),
+        title: "Daily interest credited",
+        body: `Interest is accruing daily on your savings. Total earned so far: ${formatNGN(t?.interestEarned ?? 0)}.`,
+      },
+      {
+        id: `NTF_SEED3_${traderId}`, kind: "System", read: true,
+        iso: new Date(Date.now() - 3 * 86_400_000).toISOString(),
+        title: "Funds held by Nombank MFB",
+        body: "Your savings are held in a custodial account with Nombank Microfinance Bank.",
+      },
+    ];
+  }
+  return s.notificationsByTrader[traderId]!;
+}
+
+export function getNotifications(traderId: string): TraderNotification[] {
+  const s = load();
+  const list = ensureNotifications(s, traderId);
+  return list;
+}
+
+export function unreadNotificationCount(traderId: string): number {
+  return getNotifications(traderId).filter((n) => !n.read).length;
+}
+
+export function markNotificationRead(traderId: string, id: string) {
+  const s = load();
+  const list = ensureNotifications(s, traderId);
+  const n = list.find((x) => x.id === id);
+  if (n) { n.read = true; save(s); }
+}
+
+export function markAllNotificationsRead(traderId: string) {
+  const s = load();
+  ensureNotifications(s, traderId).forEach((n) => { n.read = true; });
+  save(s);
+}
+
+export function pushTraderNotification(traderId: string, input: { title: string; body: string; kind?: TraderNotification["kind"] }) {
+  const s = load();
+  ensureNotifications(s, traderId);
+  pushNotificationInternal(s, traderId, { ...input, kind: input.kind ?? "System" });
+  save(s);
+}
+
+// ---------------------------------------------------------------------------
+// Savings product placements (SafeVault / SafeGrowth / SafeLock)
+// ---------------------------------------------------------------------------
+export const PRODUCT_TERMS: Record<SavingsProductId, { termDays: number[]; penaltyPct: number }> = {
+  safevault: { termDays: [0], penaltyPct: 0 },
+  safegrowth: { termDays: [180, 270, 365], penaltyPct: 0 },
+  safelock: { termDays: [30, 90, 180], penaltyPct: 2 },
+};
+
+export function getPlacements(traderId: string): Placement[] {
+  const s = load();
+  return s.placementsByTrader?.[traderId] ?? [];
+}
+
+export function projectedReturn(amount: number, rate: number, termDays: number) {
+  const days = termDays || 365;
+  return Math.round(amount * rate * (days / 365));
+}
+
+export function earlyExitPreview(p: Placement) {
+  const penalty = Math.round(p.amount * (p.earlyExitPenaltyPct / 100));
+  const elapsedDays = Math.max(0, Math.floor((Date.now() - new Date(p.startedAt).getTime()) / 86_400_000));
+  const accrued = Math.round(p.amount * p.rate * (elapsedDays / 365));
+  return { penalty, accrued, payout: Math.max(0, p.amount + accrued - penalty), elapsedDays };
+}
+
+export function createPlacement(input: { productId: SavingsProductId; amount: number; termDays: number }):
+  { placement: Placement } | { error: string } {
+  const s = load();
+  const t = s.traders.find((x) => x.id === s.currentTraderId);
+  if (!t) return { error: "Not signed in" };
+  const product = getSavingsProduct(input.productId);
+  if (input.amount < 1000) return { error: "Minimum placement is ₦1,000" };
+  if (input.amount > t.balance) return { error: "Amount exceeds your available savings balance" };
+  const now = new Date();
+  const placement: Placement = {
+    id: `PLC_${Date.now().toString(36).toUpperCase()}`,
+    productId: product.id,
+    productName: product.name,
+    amount: input.amount,
+    rate: product.rate,
+    termDays: input.termDays,
+    startedAt: now.toISOString(),
+    maturesAt: new Date(now.getTime() + input.termDays * 86_400_000).toISOString(),
+    status: "Active",
+    earlyExitPenaltyPct: PRODUCT_TERMS[product.id].penaltyPct,
+  };
+  t.balance -= input.amount;
+  pushTxn(s, t.id, {
+    id: `TXN_${Date.now().toString(36).toUpperCase()}`,
+    date: now.toISOString(),
+    description: `Moved into ${product.name}${input.termDays ? ` (${input.termDays} days)` : ""}`,
+    amount: input.amount, balanceAfter: t.balance, type: "Withdrawal",
+    status: "Completed", agentName: "SafeBox Treasury",
+  });
+  s.placementsByTrader = s.placementsByTrader ?? {};
+  s.placementsByTrader[t.id] = [placement, ...(s.placementsByTrader[t.id] ?? [])];
+  save(s);
+  return { placement };
+}
+
+export function closePlacement(id: string): { payout: number } | { error: string } {
+  const s = load();
+  const t = s.traders.find((x) => x.id === s.currentTraderId);
+  if (!t) return { error: "Not signed in" };
+  const list = s.placementsByTrader?.[t.id] ?? [];
+  const p = list.find((x) => x.id === id);
+  if (!p || p.status === "Closed") return { error: "Placement not found" };
+  const matured = new Date(p.maturesAt).getTime() <= Date.now();
+  const preview = earlyExitPreview(p);
+  const payout = matured ? p.amount + projectedReturn(p.amount, p.rate, p.termDays) : preview.payout;
+  if (!matured && p.productId === "safegrowth") return { error: "SafeGrowth cannot be exited before maturity" };
+  p.status = "Closed";
+  t.balance += payout;
+  pushTxn(s, t.id, {
+    id: `TXN_${Date.now().toString(36).toUpperCase()}`,
+    date: new Date().toISOString(),
+    description: matured ? `${p.productName} matured` : `${p.productName} early exit (${p.earlyExitPenaltyPct}% penalty)`,
+    amount: payout, balanceAfter: t.balance, type: "Deposit",
+    status: "Completed", agentName: "SafeBox Treasury",
+  });
+  save(s);
+  return { payout };
+}
+
+// ---------------------------------------------------------------------------
+// Goals: withdraw back into the wallet
+// ---------------------------------------------------------------------------
+export function withdrawFromGoal(traderId: string, goalId: string, amount: number): { ok: true } | { error: string } {
+  const s = load();
+  const g = (s.goalsByTrader[traderId] ?? []).find((x) => x.id === goalId);
+  const t = s.traders.find((x) => x.id === traderId);
+  if (!g || !t) return { error: "Goal not found" };
+  if (amount <= 0) return { error: "Enter a valid amount" };
+  if (amount > g.current) return { error: "Amount exceeds the goal balance" };
+  g.current -= amount;
+  save(s);
+  pushTraderNotification(traderId, {
+    kind: "Goal",
+    title: `${formatNGN(amount)} moved out of "${g.name}"`,
+    body: "The amount is back in your available savings balance.",
+  });
+  return { ok: true };
+}
+
+// ---------------------------------------------------------------------------
+// KYC documents / profile media
+// ---------------------------------------------------------------------------
+export function addKycDoc(traderId: string, doc: { kind: KycDoc["kind"]; fileName: string }) {
+  const s = load();
+  const t = s.traders.find((x) => x.id === traderId);
+  if (!t) return { error: "Trader not found" } as const;
+  const entry: KycDoc = {
+    id: `DOC_${Date.now().toString(36).toUpperCase()}`,
+    kind: doc.kind,
+    fileName: sanitizeText(doc.fileName, 80),
+    uploadedAt: new Date().toISOString(),
+    status: "Under review",
+  };
+  t.kycDocs = [entry, ...(t.kycDocs ?? [])].slice(0, 12);
+  if (t.kycStatus === "Tier 1") t.kycStatus = "Pending review";
+  save(s);
+  return { ok: true, doc: entry } as const;
+}
+
+export function removeKycDoc(traderId: string, docId: string) {
+  const s = load();
+  const t = s.traders.find((x) => x.id === traderId);
+  if (!t) return;
+  t.kycDocs = (t.kycDocs ?? []).filter((d) => d.id !== docId);
+  save(s);
+}
