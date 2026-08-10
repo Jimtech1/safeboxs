@@ -109,7 +109,10 @@ export type Trader = {
   photo?: string;
   kycStatus?: "Tier 1" | "Pending review" | "Verified" | "Rejected";
   bankAccount?: { bankName: string; accountNumber: string; accountName: string };
+  nextOfKin?: { name: string; relationship: string; phone: string };
+  kycDocs?: KycDoc[];
   smsAlerts: boolean;
+
   emailAlerts: boolean;
 };
 
