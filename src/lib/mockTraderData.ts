@@ -298,8 +298,11 @@ type Store = {
   txnsByTrader: Record<string, TraderTxn[]>;
   withdrawals: WithdrawalRequest[];
   goalsByTrader: Record<string, Goal[]>;
+  notificationsByTrader?: Record<string, TraderNotification[]>;
+  placementsByTrader?: Record<string, Placement[]>;
   currentTraderId?: string;
 };
+
 
 function defaultStore(): Store {
   const txnsByTrader: Record<string, TraderTxn[]> = {};
