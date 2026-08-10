@@ -51,6 +51,7 @@ import { Route as AdminFloatRouteImport } from './routes/admin.float'
 import { Route as AdminDepositsRouteImport } from './routes/admin.deposits'
 import { Route as AdminComplianceRouteImport } from './routes/admin.compliance'
 import { Route as AdminAgentsRouteImport } from './routes/admin.agents'
+import { Route as AdminAgentsIdRouteImport } from './routes/admin.agents.$id'
 
 const TraderRoute = TraderRouteImport.update({
   id: '/trader',
@@ -262,6 +263,11 @@ const AdminAgentsRoute = AdminAgentsRouteImport.update({
   path: '/agents',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminAgentsIdRoute = AdminAgentsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AdminAgentsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -274,7 +280,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/trader': typeof TraderRouteWithChildren
-  '/admin/agents': typeof AdminAgentsRoute
+  '/admin/agents': typeof AdminAgentsRouteWithChildren
   '/admin/compliance': typeof AdminComplianceRoute
   '/admin/deposits': typeof AdminDepositsRoute
   '/admin/float': typeof AdminFloatRoute
@@ -306,6 +312,7 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AdminIndexRoute
   '/agent/': typeof AgentIndexRoute
   '/trader/': typeof TraderIndexRoute
+  '/admin/agents/$id': typeof AdminAgentsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -315,7 +322,7 @@ export interface FileRoutesByTo {
   '/for-traders': typeof ForTradersRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
-  '/admin/agents': typeof AdminAgentsRoute
+  '/admin/agents': typeof AdminAgentsRouteWithChildren
   '/admin/compliance': typeof AdminComplianceRoute
   '/admin/deposits': typeof AdminDepositsRoute
   '/admin/float': typeof AdminFloatRoute
@@ -347,6 +354,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/agent': typeof AgentIndexRoute
   '/trader': typeof TraderIndexRoute
+  '/admin/agents/$id': typeof AdminAgentsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -360,7 +368,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/trader': typeof TraderRouteWithChildren
-  '/admin/agents': typeof AdminAgentsRoute
+  '/admin/agents': typeof AdminAgentsRouteWithChildren
   '/admin/compliance': typeof AdminComplianceRoute
   '/admin/deposits': typeof AdminDepositsRoute
   '/admin/float': typeof AdminFloatRoute
@@ -392,6 +400,7 @@ export interface FileRoutesById {
   '/admin/': typeof AdminIndexRoute
   '/agent/': typeof AgentIndexRoute
   '/trader/': typeof TraderIndexRoute
+  '/admin/agents/$id': typeof AdminAgentsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -438,6 +447,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/agent/'
     | '/trader/'
+    | '/admin/agents/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -479,6 +489,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/agent'
     | '/trader'
+    | '/admin/agents/$id'
   id:
     | '__root__'
     | '/'
@@ -523,6 +534,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/agent/'
     | '/trader/'
+    | '/admin/agents/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -834,11 +846,30 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAgentsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/agents/$id': {
+      id: '/admin/agents/$id'
+      path: '/$id'
+      fullPath: '/admin/agents/$id'
+      preLoaderRoute: typeof AdminAgentsIdRouteImport
+      parentRoute: typeof AdminAgentsRoute
+    }
   }
 }
 
+interface AdminAgentsRouteChildren {
+  AdminAgentsIdRoute: typeof AdminAgentsIdRoute
+}
+
+const AdminAgentsRouteChildren: AdminAgentsRouteChildren = {
+  AdminAgentsIdRoute: AdminAgentsIdRoute,
+}
+
+const AdminAgentsRouteWithChildren = AdminAgentsRoute._addFileChildren(
+  AdminAgentsRouteChildren,
+)
+
 interface AdminRouteChildren {
-  AdminAgentsRoute: typeof AdminAgentsRoute
+  AdminAgentsRoute: typeof AdminAgentsRouteWithChildren
   AdminComplianceRoute: typeof AdminComplianceRoute
   AdminDepositsRoute: typeof AdminDepositsRoute
   AdminFloatRoute: typeof AdminFloatRoute
@@ -852,7 +883,7 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
-  AdminAgentsRoute: AdminAgentsRoute,
+  AdminAgentsRoute: AdminAgentsRouteWithChildren,
   AdminComplianceRoute: AdminComplianceRoute,
   AdminDepositsRoute: AdminDepositsRoute,
   AdminFloatRoute: AdminFloatRoute,
