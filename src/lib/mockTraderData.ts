@@ -459,7 +459,36 @@ export function changeTraderPin(currentPin: string, newPin: string): { ok: true 
 // ---------- Agent-driven mutations (shared with the agent dashboard) ----------
 function pushTxn(s: Store, traderId: string, txn: TraderTxn) {
   s.txnsByTrader[traderId] = [txn, ...(s.txnsByTrader[traderId] ?? [])].slice(0, 200);
+  pushNotificationInternal(s, traderId, {
+    kind: txn.type,
+    title:
+      txn.type === "Deposit" ? `Deposit of ${formatNGN(txn.amount)} received`
+      : txn.type === "Withdrawal" ? `Withdrawal of ${formatNGN(txn.amount)} processed`
+      : `Interest credit of ${formatNGN(txn.amount)}`,
+    body: `${txn.description}. New balance: ${formatNGN(txn.balanceAfter)}.`,
+  });
 }
+
+function pushNotificationInternal(
+  s: Store,
+  traderId: string,
+  input: { title: string; body: string; kind: TraderNotification["kind"] },
+) {
+  s.notificationsByTrader = s.notificationsByTrader ?? {};
+  s.notificationsByTrader[traderId] = [
+    {
+      id: `NTF_${Date.now().toString(36).toUpperCase()}${Math.floor(Math.random() * 100)}`,
+      title: input.title,
+      body: input.body,
+      kind: input.kind,
+      iso: new Date().toISOString(),
+      read: false,
+    },
+    ...(s.notificationsByTrader[traderId] ?? []),
+  ].slice(0, 50);
+}
+
+
 
 export function applyAgentDeposit(input: { traderId: string; amount: number; agentName: string }) {
   const s = load();
