@@ -1,14 +1,15 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ArrowDownToLine, CheckCircle2, MessageSquare } from "lucide-react";
+import { ArrowLeft, ArrowDownToLine, CheckCircle2, AlertTriangle } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { traders, formatNaira } from "@/lib/mockData";
-import { agentStore } from "@/lib/agentStore";
+import { agentStore, useAgentState } from "@/lib/agentStore";
 import { toast } from "sonner";
 import { NumPad } from "@/components/agent/NumPad";
+import { TxnReceipt, type TxnReceiptData } from "@/components/agent/TxnReceipt";
 
 export const Route = createFileRoute("/agent/deposit")({
   head: () => ({ meta: [
@@ -25,12 +26,33 @@ function DepositFlow() {
   const [step, setStep] = useState<1|2|3|4>(1);
   const [phone, setPhone] = useState("");
   const [amount, setAmount] = useState("");
+  const [receipt, setReceipt] = useState<TxnReceiptData | null>(null);
   const navigate = useNavigate();
+  const agentState = useAgentState();
 
   const trader = traders.find((t) => t.phone === phone) ?? traders[0];
-  const newBalance = trader.balance + Number(amount || 0);
+  const amt = Number(amount || 0);
+  const newBalance = trader.balance + amt;
+  const exceedsFloat = amt > agentState.floatBalance;
 
-  const reset = () => { setStep(1); setPhone(""); setAmount(""); };
+  const reset = () => { setStep(1); setPhone(""); setAmount(""); setReceipt(null); };
+
+  const process = () => {
+    const res = agentStore.recordDeposit(amt, { name: trader.name, phone: trader.phone });
+    if ("error" in res) { toast.error(res.error); return; }
+    setReceipt({
+      txnId: `TX-${Date.now().toString().slice(-7)}`,
+      kind: "Deposit",
+      traderName: trader.name,
+      traderPhone: trader.phone,
+      amount: amt,
+      fee: 10,
+      floatAfter: res.floatBalance,
+      timestamp: new Date().toLocaleString("en-NG", { dateStyle: "medium", timeStyle: "short" }),
+    });
+    setStep(4);
+    toast.success(`SafeBox SMS: ${trader.name.split(" ")[0]}, you saved ${formatNaira(amt)}. New balance: ${formatNaira(newBalance)}.`, { duration: 7000 });
+  };
 
   return (
     <div className="space-y-4">
@@ -81,10 +103,19 @@ function DepositFlow() {
               </div>
               <div className="rounded-2xl bg-cream p-6 text-center">
                 <p className="text-xs uppercase tracking-wide text-muted-foreground">Amount</p>
-                <p className="font-display text-4xl font-bold mt-1">{formatNaira(Number(amount || 0))}</p>
+                <p className="font-display text-4xl font-bold mt-1">{formatNaira(amt)}</p>
               </div>
+              {exceedsFloat && amt > 0 && (
+                <div className="flex items-start gap-2 rounded-lg bg-destructive/10 text-destructive p-3 text-sm">
+                  <AlertTriangle className="h-4 w-4 mt-0.5 shrink-0" />
+                  <div>
+                    <p>Insufficient float — you need {formatNaira(amt - agentState.floatBalance)} more.</p>
+                    <Link to="/agent/topup" className="underline font-medium">Top up float</Link>
+                  </div>
+                </div>
+              )}
               <NumPad onPress={(k) => setAmount(amount + k)} onBack={() => setAmount(amount.slice(0, -1))} />
-              <Button disabled={!amount || Number(amount) <= 0} className="w-full h-12 bg-success hover:bg-success/90" onClick={() => setStep(3)}>Confirm Deposit</Button>
+              <Button disabled={!amount || amt <= 0 || exceedsFloat} className="w-full h-12 bg-success hover:bg-success/90" onClick={() => setStep(3)}>Confirm Deposit</Button>
             </Card>
           )}
 
@@ -95,36 +126,41 @@ function DepositFlow() {
                 <Row label="Trader" value={trader.name} />
                 <Row label="Phone" value={trader.phone} />
                 <Row label="Type" value="Deposit" />
-                <Row label="Amount" value={formatNaira(Number(amount))} bold />
+                <Row label="Amount" value={formatNaira(amt)} bold />
                 <Row label="New balance" value={formatNaira(newBalance)} bold />
               </div>
-              <Button className="w-full h-12 bg-success hover:bg-success/90" onClick={() => { agentStore.recordDeposit(Number(amount), { name: trader.name, phone: trader.phone }); setStep(4); toast.success(`SafeBox SMS: ${trader.name.split(" ")[0]}, you saved ${formatNaira(Number(amount))}. New balance: ${formatNaira(newBalance)}.`, { duration: 7000 }); }}>
+              {exceedsFloat && (
+                <div className="flex items-start gap-2 rounded-lg bg-destructive/10 text-destructive p-3 text-sm">
+                  <AlertTriangle className="h-4 w-4 mt-0.5 shrink-0" />
+                  <div>
+                    <p>Insufficient float — you need {formatNaira(amt - agentState.floatBalance)} more.</p>
+                    <Link to="/agent/topup" className="underline font-medium">Top up float</Link>
+                  </div>
+                </div>
+              )}
+              <Button disabled={exceedsFloat} className="w-full h-12 bg-success hover:bg-success/90" onClick={process}>
                 Process Deposit
               </Button>
             </Card>
           )}
 
-          {step === 4 && (
-            <Card className="p-6 text-center space-y-4">
-              <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="mx-auto grid h-20 w-20 place-items-center rounded-full bg-success/15 text-success">
-                <CheckCircle2 className="h-10 w-10" />
-              </motion.div>
-              <div>
-                <h3 className="font-display text-2xl font-bold">Deposit Successful</h3>
-                <p className="text-sm text-muted-foreground mt-1">{formatNaira(Number(amount))} saved for {trader.name}</p>
-              </div>
-              <div className="flex items-center justify-center gap-2 text-xs text-success">
-                <MessageSquare className="h-4 w-4" /> SMS receipt sent
-              </div>
-              <div className="rounded-lg bg-cream p-3">
-                <p className="text-xs text-muted-foreground">New balance</p>
-                <p className="font-display text-xl font-bold text-primary">{formatNaira(newBalance)}</p>
-              </div>
-              <div className="grid grid-cols-2 gap-2">
+          {step === 4 && receipt && (
+            <div className="space-y-4">
+              <Card className="p-6 text-center space-y-4 print:hidden">
+                <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="mx-auto grid h-20 w-20 place-items-center rounded-full bg-success/15 text-success">
+                  <CheckCircle2 className="h-10 w-10" />
+                </motion.div>
+                <div>
+                  <h3 className="font-display text-2xl font-bold">Deposit Successful</h3>
+                  <p className="text-sm text-muted-foreground mt-1">{formatNaira(amt)} saved for {trader.name}</p>
+                </div>
+              </Card>
+              <TxnReceipt data={receipt} />
+              <div className="grid grid-cols-2 gap-2 print:hidden">
                 <Button variant="outline" onClick={reset}>New Deposit</Button>
                 <Button className="bg-primary hover:bg-primary/90" onClick={() => navigate({ to: "/agent" })}>Home</Button>
               </div>
-            </Card>
+            </div>
           )}
         </motion.div>
       </AnimatePresence>
