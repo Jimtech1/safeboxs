@@ -301,7 +301,7 @@ export const platformStore = {
   reset() { commit(defaultState()); },
 
   /** Free-form audit entry so every dashboard action leaves a trail. */
-  audit(action: string, actor?: string) {
+  logAction(action: string, actor?: string) {
     const next = clone();
     logAudit(next, actor ?? this.currentAdmin()?.name ?? this.currentAgent()?.name ?? "System", action);
     commit(next);
