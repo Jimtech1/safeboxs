@@ -300,6 +300,67 @@ export const platformStore = {
   },
   reset() { commit(defaultState()); },
 
+  /** Free-form audit entry so every dashboard action leaves a trail. */
+  audit(action: string, actor?: string) {
+    const next = clone();
+    logAudit(next, actor ?? this.currentAdmin()?.name ?? this.currentAgent()?.name ?? "System", action);
+    commit(next);
+  },
+
+  /** Mock SMS re-send for a ledger transaction (agent receipt flow). */
+  resendSms(txnId: string) {
+    const txn = state.ledger.find((t) => t.id === txnId);
+    const next = clone();
+    logAudit(next, next.agents.find((a) => a.id === next.sessionAgentId)?.name ?? "Agent",
+      `Re-sent SMS receipt for ${txnId}`);
+    commit(next);
+    return txn ?? null;
+  },
+
+  /** Admin float adjustment (credit or debit an agent's float capital). */
+  adjustAgentFloat(agentId: string, delta: number, reason: string) {
+    const next = clone();
+    const agent = next.agents.find((a) => a.id === agentId);
+    if (!agent) return { error: "Agent not found" } as const;
+    if (!Number.isFinite(delta) || delta === 0) return { error: "Enter an adjustment amount" } as const;
+    if (agent.floatBalance + delta < 0) return { error: "Adjustment would make float negative" } as const;
+    agent.floatBalance += delta;
+    agent.floatCapacity = Math.max(agent.floatCapacity, agent.floatBalance);
+    next.ledger = [{
+      id: newId(delta > 0 ? "FL" : "FL"), agentId: agent.id, agentName: agent.name,
+      kind: delta > 0 ? ("FloatTopup" as const) : ("FloatWithdraw" as const),
+      amount: Math.abs(delta), channel: "Admin adjustment", reference: sanitizeText(reason, 80),
+      status: "Successful" as const, ...nowStamp(), floatAfter: agent.floatBalance,
+    }, ...next.ledger].slice(0, 500);
+    logAudit(next, this.currentAdmin()?.name ?? "Admin",
+      `${delta > 0 ? "Credited" : "Debited"} ₦${Math.abs(delta).toLocaleString()} float for ${agent.name} — ${sanitizeText(reason, 80)}`);
+    commit(next);
+    return { ok: true, floatBalance: agent.floatBalance } as const;
+  },
+
+  updateAdmin(id: string, patch: { name?: string; role?: AdminUser["role"]; email?: string }) {
+    const next = clone();
+    const a = next.admins.find((x) => x.id === id);
+    if (!a) return { error: "Admin not found" } as const;
+    if (patch.email && !isValidEmail(patch.email)) return { error: "Enter a valid email address" } as const;
+    if (patch.name) a.name = sanitizeText(patch.name, 60);
+    if (patch.email) a.email = patch.email.trim().toLowerCase();
+    if (patch.role) a.role = patch.role;
+    logAudit(next, this.currentAdmin()?.name ?? "Admin", `Updated team member ${a.name}`);
+    commit(next);
+    return { ok: true } as const;
+  },
+
+  sendTestSms(to: string) {
+    const phone = normalizePhone(to);
+    if (!isValidPhone(phone)) return { error: "Enter an 11-digit phone number" } as const;
+    const next = clone();
+    logAudit(next, this.currentAdmin()?.name ?? "Admin", `Sent test SMS to ${phone}`);
+    commit(next);
+    return { ok: true, phone } as const;
+  },
+
+
   // ---------- Agent auth ----------
   currentAgent(): AgentRecord | null {
     if (!state.sessionAgentId) return null;
