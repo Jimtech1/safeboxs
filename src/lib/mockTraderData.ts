@@ -76,7 +76,38 @@ export const SAVINGS_PRODUCTS: SavingsProduct[] = [
 export const getSavingsProduct = (id?: SavingsProductId): SavingsProduct =>
   SAVINGS_PRODUCTS.find((p) => p.id === id) ?? SAVINGS_PRODUCTS[0];
 
+export type KycDoc = {
+  id: string;
+  kind: "NIN slip" | "Passport photo" | "Utility bill" | "Shop photo" | "Other";
+  fileName: string;
+  uploadedAt: string;
+  status: "Uploaded" | "Under review" | "Verified" | "Rejected";
+};
+
+export type TraderNotification = {
+  id: string;
+  title: string;
+  body: string;
+  iso: string;
+  read: boolean;
+  kind: "Deposit" | "Withdrawal" | "Interest" | "System" | "Goal";
+};
+
+export type Placement = {
+  id: string;
+  productId: SavingsProductId;
+  productName: string;
+  amount: number;
+  rate: number;
+  termDays: number;
+  startedAt: string;
+  maturesAt: string;
+  status: "Active" | "Matured" | "Closed";
+  earlyExitPenaltyPct: number;
+};
+
 export type Goal = {
+
   id: string;
   name: string;
   target: number;
