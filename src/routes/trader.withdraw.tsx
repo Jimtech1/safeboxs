@@ -41,16 +41,37 @@ function TraderWithdraw() {
 
   if (!trader) return null;
 
-  const submit = (e: React.FormEvent) => {
+  const startOtp = (e: React.FormEvent) => {
     e.preventDefault();
     const n = Number(amount);
     if (!n || n <= 0) return toast.error("Enter a valid amount");
-    const result = requestWithdrawal({ amount: n, method, note });
+    if (n > trader.balance) return toast.error("Amount exceeds your available balance");
+    const code = String(Math.floor(100000 + Math.random() * 900000));
+    setOtpCode(code);
+    setOtpInput("");
+    setResendIn(60);
+    setOtpOpen(true);
+    toast.success(`SMS OTP sent to ${trader.phone}: ${code}`, { description: "Demo mode — the code is shown here." });
+  };
+
+  const resendOtp = () => {
+    if (resendIn > 0) return;
+    const code = String(Math.floor(100000 + Math.random() * 900000));
+    setOtpCode(code);
+    setResendIn(60);
+    toast.success(`New OTP sent: ${code}`);
+  };
+
+  const submit = () => {
+    if (otpInput.trim() !== otpCode) return toast.error("Incorrect OTP. Check the SMS and try again.");
+    const result = requestWithdrawal({ amount: Number(amount), method, note });
     if ("error" in result) return toast.error(result.error);
+    setOtpOpen(false);
     setConfirmed(result);
     setAmount(""); setNote("");
     refresh();
   };
+
 
   const active = withdrawals.filter((w) => w.status === "Pending" || w.status === "Processing");
   const past = withdrawals.filter((w) => w.status !== "Pending" && w.status !== "Processing");
