@@ -27,6 +27,18 @@ function TraderWithdraw() {
   const [method, setMethod] = useState<WithdrawalRequest["method"]>("Agent cash pickup");
   const [note, setNote] = useState("");
   const [confirmed, setConfirmed] = useState<WithdrawalRequest | null>(null);
+  const [otpOpen, setOtpOpen] = useState(false);
+  const [otpCode, setOtpCode] = useState("");
+  const [otpInput, setOtpInput] = useState("");
+  const [resendIn, setResendIn] = useState(0);
+  const [cancelTarget, setCancelTarget] = useState<WithdrawalRequest | null>(null);
+
+  useEffect(() => {
+    if (resendIn <= 0) return;
+    const t = setTimeout(() => setResendIn((s) => s - 1), 1000);
+    return () => clearTimeout(t);
+  }, [resendIn]);
+
 
   const refresh = () => {
     const t = getCurrentTrader();
