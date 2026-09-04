@@ -71,11 +71,11 @@ function TraderInterest() {
         <div className="mt-4 h-64">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={ledger}>
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-              <XAxis dataKey="label" stroke="var(--muted-foreground)" fontSize={11} interval={4} />
-              <YAxis stroke="var(--muted-foreground)" fontSize={11} />
-              <Tooltip contentStyle={{ borderRadius: 12, border: "1px solid var(--border)" }} formatter={(v: number) => formatKobo(Number(v))} />
-              <Area type="monotone" dataKey="cumulative" name="Cumulative interest" stroke="var(--primary)" fill="var(--primary)" fillOpacity={0.15} strokeWidth={2} />
+              <CartesianGrid strokeDasharray="3 3" stroke={C["border"]} />
+              <XAxis dataKey="label" stroke={C["muted-foreground"]} fontSize={11} interval={4} />
+              <YAxis stroke={C["muted-foreground"]} fontSize={11} />
+              <Tooltip contentStyle={{ borderRadius: 12, borderColor: C["border"], background: C["card"], color: C["foreground"] }} formatter={(v: number) => formatKobo(Number(v))} />
+              <Area type="monotone" dataKey="cumulative" name="Cumulative interest" stroke={C["primary"]} fill={C["primary"]} fillOpacity={0.15} strokeWidth={2} />
             </AreaChart>
           </ResponsiveContainer>
         </div>

@@ -65,13 +65,13 @@ function YieldTreasury() {
           <div className="mt-4 h-72">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={t.series}>
-                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-                <XAxis dataKey="label" stroke="var(--muted-foreground)" fontSize={11} interval={4} />
-                <YAxis stroke="var(--muted-foreground)" fontSize={11} />
-                <Tooltip contentStyle={{ borderRadius: 12, border: "1px solid var(--border)" }} formatter={(v: number) => formatNaira(Number(v))} />
+                <CartesianGrid strokeDasharray="3 3" stroke={C["border"]} />
+                <XAxis dataKey="label" stroke={C["muted-foreground"]} fontSize={11} interval={4} />
+                <YAxis stroke={C["muted-foreground"]} fontSize={11} />
+                <Tooltip contentStyle={{ borderRadius: 12, borderColor: C["border"], background: C["card"], color: C["foreground"] }} formatter={(v: number) => formatNaira(Number(v))} />
                 <Legend wrapperStyle={{ fontSize: 12 }} />
-                <Area type="monotone" dataKey="gross" name="Gross yield" stroke="var(--gold)" fill="var(--gold)" fillOpacity={0.18} strokeWidth={2} />
-                <Area type="monotone" dataKey="payout" name="Trader interest" stroke="var(--primary)" fill="var(--primary)" fillOpacity={0.15} strokeWidth={2} />
+                <Area type="monotone" dataKey="gross" name="Gross yield" stroke={C["gold"]} fill={C["gold"]} fillOpacity={0.18} strokeWidth={2} />
+                <Area type="monotone" dataKey="payout" name="Trader interest" stroke={C["primary"]} fill={C["primary"]} fillOpacity={0.15} strokeWidth={2} />
               </AreaChart>
             </ResponsiveContainer>
           </div>

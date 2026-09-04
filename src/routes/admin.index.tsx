@@ -32,7 +32,7 @@ const toneBg: Record<string, string> = {
   success: "bg-success/15 text-success",
 };
 
-const PIE_COLORS = ["var(--primary)", "var(--gold)"];
+const PIE_COLORS = [{C["primary"]}, {C["gold"]}];
 
 function Overview() {
   const pendingAgents = agents.filter((a) => a.status === "Pending");
@@ -82,16 +82,16 @@ function Overview() {
           <div className="mt-4 h-72">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={savingsByRegion}>
-                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-                <XAxis dataKey="day" stroke="var(--muted-foreground)" fontSize={12} />
-                <YAxis stroke="var(--muted-foreground)" fontSize={12} />
-                <Tooltip contentStyle={{ borderRadius: 12, border: "1px solid var(--border)" }} />
+                <CartesianGrid strokeDasharray="3 3" stroke={C["border"]} />
+                <XAxis dataKey="day" stroke={C["muted-foreground"]} fontSize={12} />
+                <YAxis stroke={C["muted-foreground"]} fontSize={12} />
+                <Tooltip contentStyle={{ borderRadius: 12, borderColor: C["border"], background: C["card"], color: C["foreground"] }} />
                 <Legend wrapperStyle={{ fontSize: 12 }} />
-                <Line type="monotone" dataKey="Lagos" stroke="var(--primary)" strokeWidth={2} />
-                <Line type="monotone" dataKey="Kano" stroke="var(--gold)" strokeWidth={2} />
-                <Line type="monotone" dataKey="Oyo" stroke="var(--accent)" strokeWidth={2} />
-                <Line type="monotone" dataKey="Rivers" stroke="var(--success)" strokeWidth={2} />
-                <Line type="monotone" dataKey="FCT" stroke="var(--warning)" strokeWidth={2} />
+                <Line type="monotone" dataKey="Lagos" stroke={C["primary"]} strokeWidth={2} />
+                <Line type="monotone" dataKey="Kano" stroke={C["gold"]} strokeWidth={2} />
+                <Line type="monotone" dataKey="Oyo" stroke={C["accent"]} strokeWidth={2} />
+                <Line type="monotone" dataKey="Rivers" stroke={C["success"]} strokeWidth={2} />
+                <Line type="monotone" dataKey="FCT" stroke={C["warning"]} strokeWidth={2} />
               </LineChart>
             </ResponsiveContainer>
           </div>
