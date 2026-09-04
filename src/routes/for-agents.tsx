@@ -80,7 +80,7 @@ function ForAgents() {
                 ))}
               </ul>
             </div>
-            <Card className="p-6 bg-white text-foreground">
+            <Card className="p-6 bg-card text-card-foreground">
               <h3 className="font-display text-xl font-semibold">Apply to be an Agent</h3>
               <p className="mt-1 text-sm text-muted-foreground">Get a callback within 24 hours.</p>
               <div className="mt-5 space-y-3">

@@ -1,3 +1,4 @@
+import { useChartColors } from "@/lib/chartColors";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useMemo } from "react";
 import { Card } from "@/components/ui/card";
@@ -24,6 +25,7 @@ const WITHDRAWAL_FEE_GROSS = 100;
 type Range = "today" | "week" | "month" | "custom";
 
 function WithdrawalsAnalytics() {
+  const C = useChartColors();
   const [range, setRange] = useState<Range>("today");
   const [q, setQ] = useState("");
   const [sort, setSort] = useState<"volume" | "name">("volume");
@@ -112,11 +114,11 @@ function WithdrawalsAnalytics() {
           <div className="h-56">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
+                <CartesianGrid strokeDasharray="3 3" stroke={C["border"]} />
                 <XAxis dataKey="name" />
                 <YAxis />
                 <Tooltip formatter={(v: number) => formatNaira(v)} />
-                <Bar dataKey="amount" fill="#b91c1c" radius={[6, 6, 0, 0]} />
+                <Bar dataKey="amount" fill={C["destructive"]} radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>

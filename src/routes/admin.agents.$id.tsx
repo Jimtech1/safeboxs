@@ -1,3 +1,4 @@
+import { useChartColors } from "@/lib/chartColors";
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Card } from "@/components/ui/card";
@@ -27,6 +28,7 @@ export const Route = createFileRoute("/admin/agents/$id")({
 });
 
 function AgentDetail() {
+  const C = useChartColors();
   const { id } = useParams({ from: "/admin/agents/$id" });
   const state = usePlatform();
   const agent = state.agents.find((a) => a.id === id);
@@ -96,7 +98,7 @@ function AgentDetail() {
               <XAxis dataKey="name" fontSize={11} />
               <YAxis fontSize={11} tickFormatter={(v) => `${v / 1000}k`} />
               <Tooltip formatter={(v: number) => formatNaira(v)} />
-              <Bar dataKey="amount" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="amount" fill={C["primary"]} radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>

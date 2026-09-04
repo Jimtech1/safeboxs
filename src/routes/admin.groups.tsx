@@ -1,3 +1,4 @@
+import { useChartColors } from "@/lib/chartColors";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Card } from "@/components/ui/card";
@@ -33,6 +34,7 @@ export const Route = createFileRoute("/admin/groups")({
 });
 
 function AdminGroups() {
+  const C = useChartColors();
   const state = useGroupState();
   const totals = groupStore.totals();
   const [query, setQuery] = useState("");
@@ -120,8 +122,8 @@ function AdminGroups() {
                   <XAxis dataKey="name" fontSize={11} />
                   <YAxis fontSize={11} tickFormatter={(v) => `${v / 1000}k`} />
                   <Tooltip formatter={(v: number) => formatNGN(v)} />
-                  <Bar dataKey="collected" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="pool" fill="hsl(var(--gold))" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="collected" fill={C["primary"]} radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="pool" fill={C["gold"]} radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>

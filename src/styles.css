@@ -165,7 +165,7 @@
   .bg-hero-gradient {
     background-image: radial-gradient(at 20% 20%, color-mix(in oklab, var(--primary) 18%, transparent) 0px, transparent 50%),
                       radial-gradient(at 80% 0%, color-mix(in oklab, var(--gold) 22%, transparent) 0px, transparent 50%),
-                      linear-gradient(180deg, var(--cream), white);
+                      linear-gradient(180deg, var(--cream), var(--background));
   }
   .text-gradient-gold {
     background: linear-gradient(135deg, var(--gold), color-mix(in oklab, var(--gold) 60%, var(--primary)));

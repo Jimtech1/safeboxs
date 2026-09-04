@@ -1,3 +1,4 @@
+import { useChartColors } from "@/lib/chartColors";
 import { createFileRoute } from "@tanstack/react-router";
 import { Card } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, CartesianGrid } from "recharts";
@@ -33,6 +34,7 @@ const history = Array.from({ length: 6 }, (_, i) => ({
 }));
 
 function Performance() {
+  const C = useChartColors();
   return (
     <div className="space-y-4">
       <h1 className="text-xl font-bold">My Performance</h1>
@@ -62,11 +64,11 @@ function Performance() {
         <div className="h-56 mt-3">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={dailyCommission}>
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-              <XAxis dataKey="day" stroke="var(--muted-foreground)" fontSize={11} />
-              <YAxis stroke="var(--muted-foreground)" fontSize={11} />
-              <Tooltip contentStyle={{ borderRadius: 12, border: "1px solid var(--border)" }} />
-              <Bar dataKey="value" fill="var(--gold)" radius={[8,8,0,0]} />
+              <CartesianGrid strokeDasharray="3 3" stroke={C["border"]} />
+              <XAxis dataKey="day" stroke={C["muted-foreground"]} fontSize={11} />
+              <YAxis stroke={C["muted-foreground"]} fontSize={11} />
+              <Tooltip contentStyle={{ borderRadius: 12, borderColor: C["border"], background: C["card"], color: C["foreground"] }} />
+              <Bar dataKey="value" fill={C["gold"]} radius={[8,8,0,0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>

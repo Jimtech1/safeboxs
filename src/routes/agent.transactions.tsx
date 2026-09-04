@@ -39,7 +39,7 @@ function TxList() {
       <h1 className="text-xl font-bold">My Transactions</h1>
       <div className="grid grid-cols-3 gap-2 rounded-xl bg-secondary p-1">
         {(["today","week","month"] as const).map((t) => (
-          <button key={t} onClick={() => setTab(t)} className={`py-2 rounded-lg text-sm font-medium capitalize transition ${tab === t ? "bg-white shadow text-primary" : "text-muted-foreground"}`}>
+          <button key={t} onClick={() => setTab(t)} className={`py-2 rounded-lg text-sm font-medium capitalize transition ${tab === t ? "bg-card shadow text-primary" : "text-muted-foreground"}`}>
             {t}
           </button>
         ))}
