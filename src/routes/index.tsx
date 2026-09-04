@@ -62,7 +62,7 @@ function Landing() {
       <section className="bg-hero-gradient">
         <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 py-16 md:grid-cols-2 md:px-8 md:py-24">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-white/70 px-3 py-1 text-xs font-medium text-primary">
+            <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-card/80 px-3 py-1 text-xs font-medium text-primary">
               <ShieldCheck className="h-3.5 w-3.5" /> {current.eyebrow}
             </div>
             <AnimatePresence mode="wait">
@@ -84,7 +84,7 @@ function Landing() {
                 </p>
                 <div className="mt-6 flex flex-wrap gap-2">
                   {current.chips.map((p) => (
-                    <span key={p} className="rounded-full bg-white px-3 py-1 text-xs font-medium text-foreground/80 shadow-sm border">
+                    <span key={p} className="rounded-full bg-card px-3 py-1 text-xs font-medium text-foreground/80 shadow-sm border">
                       {p}
                     </span>
                   ))}
@@ -115,7 +115,7 @@ function Landing() {
           <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.7, delay: 0.1 }} className="relative">
             <div className="relative mx-auto h-[460px] sm:h-[500px] md:aspect-square md:h-auto max-w-md">
               {/* Agent + trader card */}
-              <div className="absolute left-0 top-0 md:top-6 w-[72%] rounded-2xl bg-white p-4 md:p-5 shadow-xl border">
+              <div className="absolute left-0 top-0 md:top-6 w-[72%] rounded-2xl bg-card p-4 md:p-5 shadow-xl border">
                 <div className="flex items-center gap-3">
                   <div className="grid h-10 w-10 md:h-12 md:w-12 place-items-center rounded-full bg-primary/10 text-primary"><Users /></div>
                   <div>
@@ -146,7 +146,7 @@ function Landing() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="absolute bottom-0 left-0 md:left-6 w-[92%] md:w-[88%] rounded-2xl bg-white p-4 md:p-5 shadow-xl border"
+                className="absolute bottom-0 left-0 md:left-6 w-[92%] md:w-[88%] rounded-2xl bg-card p-4 md:p-5 shadow-xl border"
               >
                 <div className="flex items-center justify-between">
                   <p className="text-sm font-semibold">Savings growing</p>
@@ -543,7 +543,7 @@ function TraderDemoSection() {
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="e.g. 08012345678"
-                className="w-full h-11 rounded-md border border-input bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full h-11 rounded-md border border-input bg-card px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
               />
               <Button type="submit" className="w-full bg-primary hover:bg-primary/90">Check Balance</Button>
               <p className="text-[11px] text-muted-foreground text-center">Try the demo number <code className="font-mono">08012345678</code></p>

@@ -61,11 +61,11 @@ function AgentsPage() {
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input className="pl-9" placeholder="Search by name, phone, ID…" value={q} onChange={(e) => setQ(e.target.value)} />
           </div>
-          <select className="border rounded-md px-3 text-sm bg-white" value={principal} onChange={(e) => setPrincipal(e.target.value)}>
+          <select className="border rounded-md px-3 text-sm bg-card" value={principal} onChange={(e) => setPrincipal(e.target.value)}>
             <option>All</option>
             {principals.map((p) => <option key={p}>{p}</option>)}
           </select>
-          <select className="border rounded-md px-3 text-sm bg-white" value={status} onChange={(e) => setStatus(e.target.value)}>
+          <select className="border rounded-md px-3 text-sm bg-card" value={status} onChange={(e) => setStatus(e.target.value)}>
             <option>All</option>
             <option>Active</option>
             <option>Pending</option>

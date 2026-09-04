@@ -46,7 +46,7 @@ function TxPage() {
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input className="pl-9" placeholder="Search Tx ID, trader phone, agent…" value={q} onChange={(e) => setQ(e.target.value)} />
           </div>
-          <select className="border rounded-md px-3 text-sm bg-white" value={type} onChange={(e) => setType(e.target.value)}>
+          <select className="border rounded-md px-3 text-sm bg-card" value={type} onChange={(e) => setType(e.target.value)}>
             <option>All</option>
             <option>Deposit</option>
             <option>Withdrawal</option>

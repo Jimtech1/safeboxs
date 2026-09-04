@@ -59,7 +59,7 @@ function TradersPage() {
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input className="pl-9" placeholder="Search by name, phone, ID…" value={q} onChange={(e) => setQ(e.target.value)} />
           </div>
-          <select className="border rounded-md px-3 text-sm bg-white" value={market} onChange={(e) => setMarket(e.target.value)}>
+          <select className="border rounded-md px-3 text-sm bg-card" value={market} onChange={(e) => setMarket(e.target.value)}>
             <option>All</option>
             {markets.map((m) => <option key={m}>{m}</option>)}
           </select>

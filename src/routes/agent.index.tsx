@@ -202,7 +202,7 @@ function Metric({ label, value, sub, tone }: { label: string; value: string; sub
     success: "text-success",
     primary: "text-primary",
     destructive: "text-destructive",
-    gold: "text-gold-foreground",
+    gold: "text-gold",
   }[tone];
   return (
     <div className="flex items-end justify-between gap-2">
