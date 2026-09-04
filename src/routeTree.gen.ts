@@ -51,6 +51,7 @@ import { Route as AdminFloatRouteImport } from './routes/admin.float'
 import { Route as AdminDepositsRouteImport } from './routes/admin.deposits'
 import { Route as AdminComplianceRouteImport } from './routes/admin.compliance'
 import { Route as AdminAgentsRouteImport } from './routes/admin.agents'
+import { Route as AdminTradersIdRouteImport } from './routes/admin.traders.$id'
 import { Route as AdminAgentsIdRouteImport } from './routes/admin.agents.$id'
 
 const TraderRoute = TraderRouteImport.update({
@@ -263,6 +264,11 @@ const AdminAgentsRoute = AdminAgentsRouteImport.update({
   path: '/agents',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminTradersIdRoute = AdminTradersIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AdminTradersRoute,
+} as any)
 const AdminAgentsIdRoute = AdminAgentsIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -286,7 +292,7 @@ export interface FileRoutesByFullPath {
   '/admin/float': typeof AdminFloatRoute
   '/admin/groups': typeof AdminGroupsRoute
   '/admin/settings': typeof AdminSettingsRoute
-  '/admin/traders': typeof AdminTradersRoute
+  '/admin/traders': typeof AdminTradersRouteWithChildren
   '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/withdrawals': typeof AdminWithdrawalsRoute
   '/admin/yield': typeof AdminYieldRoute
@@ -313,6 +319,7 @@ export interface FileRoutesByFullPath {
   '/agent/': typeof AgentIndexRoute
   '/trader/': typeof TraderIndexRoute
   '/admin/agents/$id': typeof AdminAgentsIdRoute
+  '/admin/traders/$id': typeof AdminTradersIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -328,7 +335,7 @@ export interface FileRoutesByTo {
   '/admin/float': typeof AdminFloatRoute
   '/admin/groups': typeof AdminGroupsRoute
   '/admin/settings': typeof AdminSettingsRoute
-  '/admin/traders': typeof AdminTradersRoute
+  '/admin/traders': typeof AdminTradersRouteWithChildren
   '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/withdrawals': typeof AdminWithdrawalsRoute
   '/admin/yield': typeof AdminYieldRoute
@@ -355,6 +362,7 @@ export interface FileRoutesByTo {
   '/agent': typeof AgentIndexRoute
   '/trader': typeof TraderIndexRoute
   '/admin/agents/$id': typeof AdminAgentsIdRoute
+  '/admin/traders/$id': typeof AdminTradersIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -374,7 +382,7 @@ export interface FileRoutesById {
   '/admin/float': typeof AdminFloatRoute
   '/admin/groups': typeof AdminGroupsRoute
   '/admin/settings': typeof AdminSettingsRoute
-  '/admin/traders': typeof AdminTradersRoute
+  '/admin/traders': typeof AdminTradersRouteWithChildren
   '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/withdrawals': typeof AdminWithdrawalsRoute
   '/admin/yield': typeof AdminYieldRoute
@@ -401,6 +409,7 @@ export interface FileRoutesById {
   '/agent/': typeof AgentIndexRoute
   '/trader/': typeof TraderIndexRoute
   '/admin/agents/$id': typeof AdminAgentsIdRoute
+  '/admin/traders/$id': typeof AdminTradersIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -448,6 +457,7 @@ export interface FileRouteTypes {
     | '/agent/'
     | '/trader/'
     | '/admin/agents/$id'
+    | '/admin/traders/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -490,6 +500,7 @@ export interface FileRouteTypes {
     | '/agent'
     | '/trader'
     | '/admin/agents/$id'
+    | '/admin/traders/$id'
   id:
     | '__root__'
     | '/'
@@ -535,6 +546,7 @@ export interface FileRouteTypes {
     | '/agent/'
     | '/trader/'
     | '/admin/agents/$id'
+    | '/admin/traders/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -846,6 +858,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAgentsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/traders/$id': {
+      id: '/admin/traders/$id'
+      path: '/$id'
+      fullPath: '/admin/traders/$id'
+      preLoaderRoute: typeof AdminTradersIdRouteImport
+      parentRoute: typeof AdminTradersRoute
+    }
     '/admin/agents/$id': {
       id: '/admin/agents/$id'
       path: '/$id'
@@ -868,6 +887,18 @@ const AdminAgentsRouteWithChildren = AdminAgentsRoute._addFileChildren(
   AdminAgentsRouteChildren,
 )
 
+interface AdminTradersRouteChildren {
+  AdminTradersIdRoute: typeof AdminTradersIdRoute
+}
+
+const AdminTradersRouteChildren: AdminTradersRouteChildren = {
+  AdminTradersIdRoute: AdminTradersIdRoute,
+}
+
+const AdminTradersRouteWithChildren = AdminTradersRoute._addFileChildren(
+  AdminTradersRouteChildren,
+)
+
 interface AdminRouteChildren {
   AdminAgentsRoute: typeof AdminAgentsRouteWithChildren
   AdminComplianceRoute: typeof AdminComplianceRoute
@@ -875,7 +906,7 @@ interface AdminRouteChildren {
   AdminFloatRoute: typeof AdminFloatRoute
   AdminGroupsRoute: typeof AdminGroupsRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
-  AdminTradersRoute: typeof AdminTradersRoute
+  AdminTradersRoute: typeof AdminTradersRouteWithChildren
   AdminTransactionsRoute: typeof AdminTransactionsRoute
   AdminWithdrawalsRoute: typeof AdminWithdrawalsRoute
   AdminYieldRoute: typeof AdminYieldRoute
@@ -889,7 +920,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminFloatRoute: AdminFloatRoute,
   AdminGroupsRoute: AdminGroupsRoute,
   AdminSettingsRoute: AdminSettingsRoute,
-  AdminTradersRoute: AdminTradersRoute,
+  AdminTradersRoute: AdminTradersRouteWithChildren,
   AdminTransactionsRoute: AdminTransactionsRoute,
   AdminWithdrawalsRoute: AdminWithdrawalsRoute,
   AdminYieldRoute: AdminYieldRoute,
