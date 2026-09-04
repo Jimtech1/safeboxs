@@ -1,3 +1,4 @@
+import { useChartColors } from "@/lib/chartColors";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Card } from "@/components/ui/card";
@@ -33,6 +34,7 @@ export const Route = createFileRoute("/admin/groups")({
 });
 
 function AdminGroups() {
+  const C = useChartColors();
   const state = useGroupState();
   const totals = groupStore.totals();
   const [query, setQuery] = useState("");

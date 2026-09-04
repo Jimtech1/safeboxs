@@ -1,3 +1,4 @@
+import { useChartColors } from "@/lib/chartColors";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
@@ -26,6 +27,7 @@ export const Route = createFileRoute("/trader/interest")({
 });
 
 function TraderInterest() {
+  const C = useChartColors();
   const [trader, setTrader] = useState<Trader | null>(null);
   const [ledger, setLedger] = useState<YieldEntry[]>([]);
 

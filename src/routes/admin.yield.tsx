@@ -1,3 +1,4 @@
+import { useChartColors } from "@/lib/chartColors";
 import { createFileRoute } from "@tanstack/react-router";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -23,6 +24,7 @@ export const Route = createFileRoute("/admin/yield")({
 });
 
 function YieldTreasury() {
+  const C = useChartColors();
   const t = treasurySummary();
   const topTraders = traders.slice(0, 8);
 

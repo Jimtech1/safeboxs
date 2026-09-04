@@ -1,3 +1,4 @@
+import { useChartColors } from "@/lib/chartColors";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -32,9 +33,9 @@ const toneBg: Record<string, string> = {
   success: "bg-success/15 text-success",
 };
 
-const PIE_COLORS = [{C["primary"]}, {C["gold"]}];
 
 function Overview() {
+  const C = useChartColors();
   const pendingAgents = agents.filter((a) => a.status === "Pending");
   const highValue = transactions.filter((t) => t.amount > 50000).slice(0, 4);
 
@@ -105,7 +106,7 @@ function Overview() {
               <PieChart>
                 <Pie data={txTypeSplit} dataKey="value" innerRadius={55} outerRadius={90} paddingAngle={3}>
                   {txTypeSplit.map((_, i) => (
-                    <Cell key={i} fill={PIE_COLORS[i]} />
+                    <Cell key={i} fill={i === 0 ? C["primary"] : C["gold"]} />
                   ))}
                 </Pie>
                 <Tooltip />

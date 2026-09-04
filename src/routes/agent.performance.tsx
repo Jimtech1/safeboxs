@@ -1,3 +1,4 @@
+import { useChartColors } from "@/lib/chartColors";
 import { createFileRoute } from "@tanstack/react-router";
 import { Card } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, CartesianGrid } from "recharts";
@@ -33,6 +34,7 @@ const history = Array.from({ length: 6 }, (_, i) => ({
 }));
 
 function Performance() {
+  const C = useChartColors();
   return (
     <div className="space-y-4">
       <h1 className="text-xl font-bold">My Performance</h1>
