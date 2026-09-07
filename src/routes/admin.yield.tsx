@@ -31,7 +31,7 @@ function YieldTreasury() {
   const cards = [
     { label: "Assets Under Management", value: formatNaira(t.aum), icon: Banknote, tone: "bg-primary/10 text-primary" },
     { label: "Deployed to Treasury", value: formatNaira(t.deployed), icon: Landmark, tone: "bg-accent/10 text-accent" },
-    { label: "Gross Yield / day", value: formatNaira(t.grossDaily), icon: Coins, tone: "bg-gold/15 text-gold-foreground" },
+    { label: "Gross Yield / day", value: formatNaira(t.grossDaily), icon: Coins, tone: "bg-gold/15 text-gold" },
     { label: "Trader Interest / day", value: formatNaira(t.traderPayout), icon: TrendingUp, tone: "bg-success/15 text-success" },
   ];
 

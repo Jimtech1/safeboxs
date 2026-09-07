@@ -93,7 +93,7 @@ function TraderTrust() {
       </Card>
 
       <Card className="p-5 border-gold/40 bg-gold/5">
-        <p className="font-semibold flex items-center gap-2"><AlertTriangle className="h-4 w-4 text-gold-foreground" /> Grow your score faster</p>
+        <p className="font-semibold flex items-center gap-2"><AlertTriangle className="h-4 w-4 text-gold" /> Grow your score faster</p>
         <ul className="mt-3 space-y-2 text-sm text-muted-foreground list-disc pl-5">
           <li>Complete identity verification (KYC) for the full 20 points.</li>
           <li>Contribute on schedule — every logged contribution improves consistency.</li>

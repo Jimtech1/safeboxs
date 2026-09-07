@@ -48,7 +48,7 @@ function AgentHome() {
       </div>
 
       {/* Float capital card */}
-      <Card className="overflow-hidden border-0 bg-gradient-to-br from-primary to-primary/80 text-primary-foreground">
+      <Card className="overflow-hidden border-0 bg-linear-to-br from-primary to-primary/80 text-primary-foreground">
         <div className="p-5">
           <div className="flex items-center justify-between">
             <p className="text-xs uppercase tracking-wide text-primary-foreground/70">Your Float Balance</p>

@@ -31,7 +31,7 @@ function TraderWithdraw() {
   const [otpCode, setOtpCode] = useState("");
   const [otpInput, setOtpInput] = useState("");
   const [resendIn, setResendIn] = useState(0);
-  const [cancelTarget, setCancelTarget] = useState<WithdrawalRequest | null>(null);
+  
 
   useEffect(() => {
     if (resendIn <= 0) return;
@@ -96,7 +96,7 @@ function TraderWithdraw() {
       </div>
 
       <Card className="p-6 max-w-2xl">
-        <form onSubmit={submit} className="space-y-4">
+        <form onSubmit={startOtp} className="space-y-4">
           <div>
             <Label>Amount (₦)</Label>
             <Input className="mt-1" type="number" min={1} max={trader.balance} value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="e.g. 10000" required />
@@ -196,6 +196,34 @@ function TraderWithdraw() {
           </table>
         </div>
       </Card>
+
+      <Dialog open={otpOpen} onOpenChange={setOtpOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Confirm with SMS code</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            <p className="text-sm text-muted-foreground">
+              We sent a 6-digit code to {trader.phone}. Enter it to approve this withdrawal of{" "}
+              <span className="font-semibold text-foreground">{formatNGN(Number(amount) || 0)}</span>.
+            </p>
+            <Input
+              autoFocus inputMode="numeric" maxLength={6} value={otpInput}
+              onChange={(e) => setOtpInput(e.target.value.replace(/\D/g, ""))}
+              placeholder="••••••" className="text-center text-lg tracking-[0.4em]"
+              aria-label="SMS verification code"
+            />
+            <button type="button" onClick={resendOtp} disabled={resendIn > 0}
+              className="text-xs font-medium text-primary disabled:text-muted-foreground">
+              {resendIn > 0 ? `Resend code in ${resendIn}s` : "Resend code"}
+            </button>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setOtpOpen(false)}>Cancel</Button>
+            <Button onClick={submit} disabled={otpInput.length < 6} className="bg-primary hover:bg-primary/90">Verify & submit</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Dialog open={!!confirmed} onOpenChange={() => setConfirmed(null)}>
         <DialogContent>

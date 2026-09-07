@@ -49,7 +49,7 @@ function TraderDashboard() {
   const colors: Record<string, string> = {
     primary: "bg-primary/10 text-primary",
     accent: "bg-accent/10 text-accent",
-    gold: "bg-gold/15 text-gold-foreground",
+    gold: "bg-gold/15 text-gold",
     destructive: "bg-destructive/10 text-destructive",
   };
 
@@ -76,7 +76,7 @@ function TraderDashboard() {
         <Card className="p-5">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-semibold flex items-center gap-2"><Percent className="h-4 w-4 text-gold-foreground" />Daily Interest</p>
+              <p className="text-sm font-semibold flex items-center gap-2"><Percent className="h-4 w-4 text-gold" />Daily Interest</p>
               <p className="text-xs text-muted-foreground">{NOMBA.provider} • {(NOMBA.annualRate * 100).toFixed(1)}% p.a.</p>
             </div>
             <Link to="/trader/interest" className="text-xs text-primary hover:underline">Details →</Link>
@@ -190,7 +190,7 @@ function TypeBadge({ type }: { type: TraderTxn["type"] }) {
   const styles = {
     Deposit: "bg-success/15 text-success",
     Withdrawal: "bg-destructive/15 text-destructive",
-    Interest: "bg-gold/20 text-gold-foreground",
+    Interest: "bg-gold/20 text-gold",
   } as const;
   return <span className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${styles[type]}`}>{type}</span>;
 }

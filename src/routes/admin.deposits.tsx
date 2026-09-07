@@ -239,7 +239,7 @@ function MetricCard({ label, value, icon: Icon, tone, sub }: { label: string; va
   const colors = {
     success: "bg-success/15 text-success",
     primary: "bg-primary/15 text-primary",
-    gold: "bg-gold/15 text-gold-foreground",
+    gold: "bg-gold/15 text-gold",
     accent: "bg-accent/15 text-accent",
   } as const;
   return (

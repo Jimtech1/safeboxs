@@ -7,7 +7,7 @@ import { formatNGN, type SavingsGroup } from "@/lib/groupStore";
 export function GroupStatusBadge({ status }: { status: SavingsGroup["status"] }) {
   const cls =
     status === "Active" ? "bg-primary/10 text-primary border-primary/30"
-    : status === "Recruiting" ? "bg-gold/15 text-gold-foreground border-gold/40"
+    : status === "Recruiting" ? "bg-gold/15 text-gold border-gold/40"
     : status === "Paused" ? "bg-amber-100 text-amber-800 border-amber-300"
     : "bg-secondary text-secondary-foreground border-border";
   return <Badge variant="outline" className={cls}>{status}</Badge>;

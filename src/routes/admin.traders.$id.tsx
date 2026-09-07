@@ -138,7 +138,7 @@ function TraderDetail() {
             <tbody className="divide-y">
               {txns.map((t) => (
                 <tr key={t.id}>
-                  <td className="py-2 pr-4 text-muted-foreground">{relativeTime(t.iso)}</td>
+                  <td className="py-2 pr-4 text-muted-foreground">{relativeTime(t.date)}</td>
                   <td className="py-2 pr-4">{t.type}</td>
                   <td className="py-2 pr-4 text-muted-foreground">{t.description}</td>
                   <td className={`py-2 pr-4 text-right font-semibold ${t.type === "Withdrawal" ? "text-destructive" : "text-success"}`}>

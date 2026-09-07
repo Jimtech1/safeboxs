@@ -23,7 +23,7 @@ const stats = [
 const toneBg: Record<string, string> = {
   success: "bg-success/15 text-success",
   primary: "bg-primary/10 text-primary",
-  gold: "bg-gold/15 text-gold-foreground",
+  gold: "bg-gold/15 text-gold",
 };
 
 const history = Array.from({ length: 6 }, (_, i) => ({
