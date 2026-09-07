@@ -34,7 +34,7 @@ export function TraderLayout() {
   useEffect(() => {
     const t = getCurrentTrader();
     if (!t) {
-      navigate({ to: "/trader/login" });
+      navigate({ to: "/login", replace: true });
       return;
     }
     setTrader(t);
@@ -58,7 +58,7 @@ export function TraderLayout() {
   const handleLogout = () => {
     logoutTrader();
     toast.success("Logged out");
-    navigate({ to: "/trader/login" });
+    navigate({ to: "/login", replace: true });
   };
 
   return (
