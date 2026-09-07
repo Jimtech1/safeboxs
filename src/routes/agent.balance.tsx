@@ -45,7 +45,7 @@ function BalanceFlow() {
             <p className="font-semibold text-lg">{trader.name}</p>
             <p className="text-xs text-muted-foreground">{trader.phone}</p>
           </div>
-          <div className="rounded-2xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground p-6 text-center">
+          <div className="rounded-2xl bg-linear-to-br from-primary to-primary/80 text-primary-foreground p-6 text-center">
             <p className="text-xs uppercase tracking-wide text-primary-foreground/70">Current balance</p>
             <p className="font-display text-4xl font-bold mt-1">{formatNaira(trader.balance)}</p>
           </div>

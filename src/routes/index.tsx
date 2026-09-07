@@ -159,7 +159,7 @@ function Landing() {
                       initial={{ height: 0 }}
                       animate={{ height: `${h}%` }}
                       transition={{ delay: 0.5 + i * 0.08, duration: 0.6 }}
-                      className="flex-1 rounded-t bg-gradient-to-t from-primary to-accent"
+                      className="flex-1 rounded-t bg-linear-to-t from-primary to-accent"
                     />
                   ))}
                 </div>
@@ -365,7 +365,7 @@ function Landing() {
 
 
       {/* MONTHLY JACKPOT */}
-      <section id="jackpot" className="relative overflow-hidden bg-gradient-to-br from-primary via-primary to-[#063b22] py-20 text-white">
+      <section id="jackpot" className="relative overflow-hidden bg-linear-to-br from-primary via-primary to-[#063b22] py-20 text-white">
         <div className="absolute inset-0 opacity-20 pointer-events-none" aria-hidden>
           <div className="absolute -top-20 -left-10 h-72 w-72 rounded-full bg-gold blur-3xl" />
           <div className="absolute -bottom-20 -right-10 h-72 w-72 rounded-full bg-accent blur-3xl" />
@@ -379,16 +379,16 @@ function Landing() {
               <h2 className="mt-4 font-display text-3xl md:text-5xl font-bold leading-tight">
                 Win <span className="text-gradient-gold">₦300,000</span> Every Month
               </h2>
-              <p className="mt-4 text-white/80 text-lg">
+              <p className="mt-4 text-white text-lg">
                 One lucky trader wins ₦300,000 every single month. No extra fees. No purchase required.
               </p>
-              <p className="mt-4 text-white/70 leading-relaxed">
+              <p className="mt-4 text-white/90 leading-relaxed">
                 Each month, SafeBox randomly selects one active trader from a different market location across Nigeria. The winner is someone who saves consistently and avoids unnecessary withdrawals.
               </p>
-              <p className="mt-3 text-white/70 leading-relaxed">
+              <p className="mt-3 text-white/90 leading-relaxed">
                 The more you save, the more entries you earn. The longer you save without withdrawing, the higher your chance of winning.
               </p>
-              <p className="mt-3 text-white/70 leading-relaxed">
+              <p className="mt-3 text-white/90 leading-relaxed">
                 Winners are announced on the first day of each month via SMS and on our website.
               </p>
               <div className="mt-7">
@@ -402,7 +402,7 @@ function Landing() {
 
             <div className="relative">
               <div className="relative mx-auto max-w-md rounded-3xl bg-white/5 backdrop-blur-sm border border-white/15 p-6 shadow-2xl">
-                <div className="rounded-2xl bg-gradient-to-br from-gold to-[#b8902c] p-6 text-gold-foreground shadow-lg">
+                <div className="rounded-2xl bg-linear-to-br from-gold to-[#b8902c] p-6 text-gold-foreground shadow-lg">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Trophy className="h-6 w-6" />
