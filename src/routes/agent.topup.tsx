@@ -39,7 +39,7 @@ function TopUp() {
     <div className="space-y-4">
       <Link to="/agent" className="flex items-center gap-2 text-sm text-muted-foreground"><ArrowLeft className="h-4 w-4" />Back</Link>
       <div className="flex items-center gap-3">
-        <div className="grid h-10 w-10 place-items-center rounded-xl bg-gold/15 text-gold-foreground"><Plus /></div>
+        <div className="grid h-10 w-10 place-items-center rounded-xl bg-gold/15 text-gold"><Plus /></div>
         <div>
           <h1 className="text-xl font-bold">Add Money to Float</h1>
           <p className="text-xs text-muted-foreground">Top up your dedicated float account</p>

@@ -225,7 +225,7 @@ function Landing() {
             {features.map((f, i) => (
               <motion.div key={f.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }}>
                 <Card className="h-full p-6 hover:shadow-lg transition-shadow">
-                  <div className="grid h-11 w-11 place-items-center rounded-lg bg-gold/15 text-gold-foreground">
+                  <div className="grid h-11 w-11 place-items-center rounded-lg bg-gold/15 text-gold">
                     <f.icon className="h-5 w-5" />
                   </div>
                   <h3 className="mt-4 font-semibold text-lg">{f.title}</h3>

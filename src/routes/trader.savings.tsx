@@ -48,7 +48,7 @@ const productStyles: Record<SavingsProductId, { card: string; chip: string; acce
   },
   safelock: {
     card: "border-gold/40 bg-gold/10",
-    chip: "bg-gold/25 text-gold-foreground",
+    chip: "bg-gold/25 text-gold",
     accent: "text-gold-foreground",
     btn: "bg-gold text-gold-foreground hover:bg-gold/90",
   },

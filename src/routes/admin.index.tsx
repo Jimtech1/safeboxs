@@ -29,7 +29,7 @@ const metrics = [
 const toneBg: Record<string, string> = {
   primary: "bg-primary/10 text-primary",
   accent: "bg-accent/10 text-accent",
-  gold: "bg-gold/15 text-gold-foreground",
+  gold: "bg-gold/15 text-gold",
   success: "bg-success/15 text-success",
 };
 

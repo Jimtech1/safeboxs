@@ -62,7 +62,7 @@ function TraderInterest() {
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Stat label="Annual Rate" value={`${(NOMBA.annualRate * 100).toFixed(1)}%`} sub="p.a. on your balance" icon={Percent} tone="bg-gold/15 text-gold-foreground" />
+        <Stat label="Annual Rate" value={`${(NOMBA.annualRate * 100).toFixed(1)}%`} sub="p.a. on your balance" icon={Percent} tone="bg-gold/15 text-gold" />
         <Stat label="Today's Interest" value={formatKobo(dailyInterest(trader.balance))} sub="accrued so far" icon={Coins} tone="bg-primary/10 text-primary" />
         <Stat label="Earned (30 days)" value={formatKobo(earned30)} sub="credited to balance" icon={TrendingUp} tone="bg-accent/10 text-accent" />
         <Stat label="Projected / year" value={formatNGN(projectedAnnual(trader.balance))} sub="if balance holds" icon={TrendingUp} tone="bg-success/15 text-success" />
