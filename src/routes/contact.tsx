@@ -47,19 +47,7 @@ function Contact() {
           ))}
         </div>
 
-        <Card className="p-6">
-          <h3 className="font-display text-xl font-semibold">Send a message</h3>
-          <form className="mt-5 space-y-4" onSubmit={(e) => { e.preventDefault(); toast.success("Message sent. We'll get back within 24 hours."); }}>
-            <div className="grid sm:grid-cols-2 gap-3">
-              <Input placeholder="Full name" required />
-              <Input type="email" placeholder="Email" required />
-            </div>
-            <Input placeholder="Phone number" type="tel" />
-            <Input placeholder="Subject" required />
-            <Textarea placeholder="How can we help?" rows={5} required />
-            <Button className="w-full bg-primary hover:bg-primary/90">Send Message</Button>
-          </form>
-        </Card>
+        <ContactForm />
       </section>
 
       <Footer />
