@@ -1,7 +1,51 @@
+import { useState } from "react";
 import { SafeBoxLogo } from "@/components/SafeBoxLogo";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Facebook, Instagram, Linkedin, MessageCircle } from "lucide-react";
+import { CheckCircle2, Facebook, Instagram, Linkedin, MessageCircle } from "lucide-react";
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+function NewsletterForm() {
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
+  const [done, setDone] = useState(false);
+
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const value = email.trim();
+    if (!value) { setError("Enter your email address."); return; }
+    if (!EMAIL_RE.test(value)) { setError("That email doesn't look right."); return; }
+    setError("");
+    setDone(true);
+  };
+
+  if (done) {
+    return (
+      <div className="flex items-center gap-2 rounded-lg bg-white/10 px-3 py-2.5">
+        <CheckCircle2 className="h-4 w-4 shrink-0 text-gold" />
+        <p className="text-xs text-sidebar-foreground/80">You're on the list — updates coming to {email.trim()}.</p>
+      </div>
+    );
+  }
+  return (
+    <form onSubmit={submit} noValidate>
+      <div className="flex gap-2">
+        <Input
+          type="email"
+          value={email}
+          onChange={(e) => { setEmail(e.target.value); if (error) setError(""); }}
+          placeholder="your@email.com"
+          aria-label="Email address for updates"
+          aria-invalid={!!error}
+          className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+        />
+        <Button type="submit" className="bg-gold text-gold-foreground hover:bg-gold/90">Join</Button>
+      </div>
+      {error && <p className="mt-1.5 text-xs text-gold">{error}</p>}
+    </form>
+  );
+}
 
 const cols = [
   { title: "Product", items: ["For Traders", "For Agents", "Trader Login", "Agent Login", "Pricing"] },
