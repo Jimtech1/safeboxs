@@ -66,10 +66,7 @@ export function Footer() {
             </p>
             <div className="mt-6">
               <p className="text-xs uppercase tracking-wide text-sidebar-foreground/60 mb-2">Get updates</p>
-              <div className="flex gap-2">
-                <Input placeholder="your@email.com" className="bg-white/10 border-white/20 text-white placeholder:text-white/50" />
-                <Button className="bg-gold text-gold-foreground hover:bg-gold/90">Join</Button>
-              </div>
+              <NewsletterForm />
             </div>
           </div>
           {cols.map((c) => (
