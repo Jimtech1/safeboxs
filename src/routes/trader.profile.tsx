@@ -18,6 +18,8 @@ export const Route = createFileRoute("/trader/profile")({
     { name: "description", content: "Manage your details, bank account, PIN and agent." },
     { property: "og:title", content: "My Profile | SafeBox" },
     { property: "og:description", content: "Manage your details, bank account, PIN and agent." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary_large_image" },
   ]}),
   component: TraderProfile,
 });

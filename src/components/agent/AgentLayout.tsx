@@ -33,6 +33,17 @@ export function AgentLayout() {
         </div>
       </header>
 
+      <nav aria-label="Agent navigation" className="hidden border-b bg-card md:block">
+        <div className="mx-auto flex max-w-2xl items-center gap-1 px-4 py-2">
+          {tabs.map((t) => (
+            <Link key={t.to} to={t.to} aria-current={isActive(t.to, t.exact) ? "page" : undefined}
+              className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium ${isActive(t.to, t.exact) ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted hover:text-foreground"}`}>
+              <t.icon className="h-4 w-4" />{t.label}
+            </Link>
+          ))}
+        </div>
+      </nav>
+
       <main className="mx-auto w-full max-w-2xl flex-1 px-4 py-5 pb-10">
         <Outlet />
       </main>
