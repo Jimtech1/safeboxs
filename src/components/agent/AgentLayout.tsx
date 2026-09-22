@@ -2,6 +2,8 @@ import { Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { Home, ArrowLeftRight, Users, Users2, Settings as SettingsIcon } from "lucide-react";
 import { SafeBoxLogo } from "@/components/SafeBoxLogo";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { DashboardFooter } from "@/components/DashboardFooter";
+import { DashboardMobileNav } from "@/components/DashboardMobileNav";
 import { currentAgent } from "@/lib/mockData";
 
 const tabs = [
@@ -17,7 +19,7 @@ export function AgentLayout() {
   const isActive = (to: string, exact?: boolean) => exact ? path === to : path.startsWith(to);
 
   return (
-    <div className="min-h-screen bg-cream">
+    <div className="flex min-h-screen flex-col bg-cream">
       <header className="sticky top-0 z-30 bg-primary text-primary-foreground">
         <div className="mx-auto max-w-2xl px-4 py-3 flex items-center justify-between">
           <Link to="/" aria-label="SafeBox home"><SafeBoxLogo inverted /></Link>
@@ -31,31 +33,23 @@ export function AgentLayout() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-2xl px-4 py-5 pb-28">
-        <Outlet />
-      </main>
-
-      <nav aria-label="Agent navigation" className="fixed bottom-0 inset-x-0 z-40 bg-card border-t shadow-lg">
-        <div className="mx-auto max-w-2xl grid grid-cols-5">
-          {tabs.map((t) => {
-            const active = isActive(t.to, t.exact);
-            return (
-              <Link
-                key={t.to}
-                to={t.to}
-                className={`flex min-w-0 flex-col items-center gap-0.5 px-0.5 py-2.5 text-[10px] leading-tight font-medium transition-colors sm:text-[11px] ${
-                  active ? "text-primary" : "text-muted-foreground"
-                }`}
-              >
-                <div className={`grid h-8 w-8 place-items-center rounded-full transition-colors sm:h-9 sm:w-9 ${active ? "bg-primary/10" : ""}`}>
-                  <t.icon className="h-5 w-5" />
-                </div>
-                <span className="w-full truncate text-center">{t.label}</span>
-              </Link>
-            );
-          })}
+      <nav aria-label="Agent navigation" className="hidden border-b bg-card md:block">
+        <div className="mx-auto flex max-w-2xl items-center gap-1 px-4 py-2">
+          {tabs.map((t) => (
+            <Link key={t.to} to={t.to} aria-current={isActive(t.to, t.exact) ? "page" : undefined}
+              className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium ${isActive(t.to, t.exact) ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted hover:text-foreground"}`}>
+              <t.icon className="h-4 w-4" />{t.label}
+            </Link>
+          ))}
         </div>
       </nav>
+
+      <main className="mx-auto w-full max-w-2xl flex-1 px-4 py-5 pb-10">
+        <Outlet />
+      </main>
+      <div className="pb-20 md:pb-0"><DashboardFooter /></div>
+
+      <DashboardMobileNav items={tabs} path={path} label="Agent navigation" />
     </div>
   );
 }

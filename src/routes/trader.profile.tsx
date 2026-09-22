@@ -18,6 +18,8 @@ export const Route = createFileRoute("/trader/profile")({
     { name: "description", content: "Manage your details, bank account, PIN and agent." },
     { property: "og:title", content: "My Profile | SafeBox" },
     { property: "og:description", content: "Manage your details, bank account, PIN and agent." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary_large_image" },
   ]}),
   component: TraderProfile,
 });
@@ -81,8 +83,8 @@ function TraderProfile() {
         <p className="text-sm text-muted-foreground">Manage your personal info, bank account, security, KYC and agent.</p>
       </div>
 
-      <Tabs defaultValue="personal">
-        <TabsList className="w-full grid grid-cols-2 gap-1 sm:grid-cols-3 md:grid-cols-5">
+      <Tabs defaultValue="personal" className="min-w-0">
+        <TabsList className="grid h-auto min-h-11 w-full grid-cols-5 gap-0.5 p-1">
           <TabsTrigger value="personal">Personal</TabsTrigger>
           <TabsTrigger value="kyc">KYC</TabsTrigger>
           <TabsTrigger value="bank">Bank</TabsTrigger>

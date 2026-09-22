@@ -5,6 +5,8 @@ import { SafeBoxLogo } from "@/components/SafeBoxLogo";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
+import { DashboardFooter } from "@/components/DashboardFooter";
+import { DashboardMobileNav } from "@/components/DashboardMobileNav";
 import {
   getCurrentTrader, logoutTrader, getNotifications, unreadNotificationCount,
   markNotificationRead, markAllNotificationsRead, relativeTime, type Trader, type TraderNotification,
@@ -14,8 +16,8 @@ import { toast } from "sonner";
 const nav = [
   { to: "/trader", label: "Dashboard", icon: Home, exact: true },
   { to: "/trader/savings", label: "Savings", icon: PiggyBank },
-  { to: "/trader/groups", label: "Contribution", icon: Users2 },
-  { to: "/trader/transactions", label: "Transactions", icon: Receipt },
+  { to: "/trader/groups", label: "Contribution", mobileLabel: "Groups", icon: Users2 },
+  { to: "/trader/transactions", label: "Transactions", mobileLabel: "Txns", icon: Receipt },
   { to: "/trader/trust", label: "Trust", icon: ShieldCheck },
   { to: "/trader/interest", label: "Interest", icon: Percent },
   { to: "/trader/withdraw", label: "Withdraw", icon: ArrowUpFromLine },
@@ -88,7 +90,7 @@ export function TraderLayout() {
         </button>
       </aside>
 
-      <div className="md:pl-64">
+      <div className="flex min-h-screen flex-col md:pl-64">
         <header className="sticky top-0 z-30 flex items-center justify-between gap-3 border-b bg-card px-4 py-3 md:px-8">
           <div className="min-w-0">
             <Link to="/" aria-label="SafeBox home" className="md:hidden mb-1 inline-flex"><SafeBoxLogo /></Link>
@@ -149,29 +151,16 @@ export function TraderLayout() {
           </div>
         </header>
 
-        <main className="p-4 md:p-8 pb-24 md:pb-8">
+        <main className="flex-1 p-4 pb-28 md:p-8">
           <Outlet />
         </main>
+        <div className="pb-20 md:pb-0"><DashboardFooter /></div>
       </div>
 
       {/* Mobile bottom nav */}
-      <nav className="md:hidden fixed bottom-0 inset-x-0 bg-sidebar border-t border-white/10 z-40">
-        <div className="flex overflow-x-auto no-scrollbar">
-          {nav.map((n) => {
-            const active = isActive(n.to, n.exact);
-            return (
-              <Link key={n.to} to={n.to} className={`flex min-w-[20%] shrink-0 flex-col items-center gap-1 py-2 px-2 text-[10px] ${active ? "text-gold" : "text-sidebar-foreground/70"}`}>
-                <n.icon className="h-5 w-5" />
-                <span className="whitespace-nowrap">{n.label}</span>
-              </Link>
-            );
-          })}
-          <button onClick={handleLogout} className="flex min-w-[20%] shrink-0 flex-col items-center gap-1 py-2 px-2 text-[10px] text-sidebar-foreground/70">
-            <LogOut className="h-5 w-5" />
-            Logout
-          </button>
-        </div>
-      </nav>
+      <DashboardMobileNav items={nav} path={path} label="Trader navigation" extra={
+        <Button variant="outline" className="w-full justify-start gap-3" onClick={handleLogout}><LogOut className="h-5 w-5" />Logout</Button>
+      } />
 
     </div>
   );

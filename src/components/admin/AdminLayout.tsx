@@ -3,6 +3,8 @@ import { LayoutDashboard, Users, UserCog, ArrowLeftRight, Wallet, ShieldCheck, S
 import { SafeBoxLogo } from "@/components/SafeBoxLogo";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Input } from "@/components/ui/input";
+import { DashboardFooter } from "@/components/DashboardFooter";
+import { DashboardMobileNav } from "@/components/DashboardMobileNav";
 
 const nav = [
   { to: "/admin", label: "Overview", icon: LayoutDashboard, exact: true },
@@ -54,7 +56,7 @@ export function AdminLayout() {
       </aside>
 
       {/* Top header */}
-      <div className="md:pl-64">
+      <div className="flex min-h-screen flex-col md:pl-64">
         <header className="sticky top-0 z-30 flex items-center justify-between gap-4 border-b bg-card px-4 py-3 md:px-8">
           <div className="flex-1 max-w-md hidden sm:block">
             <div className="relative">
@@ -78,25 +80,14 @@ export function AdminLayout() {
           </div>
         </header>
 
-        <main className="p-4 md:p-8 pb-24 md:pb-8">
+        <main className="flex-1 p-4 pb-10 md:p-8">
           <Outlet />
         </main>
+        <div className="pb-20 md:pb-0"><DashboardFooter /></div>
       </div>
 
       {/* Mobile bottom nav */}
-      <nav className="md:hidden fixed bottom-0 inset-x-0 bg-sidebar border-t border-white/10 z-40 overflow-x-auto">
-        <div className="flex min-w-max">
-          {nav.map((n) => {
-            const active = isActive(n.to, n.exact);
-            return (
-              <Link key={n.to} to={n.to} className={`flex flex-col items-center gap-1 py-2 px-4 text-[10px] shrink-0 ${active ? "text-gold" : "text-sidebar-foreground/70"}`}>
-                <n.icon className="h-5 w-5" />
-                {n.label}
-              </Link>
-            );
-          })}
-        </div>
-      </nav>
+      <DashboardMobileNav items={nav} path={path} label="Admin navigation" />
     </div>
   );
 }
