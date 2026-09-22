@@ -5,7 +5,7 @@ import type { LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 
-type Item = { to: string; label: string; icon: LucideIcon; exact?: boolean };
+type Item = { to: string; label: string; mobileLabel?: string; icon: LucideIcon; exact?: boolean };
 
 export function DashboardMobileNav({ items, path, label, extra }: { items: Item[]; path: string; label: string; extra?: React.ReactNode }) {
   const [open, setOpen] = useState(false);
@@ -18,7 +18,7 @@ export function DashboardMobileNav({ items, path, label, extra }: { items: Item[
           <Link key={item.to} to={item.to} aria-current={active(item) ? "page" : undefined}
             className={`flex min-w-0 flex-col items-center justify-center gap-1 px-1 py-2 text-[11px] font-medium ${active(item) ? "text-gold" : "text-sidebar-foreground"}`}>
             <item.icon className="h-5 w-5 shrink-0" aria-hidden="true" />
-            <span className="w-full truncate text-center">{item.label}</span>
+            <span className="w-full truncate text-center">{item.mobileLabel ?? item.label}</span>
           </Link>
         ))}
         <Sheet open={open} onOpenChange={setOpen}>

@@ -16,8 +16,8 @@ import { toast } from "sonner";
 const nav = [
   { to: "/trader", label: "Dashboard", icon: Home, exact: true },
   { to: "/trader/savings", label: "Savings", icon: PiggyBank },
-  { to: "/trader/groups", label: "Contribution", icon: Users2 },
-  { to: "/trader/transactions", label: "Transactions", icon: Receipt },
+  { to: "/trader/groups", label: "Contribution", mobileLabel: "Groups", icon: Users2 },
+  { to: "/trader/transactions", label: "Transactions", mobileLabel: "Txns", icon: Receipt },
   { to: "/trader/trust", label: "Trust", icon: ShieldCheck },
   { to: "/trader/interest", label: "Interest", icon: Percent },
   { to: "/trader/withdraw", label: "Withdraw", icon: ArrowUpFromLine },
